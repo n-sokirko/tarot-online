@@ -56,6 +56,52 @@ def three_card_spread(db):
     )
 
 
+@pytest.fixture
+def nine_card_spread(db):
+    """Create the 'nine-card' SpreadType."""
+    return SpreadType.objects.create(
+        slug='nine-card',
+        name_ru='Расклад из 9 карт',
+        name_en='Nine-Card Spread',
+        positions_count=9,
+        positions=[
+            {'index': 0, 'label_ru': 'Корни прошлого', 'label_en': 'Roots of Past'},
+            {'index': 1, 'label_ru': 'Прошлое', 'label_en': 'Past'},
+            {'index': 2, 'label_ru': 'Уходящее', 'label_en': 'Fading'},
+            {'index': 3, 'label_ru': 'Скрытое', 'label_en': 'Hidden'},
+            {'index': 4, 'label_ru': 'Настоящее', 'label_en': 'Present'},
+            {'index': 5, 'label_ru': 'Внешнее', 'label_en': 'External'},
+            {'index': 6, 'label_ru': 'Приходящее', 'label_en': 'Arriving'},
+            {'index': 7, 'label_ru': 'Будущее', 'label_en': 'Future'},
+            {'index': 8, 'label_ru': 'Итог', 'label_en': 'Outcome'},
+        ],
+    )
+
+
+@pytest.fixture
+def large_deck(db):
+    """Create 10 cards — enough for a 9-card spread."""
+    cards = []
+    for i in range(10):
+        cards.append(
+            Card.objects.create(
+                slug=f'large-card-{i}',
+                suit='major',
+                number=i,
+                name_ru=f'Карта {i}',
+                name_en=f'Card {i}',
+                upright_meaning_ru='прямое значение',
+                upright_meaning_en='upright meaning',
+                reversed_meaning_ru='перевёрнутое значение',
+                reversed_meaning_en='reversed meaning',
+                keywords_ru=['ключ'],
+                keywords_en=['keyword'],
+                image_url=f'/cards/large-card-{i}.jpg',
+            )
+        )
+    return cards
+
+
 # ---------------------------------------------------------------------------
 # Card list tests
 # ---------------------------------------------------------------------------
@@ -235,3 +281,69 @@ class TestGetReading:
     def test_get_nonexistent_reading_returns_404(self, api_client):
         response = api_client.get('/api/v1/readings/99999/')
         assert response.status_code == 404
+
+
+# ---------------------------------------------------------------------------
+# Nine-card spread tests
+# ---------------------------------------------------------------------------
+
+@pytest.mark.django_db
+class TestNineCardReading:
+    def test_nine_card_spread_endpoint_returns_201(
+        self, api_client, large_deck, nine_card_spread
+    ):
+        payload = {
+            'question': 'What is the full picture?',
+            'locale': 'en',
+            'spread_slug': 'nine-card',
+        }
+        response = api_client.post('/api/v1/readings/', payload, format='json')
+        assert response.status_code == 201
+
+    def test_nine_card_reading_has_nine_cards(
+        self, api_client, large_deck, nine_card_spread
+    ):
+        payload = {
+            'question': 'Покажи полную картину',
+            'locale': 'ru',
+            'spread_slug': 'nine-card',
+        }
+        response = api_client.post('/api/v1/readings/', payload, format='json')
+        assert response.status_code == 201
+        data = response.data
+        assert len(data['cards']) == 9
+        assert Reading.objects.count() == 1
+        assert ReadingCard.objects.count() == 9
+
+    def test_nine_card_reading_spread_type_in_response(
+        self, api_client, large_deck, nine_card_spread
+    ):
+        payload = {'question': 'Q', 'locale': 'en', 'spread_slug': 'nine-card'}
+        response = api_client.post('/api/v1/readings/', payload, format='json')
+        assert response.status_code == 201
+        assert response.data['spread_type']['slug'] == 'nine-card'
+        assert response.data['spread_type']['positions_count'] == 9
+
+    def test_nine_card_reading_all_cards_distinct(
+        self, api_client, large_deck, nine_card_spread
+    ):
+        payload = {'question': 'Q', 'locale': 'en', 'spread_slug': 'nine-card'}
+        response = api_client.post('/api/v1/readings/', payload, format='json')
+        slugs = [c['card']['slug'] for c in response.data['cards']]
+        assert len(slugs) == len(set(slugs)), "All 9 cards must be distinct"
+
+    def test_nine_card_reading_position_indices(
+        self, api_client, large_deck, nine_card_spread
+    ):
+        payload = {'question': 'Q', 'locale': 'en', 'spread_slug': 'nine-card'}
+        response = api_client.post('/api/v1/readings/', payload, format='json')
+        indices = sorted(c['position_index'] for c in response.data['cards'])
+        assert indices == list(range(9))
+
+    def test_insufficient_cards_returns_400(
+        self, api_client, sample_cards, nine_card_spread
+    ):
+        """5 cards are not enough for a 9-card spread."""
+        payload = {'question': 'Q', 'locale': 'en', 'spread_slug': 'nine-card'}
+        response = api_client.post('/api/v1/readings/', payload, format='json')
+        assert response.status_code == 400

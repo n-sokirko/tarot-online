@@ -78,12 +78,12 @@ export default function CardDetailModal({
     >
       {/* Panel — stop propagation so clicking inside doesn't close */}
       <motion.div
-        className="relative w-full max-w-3xl rounded-2xl overflow-hidden"
+        className="relative w-full max-w-3xl rounded-2xl flex flex-col"
         style={{
           background: '#0f0c24',
           border: '1px solid rgba(212,175,55,0.4)',
           maxHeight: '90vh',
-          overflowY: 'auto',
+          overflow: 'hidden',
         }}
         initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.85, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -101,17 +101,16 @@ export default function CardDetailModal({
         </button>
 
         {/* Content grid: image LEFT, text RIGHT */}
-        <div className="flex flex-col md:flex-row gap-0">
-          {/* Card image column */}
+        <div className="flex flex-col md:flex-row flex-1 min-h-0">
+          {/* Card image column — fills full panel height */}
           <div
-            className="flex-shrink-0 flex items-center justify-center bg-slate-950 p-6 md:p-8"
-            style={{ minWidth: '280px' }}
+            className="flex-shrink-0 flex flex-col bg-slate-950 p-4 md:p-6"
+            style={{ width: '260px' }}
           >
             <div
-              className="relative rounded-xl overflow-hidden"
+              className="relative rounded-xl overflow-hidden flex-1"
               style={{
-                width: '240px',
-                height: '360px',
+                minHeight: '340px',
                 border: '2px solid #d4af37',
               }}
             >
@@ -220,8 +219,8 @@ export default function CardDetailModal({
             </div>
           </div>
 
-          {/* Text column */}
-          <div className="flex-1 p-6 md:p-8 flex flex-col gap-4">
+          {/* Text column — scrolls if content overflows */}
+          <div className="flex-1 p-6 md:p-8 flex flex-col gap-4 overflow-y-auto">
             {/* Position label */}
             {positionLabel && (
               <p

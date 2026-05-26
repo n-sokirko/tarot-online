@@ -73,7 +73,7 @@ class CreateReadingSerializer(serializers.Serializer):
                 reading=reading,
                 card=cards_map[card_id],
                 position_index=idx,
-                is_reversed=random.random() < 0.5,
+                is_reversed=False,
             )
             for idx, card_id in enumerate(chosen_ids)
         ]
