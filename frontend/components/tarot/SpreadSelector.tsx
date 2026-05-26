@@ -112,17 +112,19 @@ export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
                 </span>
               )}
 
-              {/* Symbol grid */}
-              <div
-                className="font-serif text-center leading-relaxed whitespace-pre-line"
-                style={{
-                  color: isPremium ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
-                  fontSize: spread.slug === 'nine-card' ? '0.6rem' : '1rem',
-                  letterSpacing: '0.3em',
-                  lineHeight: spread.slug === 'nine-card' ? '1.8' : '1',
-                }}
-              >
-                {spread.symbol}
+              {/* Symbol grid — fixed height so names align across cards */}
+              <div className="flex items-center justify-center" style={{ height: '64px' }}>
+                <div
+                  className="font-serif text-center leading-relaxed whitespace-pre-line"
+                  style={{
+                    color: isPremium ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
+                    fontSize: spread.slug === 'nine-card' ? '0.6rem' : '1rem',
+                    letterSpacing: '0.3em',
+                    lineHeight: spread.slug === 'nine-card' ? '1.8' : '1',
+                  }}
+                >
+                  {spread.symbol}
+                </div>
               </div>
 
               <div className="flex flex-col items-center gap-1 text-center">

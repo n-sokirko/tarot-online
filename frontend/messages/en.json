@@ -45,5 +45,20 @@
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "network": "No connection. Check your network."
+  },
+  "auth": {
+    "login_title": "Sign In",
+    "register_title": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "display_name": "Your name (optional)",
+    "login_btn": "Sign In",
+    "register_btn": "Create Account",
+    "login_link": "Already have an account? Sign in",
+    "register_link": "No account? Register",
+    "error_invalid": "Invalid email or password.",
+    "error_exists": "This email is already registered.",
+    "error_generic": "Something went wrong. Please try again.",
+    "or": "or"
   }
 }

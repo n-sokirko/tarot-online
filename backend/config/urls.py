@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/healthz/', healthz),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema')),
+    path('api/v1/', include('apps.users.urls')),
     path('api/v1/', include('apps.tarot.urls')),
     path('api/v1/', include('apps.readings.urls')),
 ]

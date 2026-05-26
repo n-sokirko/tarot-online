@@ -1,16 +1,14 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import DeckPile from '@/components/tarot/DeckPile';
-import ThreeCardSpread from '@/components/tarot/ThreeCardSpread';
-import NineCardSpread from '@/components/tarot/NineCardSpread';
 import SpreadSelector, { type SpreadSlug } from '@/components/tarot/SpreadSelector';
 import { createReading } from '@/lib/api';
-import type { ReadingResponse, SpreadPosition } from '@/lib/types';
 
-type PageState = 'selecting' | 'idle' | 'shuffled' | 'loading' | 'spread' | 'error';
+type PageState = 'selecting' | 'idle' | 'shuffled' | 'loading' | 'error';
 
 const LOCALE = 'ru' as const;
 
@@ -29,10 +27,10 @@ export default function HomePage() {
   const t = useTranslations('home');
   const tReading = useTranslations('reading');
   const prefersReducedMotion = useReducedMotion();
+  const router = useRouter();
 
   const [pageState, setPageState] = useState<PageState>('selecting');
   const [selectedSpread, setSelectedSpread] = useState<SpreadSlug>('three-card');
-  const [reading, setReading] = useState<ReadingResponse | null>(null);
   const [sessionKey, setSessionKey] = useState(0);
 
   const handleSpreadSelect = useCallback((slug: SpreadSlug) => {
@@ -48,21 +46,16 @@ export default function HomePage() {
     setPageState('loading');
     try {
       const result = await createReading(LOCALE, selectedSpread);
-      setReading(result);
-      setPageState('spread');
+      router.push(`/reading/${result.id}`);
     } catch {
       setPageState('error');
     }
-  }, [selectedSpread]);
+  }, [selectedSpread, router]);
 
   const handleReset = useCallback(() => {
-    setReading(null);
     setPageState('selecting');
     setSessionKey((k) => k + 1);
   }, []);
-
-  const spreadPositions: SpreadPosition[] =
-    reading?.spread_type?.positions ?? [];
 
   return (
     <main
@@ -140,7 +133,7 @@ export default function HomePage() {
 
         {/* Step 1: Deck + Shuffle */}
         <AnimatePresence mode="wait">
-          {pageState !== 'selecting' && pageState !== 'spread' && (
+          {pageState !== 'selecting' && (
             <motion.div
               key="deck"
               className="flex flex-col items-center gap-8"
@@ -243,69 +236,6 @@ export default function HomePage() {
           )}
         </AnimatePresence>
 
-        {/* Step 2: Card spread */}
-        <AnimatePresence>
-          {pageState === 'spread' && reading !== null && (
-            <motion.div
-              key="spread"
-              className="w-full flex flex-col items-center gap-8"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div
-                className="flex items-center gap-4 w-full max-w-xs"
-                aria-hidden="true"
-              >
-                <div
-                  className="flex-1 h-px"
-                  style={{ background: 'rgba(212,175,55,0.25)' }}
-                />
-                <span style={{ color: 'rgba(212,175,55,0.5)', fontSize: '0.7rem' }}>
-                  ✦
-                </span>
-                <div
-                  className="flex-1 h-px"
-                  style={{ background: 'rgba(212,175,55,0.25)' }}
-                />
-              </div>
-
-              {selectedSpread === 'nine-card' ? (
-                <NineCardSpread
-                  cards={reading.cards}
-                  spreadPositions={spreadPositions}
-                  locale={LOCALE}
-                />
-              ) : (
-                <ThreeCardSpread
-                  cards={reading.cards}
-                  spreadPositions={spreadPositions}
-                  locale={LOCALE}
-                />
-              )}
-
-              <motion.button
-                className="mt-4 px-6 py-2 rounded-full text-xs tracking-widest uppercase"
-                style={{
-                  border: '1px solid rgba(212,175,55,0.3)',
-                  color: 'rgba(201,194,224,0.5)',
-                  letterSpacing: '0.12em',
-                }}
-                whileHover={
-                  prefersReducedMotion
-                    ? {}
-                    : {
-                        borderColor: 'rgba(212,175,55,0.6)',
-                        color: 'rgba(201,194,224,0.8)',
-                      }
-                }
-                onClick={handleReset}
-              >
-                ↺ {tReading('shuffle')}
-              </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       <footer
