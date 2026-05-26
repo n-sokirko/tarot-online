@@ -47,18 +47,61 @@ export default function CardFace({
           style={{ transform: isReversed ? 'rotate(180deg)' : undefined }}
         >
           {imgError ? (
-            /* Placeholder when image fails */
+            /* Ornamental golden placeholder when image fails */
             <div
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-2"
               style={{
-                background: 'linear-gradient(135deg, #2a1a5e 0%, #0b0b1f 100%)',
+                background: 'linear-gradient(135deg, #1e1245 0%, #0b0b1f 100%)',
               }}
             >
-              <span
-                className="text-4xl"
-                style={{ color: 'rgba(212,175,55,0.3)' }}
+              <svg
+                width="56"
+                height="56"
+                viewBox="0 0 56 56"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
-                ✦
+                {/* Outer circle */}
+                <circle cx="28" cy="28" r="26" stroke="rgba(212,175,55,0.35)" strokeWidth="0.75" />
+                {/* Inner circle */}
+                <circle cx="28" cy="28" r="18" stroke="rgba(212,175,55,0.25)" strokeWidth="0.75" />
+                {/* Eight-pointed star spokes */}
+                {[0, 45, 90, 135].map((deg) => (
+                  <line
+                    key={deg}
+                    x1="28"
+                    y1="4"
+                    x2="28"
+                    y2="52"
+                    stroke="rgba(212,175,55,0.4)"
+                    strokeWidth="0.75"
+                    transform={`rotate(${deg} 28 28)`}
+                  />
+                ))}
+                {/* Diamond points at the eight compass tips */}
+                {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => {
+                  const rad = (deg * Math.PI) / 180;
+                  const cx = 28 + 26 * Math.sin(rad);
+                  const cy = 28 - 26 * Math.cos(rad);
+                  return (
+                    <circle
+                      key={deg}
+                      cx={cx}
+                      cy={cy}
+                      r="1.5"
+                      fill="rgba(212,175,55,0.5)"
+                    />
+                  );
+                })}
+                {/* Central asterisk */}
+                <circle cx="28" cy="28" r="3" fill="rgba(212,175,55,0.45)" />
+              </svg>
+              <span
+                className="font-serif text-center px-2 leading-tight"
+                style={{ color: '#d4af37', fontSize: '0.75rem' }}
+              >
+                {name}
               </span>
             </div>
           ) : (

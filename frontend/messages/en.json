@@ -26,7 +26,9 @@
   "card": {
     "reversed": "Reversed",
     "close": "Close",
-    "position_context": "Position"
+    "position_context": "Position",
+    "interpret_cta": "Reveal meaning in context of your question",
+    "interpret_soon": "Coming soon"
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",

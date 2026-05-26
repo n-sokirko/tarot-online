@@ -26,7 +26,9 @@
   "card": {
     "reversed": "Перевёрнутая",
     "close": "Закрыть",
-    "position_context": "Позиция"
+    "position_context": "Позиция",
+    "interpret_cta": "Раскрыть значение в контексте вопроса",
+    "interpret_soon": "Скоро"
   },
   "errors": {
     "generic": "Что-то пошло не так. Попробуйте ещё раз.",

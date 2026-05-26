@@ -26,6 +26,7 @@ export default function ThreeCardSpread({
   const prefersReducedMotion = useReducedMotion();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
+  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [flippedCards, setFlippedCards] = useState<[boolean, boolean, boolean]>([
     false,
     false,
@@ -139,15 +140,28 @@ export default function ThreeCardSpread({
               <motion.div
                 className="w-full"
                 style={{ maxWidth: '140px' }}
+                animate={
+                  !prefersReducedMotion && clickedIndex === i
+                    ? { scale: 1.18, zIndex: 10 }
+                    : { scale: 1, zIndex: 1 }
+                }
                 whileHover={
                   drawnCard !== null && (flippedCards[i] ?? false)
-                    ? { scale: 1.05 }
+                    ? { scale: 1.08 }
                     : {}
                 }
                 transition={{ duration: 0.2, ease: 'easeOut' }}
                 onClick={() => {
                   if (drawnCard !== null && (flippedCards[i] ?? false)) {
-                    setSelectedCardIndex(i);
+                    if (prefersReducedMotion) {
+                      setSelectedCardIndex(i);
+                    } else {
+                      setClickedIndex(i);
+                      setTimeout(() => {
+                        setSelectedCardIndex(i);
+                        setClickedIndex(null);
+                      }, 300);
+                    }
                   }
                 }}
               >
