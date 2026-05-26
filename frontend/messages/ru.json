@@ -12,9 +12,21 @@
     "interpret": "Прочитать расклад",
     "loading": "Карты раскрываются...",
     "save": "Сохранить расклад",
-    "draw_prompt": "Колода перетасована. Вытяните три карты.",
+    "draw_prompt": "Колода перетасована. Вытяните карты.",
     "error": "Что-то пошло не так. Попробуйте ещё раз.",
-    "reversed": "Перевёрнутая"
+    "reversed": "Перевёрнутая",
+    "choose_spread": "Выберите расклад",
+    "spread_3_name": "Три карты",
+    "spread_3_desc": "Прошлое · Настоящее · Будущее",
+    "spread_3_cards": "3 карты",
+    "spread_9_name": "Девять карт",
+    "spread_9_desc": "Полный анализ ситуации",
+    "spread_9_cards": "9 карт",
+    "spread_celtic_name": "Кельтский крест",
+    "spread_celtic_desc": "Расширенный глубинный расклад",
+    "spread_celtic_cards": "10 карт",
+    "premium_badge": "Premium",
+    "premium_locked": "Скоро"
   },
   "positions": {
     "three_card": {

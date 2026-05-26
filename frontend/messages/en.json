@@ -12,9 +12,21 @@
     "interpret": "Read the spread",
     "loading": "The cards are turning...",
     "save": "Save this reading",
-    "draw_prompt": "The deck is shuffled. Draw three cards.",
+    "draw_prompt": "The deck is shuffled. Draw your cards.",
     "error": "Something went wrong. Please try again.",
-    "reversed": "Reversed"
+    "reversed": "Reversed",
+    "choose_spread": "Choose your spread",
+    "spread_3_name": "Three Cards",
+    "spread_3_desc": "Past · Present · Future",
+    "spread_3_cards": "3 cards",
+    "spread_9_name": "Nine Cards",
+    "spread_9_desc": "Full situation analysis",
+    "spread_9_cards": "9 cards",
+    "spread_celtic_name": "Celtic Cross",
+    "spread_celtic_desc": "Advanced in-depth reading",
+    "spread_celtic_cards": "10 cards",
+    "premium_badge": "Premium",
+    "premium_locked": "Coming soon"
   },
   "positions": {
     "three_card": {

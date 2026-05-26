@@ -5,15 +5,13 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import DeckPile from '@/components/tarot/DeckPile';
 import ThreeCardSpread from '@/components/tarot/ThreeCardSpread';
+import NineCardSpread from '@/components/tarot/NineCardSpread';
+import SpreadSelector, { type SpreadSlug } from '@/components/tarot/SpreadSelector';
 import { createReading } from '@/lib/api';
-import { mockReading } from '@/lib/mock-reading';
 import type { ReadingResponse, SpreadPosition } from '@/lib/types';
 
-type PageState = 'idle' | 'shuffled' | 'loading' | 'spread' | 'error';
+type PageState = 'selecting' | 'idle' | 'shuffled' | 'loading' | 'spread' | 'error';
 
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
-
-// Locale hardcoded for Stage 1 (no locale routing yet)
 const LOCALE = 'ru' as const;
 
 const STAR_POSITIONS = [
@@ -32,10 +30,15 @@ export default function HomePage() {
   const tReading = useTranslations('reading');
   const prefersReducedMotion = useReducedMotion();
 
-  const [pageState, setPageState] = useState<PageState>('idle');
+  const [pageState, setPageState] = useState<PageState>('selecting');
+  const [selectedSpread, setSelectedSpread] = useState<SpreadSlug>('three-card');
   const [reading, setReading] = useState<ReadingResponse | null>(null);
-  // Increment to force DeckPile remount on reset
   const [sessionKey, setSessionKey] = useState(0);
+
+  const handleSpreadSelect = useCallback((slug: SpreadSlug) => {
+    setSelectedSpread(slug);
+    setPageState('idle');
+  }, []);
 
   const handleShuffleComplete = useCallback(() => {
     setPageState('shuffled');
@@ -44,23 +47,17 @@ export default function HomePage() {
   const handleDraw = useCallback(async () => {
     setPageState('loading');
     try {
-      let result: ReadingResponse;
-      if (USE_MOCK) {
-        await new Promise<void>((resolve) => setTimeout(resolve, 600));
-        result = { ...mockReading, locale: LOCALE };
-      } else {
-        result = await createReading(LOCALE);
-      }
+      const result = await createReading(LOCALE, selectedSpread);
       setReading(result);
       setPageState('spread');
     } catch {
       setPageState('error');
     }
-  }, []);
+  }, [selectedSpread]);
 
   const handleReset = useCallback(() => {
     setReading(null);
-    setPageState('idle');
+    setPageState('selecting');
     setSessionKey((k) => k + 1);
   }, []);
 
@@ -98,7 +95,7 @@ export default function HomePage() {
 
       {/* Hero */}
       <motion.header
-        className="text-center mb-12 md:mb-16 max-w-xl"
+        className="text-center mb-10 md:mb-14 max-w-xl"
         initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
@@ -123,11 +120,27 @@ export default function HomePage() {
         </p>
       </motion.header>
 
-      {/* Main content area */}
+      {/* Main content */}
       <div className="w-full max-w-2xl flex flex-col items-center gap-10">
+
+        {/* Step 0: Spread selector */}
+        <AnimatePresence mode="wait">
+          {pageState === 'selecting' && (
+            <motion.div
+              key="selector"
+              initial={prefersReducedMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.35 }}
+            >
+              <SpreadSelector key={sessionKey} onSelect={handleSpreadSelect} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Step 1: Deck + Shuffle */}
         <AnimatePresence mode="wait">
-          {pageState !== 'spread' && (
+          {pageState !== 'selecting' && pageState !== 'spread' && (
             <motion.div
               key="deck"
               className="flex flex-col items-center gap-8"
@@ -141,7 +154,6 @@ export default function HomePage() {
                 onShuffleComplete={handleShuffleComplete}
               />
 
-              {/* Secondary controls — draw / loading / error */}
               <AnimatePresence mode="wait">
                 {pageState === 'shuffled' && (
                   <motion.div
@@ -231,7 +243,7 @@ export default function HomePage() {
           )}
         </AnimatePresence>
 
-        {/* Step 2: Three-card spread */}
+        {/* Step 2: Card spread */}
         <AnimatePresence>
           {pageState === 'spread' && reading !== null && (
             <motion.div
@@ -241,7 +253,6 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              {/* Ornamental divider */}
               <div
                 className="flex items-center gap-4 w-full max-w-xs"
                 aria-hidden="true"
@@ -259,13 +270,20 @@ export default function HomePage() {
                 />
               </div>
 
-              <ThreeCardSpread
-                cards={reading.cards}
-                spreadPositions={spreadPositions}
-                locale={LOCALE}
-              />
+              {selectedSpread === 'nine-card' ? (
+                <NineCardSpread
+                  cards={reading.cards}
+                  spreadPositions={spreadPositions}
+                  locale={LOCALE}
+                />
+              ) : (
+                <ThreeCardSpread
+                  cards={reading.cards}
+                  spreadPositions={spreadPositions}
+                  locale={LOCALE}
+                />
+              )}
 
-              {/* Start over */}
               <motion.button
                 className="mt-4 px-6 py-2 rounded-full text-xs tracking-widest uppercase"
                 style={{
@@ -290,7 +308,6 @@ export default function HomePage() {
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
       <footer
         className="mt-auto pt-16 text-center"
         style={{
