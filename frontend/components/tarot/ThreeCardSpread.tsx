@@ -138,21 +138,27 @@ export default function ThreeCardSpread({
 
               {/* Card slot */}
               <motion.div
-                className="w-full"
+                className="w-full cursor-pointer"
                 style={{ maxWidth: '140px' }}
                 animate={
                   !prefersReducedMotion && clickedIndex === i
-                    ? { scale: 1.18, zIndex: 10 }
-                    : { scale: 1, zIndex: 1 }
+                    ? { scale: 1.18 }
+                    : { scale: 1 }
                 }
-                whileHover={
-                  drawnCard !== null && (flippedCards[i] ?? false)
-                    ? { scale: 1.08 }
-                    : {}
-                }
+                whileHover={drawnCard !== null ? { scale: 1.08 } : {}}
                 transition={{ duration: 0.2, ease: 'easeOut' }}
                 onClick={() => {
-                  if (drawnCard !== null && (flippedCards[i] ?? false)) {
+                  if (drawnCard === null) return;
+                  const isFaceUp = flippedCards[i] ?? false;
+                  if (!isFaceUp) {
+                    // Flip the card manually
+                    setFlippedCards((prev) => {
+                      const next: [boolean, boolean, boolean] = [...prev] as [boolean, boolean, boolean];
+                      next[i] = true;
+                      return next;
+                    });
+                  } else {
+                    // Open detail modal
                     if (prefersReducedMotion) {
                       setSelectedCardIndex(i);
                     } else {
@@ -166,11 +172,7 @@ export default function ThreeCardSpread({
                 }}
               >
                 {drawnCard !== null ? (
-                  <div
-                    className={
-                      flippedCards[i] ?? false ? 'cursor-pointer' : ''
-                    }
-                  >
+                  <div>
                     <CardFlip
                       isFaceUp={flippedCards[i] ?? false}
                       front={
