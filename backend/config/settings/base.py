@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'apps.tarot',
     'apps.readings',
     'apps.users',
+    'apps.billing',
+    'apps.runes',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +107,15 @@ GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
 
 # Anthropic
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+ANTHROPIC_MODEL_FREE = config('ANTHROPIC_MODEL_FREE', default='claude-haiku-4-5-20251001')
+ANTHROPIC_MODEL_PREMIUM = config('ANTHROPIC_MODEL_PREMIUM', default='claude-sonnet-4-6')
+ANTHROPIC_MODEL_DEEP = config('ANTHROPIC_MODEL_DEEP', default='claude-opus-4-7')
+
+# Paddle (Merchant of Record)
+PADDLE_ENV = config('PADDLE_ENV', default='sandbox')  # sandbox | production
+PADDLE_API_KEY = config('PADDLE_API_KEY', default='')
+PADDLE_WEBHOOK_SECRET = config('PADDLE_WEBHOOK_SECRET', default='')
+PADDLE_CLIENT_TOKEN = config('PADDLE_CLIENT_TOKEN', default='')  # public, fed to frontend
 
 # Celery
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')

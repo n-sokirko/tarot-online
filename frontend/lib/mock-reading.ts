@@ -31,6 +31,7 @@ export const mockReading: ReadingResponse = {
       },
     ],
   },
+  interpretation: null,
   cards: [
     {
       position_index: 0,

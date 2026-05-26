@@ -33,6 +33,31 @@ export default function Navbar({ locale }: NavbarProps) {
         TAROT
       </Link>
 
+      {/* Center nav (desktop only) */}
+      <nav className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+        <Link
+          href="/"
+          className="text-xs font-sans tracking-widest uppercase"
+          style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Таро' : 'Tarot'}
+        </Link>
+        <Link
+          href="/runes"
+          className="text-xs font-sans tracking-widest uppercase"
+          style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Руны' : 'Runes'}
+        </Link>
+        <Link
+          href="/pricing"
+          className="text-xs font-sans tracking-widest uppercase"
+          style={{ color: '#d4af37', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Premium' : 'Premium'}
+        </Link>
+      </nav>
+
       {/* Right side */}
       <div className="flex items-center gap-4 md:gap-6">
         <LocaleSwitcher currentLocale={locale} />

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import ThreeCardSpread from '@/components/tarot/ThreeCardSpread';
 import NineCardSpread from '@/components/tarot/NineCardSpread';
+import InterpretationPanel from '@/components/tarot/InterpretationPanel';
 import type { ReadingResponse, SpreadPosition } from '@/lib/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
@@ -116,6 +117,12 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
           ) : (
             <ThreeCardSpread cards={reading.cards} spreadPositions={spreadPositions} locale={LOCALE} />
           )}
+
+          <InterpretationPanel
+            readingId={reading.id}
+            locale={LOCALE}
+            initial={reading.interpretation}
+          />
 
           <button
             onClick={() => router.push('/')}

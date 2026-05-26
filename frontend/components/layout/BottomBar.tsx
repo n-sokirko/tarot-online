@@ -11,10 +11,17 @@ const HomeIcon = () => (
   </svg>
 );
 
-const HistoryIcon = () => (
+const RunesIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
+    <path d="M6 3v18"/>
+    <path d="M18 3v18"/>
+    <path d="M6 8l12 8"/>
+  </svg>
+);
+
+const PricingIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
   </svg>
 );
 
@@ -31,9 +38,10 @@ export default function BottomBar() {
 
   const activeColor = '#d4af37';
   const inactiveColor = 'rgba(201,194,224,0.35)';
-  const disabledColor = 'rgba(201,194,224,0.18)';
 
   const isHome = pathname === '/';
+  const isRunes = pathname?.startsWith('/runes') ?? false;
+  const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
 
   return (
@@ -54,20 +62,31 @@ export default function BottomBar() {
       >
         <HomeIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Расклад
+          Таро
         </span>
       </Link>
 
-      {/* History — disabled for now */}
-      <div
-        className="flex flex-col items-center gap-1 cursor-not-allowed"
-        style={{ color: disabledColor }}
+      <Link
+        href="/runes"
+        className="flex flex-col items-center gap-1"
+        style={{ color: isRunes ? activeColor : inactiveColor }}
       >
-        <HistoryIcon />
+        <RunesIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          История
+          Руны
         </span>
-      </div>
+      </Link>
+
+      <Link
+        href="/pricing"
+        className="flex flex-col items-center gap-1"
+        style={{ color: isPricing ? activeColor : inactiveColor }}
+      >
+        <PricingIcon />
+        <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          Premium
+        </span>
+      </Link>
 
       <Link
         href={user ? '/account' : '/login'}

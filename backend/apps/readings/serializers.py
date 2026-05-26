@@ -3,7 +3,7 @@ import random
 
 from rest_framework import serializers
 
-from apps.readings.models import Reading, ReadingCard
+from apps.readings.models import Interpretation, Reading, ReadingCard
 from apps.tarot.models import Card, SpreadType
 from apps.tarot.serializers import CardSerializer, SpreadTypeSerializer
 
@@ -18,6 +18,12 @@ class ReadingCardSerializer(serializers.ModelSerializer):
         fields = ['position_index', 'is_reversed', 'card']
 
 
+class InterpretationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interpretation
+        fields = ['body_md', 'model_used', 'prompt_version', 'generated_at', 'token_count']
+
+
 class ReadingSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     question = serializers.CharField()
@@ -25,10 +31,11 @@ class ReadingSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(read_only=True)
     spread_type = SpreadTypeSerializer(read_only=True)
     cards = ReadingCardSerializer(many=True, read_only=True)
+    interpretation = InterpretationSerializer(read_only=True)
 
     class Meta:
         model = Reading
-        fields = ['id', 'question', 'locale', 'created_at', 'spread_type', 'cards']
+        fields = ['id', 'question', 'locale', 'created_at', 'spread_type', 'cards', 'interpretation']
 
 
 class CreateReadingSerializer(serializers.Serializer):

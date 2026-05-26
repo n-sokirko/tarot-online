@@ -16,4 +16,6 @@ urlpatterns = [
     path('api/v1/', include('apps.users.urls')),
     path('api/v1/', include('apps.tarot.urls')),
     path('api/v1/', include('apps.readings.urls')),
+    path('api/v1/', include('apps.billing.urls')),
+    path('api/v1/', include('apps.runes.urls')),
 ]
