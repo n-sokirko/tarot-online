@@ -1,0 +1,66 @@
+# ---- Env / secrets ----
+.env
+.env.local
+.env.*.local
+*.pem
+
+# ---- Python / Django ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+media/
+staticfiles/
+
+# ---- Node / Next.js ----
+node_modules/
+.next/
+out/
+dist/
+build/
+.cache/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.next-env.d.ts
+
+# ---- Editor / OS ----
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ---- Docker ----
+*.pid
+.docker/
+
+# ---- Claude Code ----
+.claude/cache/
+.claude/sessions/
+.claude/settings.local.json
+
+# ---- Misc ----
+*.log
+coverage/
+.cypress/
+playwright-report/
+test-results/

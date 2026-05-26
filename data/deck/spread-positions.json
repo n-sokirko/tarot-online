@@ -1,0 +1,34 @@
+{
+  "version": "0.1.0",
+  "spreads": [
+    {
+      "slug": "three-card",
+      "name_ru": "Расклад трёх карт",
+      "name_en": "Three-card spread",
+      "positions_count": 3,
+      "positions": [
+        {
+          "index": 0,
+          "label_ru": "Прошлое",
+          "label_en": "Past",
+          "meaning_ru": "То, что сформировало текущую ситуацию: события, решения, чувства, на которые опирается сегодняшний день.",
+          "meaning_en": "What shaped the current situation: events, decisions, feelings on which today rests."
+        },
+        {
+          "index": 1,
+          "label_ru": "Настоящее",
+          "label_en": "Present",
+          "meaning_ru": "Что происходит прямо сейчас: главная тема, динамика, на которую стоит обратить внимание.",
+          "meaning_en": "What is happening right now: the main theme, the dynamic worth your attention."
+        },
+        {
+          "index": 2,
+          "label_ru": "Будущее",
+          "label_en": "Future",
+          "meaning_ru": "К чему ведёт текущее движение, если ничего сильно не менять. Не приговор, а тенденция.",
+          "meaning_en": "Where the current motion leads if nothing changes significantly. Not a verdict, but a tendency."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "home": {
+    "title": "Online Tarot Reading",
+    "subtitle": "Ask your question and let the cards answer",
+    "cta": "Begin reading",
+    "description": "Focus on your question. Shuffle the deck. Let the cards speak."
+  },
+  "reading": {
+    "question_placeholder": "What do you want to know?",
+    "shuffle": "Shuffle the deck",
+    "draw": "Draw cards",
+    "interpret": "Read the spread",
+    "loading": "The cards are turning...",
+    "save": "Save this reading",
+    "draw_prompt": "The deck is shuffled. Draw three cards.",
+    "error": "Something went wrong. Please try again.",
+    "reversed": "Reversed"
+  },
+  "positions": {
+    "three_card": {
+      "past": "Past",
+      "present": "Present",
+      "future": "Future"
+    }
+  },
+  "card": {
+    "reversed": "Reversed",
+    "close": "Close",
+    "position_context": "Position"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "No connection. Check your network."
+  }
+}
