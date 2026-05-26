@@ -51,7 +51,7 @@ export const mockReading: ReadingResponse = {
           'Recklessness, naivety, risk without preparation, missed opportunities',
         keywords_ru: ['начало', 'свобода', 'приключение', 'доверие'],
         keywords_en: ['beginning', 'freedom', 'adventure', 'trust'],
-        image_url: '/cards/rider-waite/00-fool.jpg',
+        image_url: '/cards/major/the-fool.jpg',
       },
     },
     {
@@ -73,7 +73,7 @@ export const mockReading: ReadingResponse = {
           'Ignoring intuition, hidden secrets, superficiality',
         keywords_ru: ['интуиция', 'тайна', 'мудрость', 'внутренний мир'],
         keywords_en: ['intuition', 'mystery', 'wisdom', 'inner world'],
-        image_url: '/cards/rider-waite/02-high-priestess.jpg',
+        image_url: '/cards/major/the-high-priestess.jpg',
       },
     },
     {
@@ -94,7 +94,7 @@ export const mockReading: ReadingResponse = {
         reversed_meaning_en: 'Loss of faith, disappointment, feeling abandoned',
         keywords_ru: ['надежда', 'вдохновение', 'исцеление', 'свет'],
         keywords_en: ['hope', 'inspiration', 'healing', 'light'],
-        image_url: '/cards/rider-waite/17-star.jpg',
+        image_url: '/cards/major/the-star.jpg',
       },
     },
   ],
