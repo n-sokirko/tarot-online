@@ -29,6 +29,25 @@
           "meaning_en": "Where the current motion leads if nothing changes significantly. Not a verdict, but a tendency."
         }
       ]
+    },
+    {
+      "slug": "nine-card",
+      "name_ru": "Расклад из 9 карт",
+      "name_en": "Nine-Card Spread",
+      "description_ru": "Полный анализ ситуации: прошлое, настоящее и будущее в трёх аспектах",
+      "description_en": "Full situation analysis: past, present and future across three dimensions",
+      "positions_count": 9,
+      "positions": [
+        {"index": 0, "label_ru": "Корни прошлого", "label_en": "Roots of Past", "meaning_ru": "Глубинная причина, сформировавшая ситуацию", "meaning_en": "The deep cause that shaped the situation"},
+        {"index": 1, "label_ru": "Прошлое", "label_en": "Past", "meaning_ru": "Недавние события и их влияние", "meaning_en": "Recent events and their influence"},
+        {"index": 2, "label_ru": "Уходящее", "label_en": "Fading", "meaning_ru": "То, что покидает вашу жизнь", "meaning_en": "What is leaving your life"},
+        {"index": 3, "label_ru": "Скрытое", "label_en": "Hidden", "meaning_ru": "Что остаётся в тени, за кулисами", "meaning_en": "What remains in the shadows"},
+        {"index": 4, "label_ru": "Настоящее", "label_en": "Present", "meaning_ru": "Центральная энергия момента", "meaning_en": "The central energy of this moment"},
+        {"index": 5, "label_ru": "Внешнее", "label_en": "External", "meaning_ru": "Влияние окружения и других людей", "meaning_en": "Influence of surroundings and others"},
+        {"index": 6, "label_ru": "Приходящее", "label_en": "Arriving", "meaning_ru": "Что входит в вашу жизнь", "meaning_en": "What is entering your life"},
+        {"index": 7, "label_ru": "Будущее", "label_en": "Future", "meaning_ru": "Ближайшее развитие событий", "meaning_en": "Near-term development of events"},
+        {"index": 8, "label_ru": "Итог", "label_en": "Outcome", "meaning_ru": "Возможный финальный результат", "meaning_en": "The possible final outcome"}
+      ]
     }
   ]
 }
