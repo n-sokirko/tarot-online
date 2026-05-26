@@ -201,7 +201,7 @@ export default function CardDetailModal({
                       src={card.image_url}
                       alt={name}
                       fill
-                      className="object-cover"
+                      className="object-cover object-top"
                       sizes="(max-width: 768px) 240px, 280px"
                       unoptimized
                       onError={() => setImgError(true)}

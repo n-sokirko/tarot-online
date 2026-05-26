@@ -119,7 +119,7 @@ export default function CardFace({
                 src={card.image_url}
                 alt={name}
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 onError={() => setImgError(true)}
                 sizes="(max-width: 768px) 40vw, 200px"
                 unoptimized
