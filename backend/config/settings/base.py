@@ -1,8 +1,25 @@
 """Base Django settings — extended by dev.py and prod.py."""
+import os
 from pathlib import Path
-from decouple import config
+from decouple import Config, RepositoryEnv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Load .env explicitly so values in the file always win, even when an empty
+# env var has been injected into the process (some shells/harnesses do this,
+# and decouple's default `config()` reads os.environ first which then
+# silently overrides the .env value with an empty string).
+# .env lives in the project root, one level above BASE_DIR (= backend/).
+_ENV_FILE = BASE_DIR.parent / '.env'
+if _ENV_FILE.exists():
+    _repo = RepositoryEnv(str(_ENV_FILE))
+    for _k, _v in _repo.data.items():
+        # Override only when the existing env value is missing or empty.
+        if not os.environ.get(_k):
+            os.environ[_k] = _v
+    config = Config(_repo)
+else:
+    from decouple import config  # noqa: F401  fallback to AutoConfig
 
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='dev-only-change-me')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
