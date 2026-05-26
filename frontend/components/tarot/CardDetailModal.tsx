@@ -6,6 +6,14 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import type { TarotCard } from '@/lib/types';
 
+const SUIT_SHIMMER: Record<string, { color: string; duration: string }> = {
+  major:     { color: 'rgba(212,175,55,0.22)',  duration: '4s' },
+  wands:     { color: 'rgba(255,110,40,0.22)',  duration: '3.5s' },
+  cups:      { color: 'rgba(60,160,230,0.22)',  duration: '4.5s' },
+  swords:    { color: 'rgba(180,210,240,0.22)', duration: '3.8s' },
+  pentacles: { color: 'rgba(80,190,100,0.22)',  duration: '4.2s' },
+};
+
 interface CardDetailModalProps {
   card: TarotCard;
   isReversed: boolean;
@@ -188,15 +196,25 @@ export default function CardDetailModal({
                     </span>
                   </div>
                 ) : (
-                  <Image
-                    src={card.image_url}
-                    alt={name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 240px, 280px"
-                    unoptimized
-                    onError={() => setImgError(true)}
-                  />
+                  <>
+                    <Image
+                      src={card.image_url}
+                      alt={name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 240px, 280px"
+                      unoptimized
+                      onError={() => setImgError(true)}
+                    />
+                    <div
+                      className="card-shimmer absolute inset-0 overflow-hidden"
+                      style={{
+                        ['--shimmer-color' as string]: SUIT_SHIMMER[card.suit]?.color ?? 'rgba(212,175,55,0.22)',
+                        ['--shimmer-duration' as string]: SUIT_SHIMMER[card.suit]?.duration ?? '4s',
+                        ['--shimmer-delay' as string]: '0.5s',
+                      }}
+                    />
+                  </>
                 )}
               </div>
             </div>

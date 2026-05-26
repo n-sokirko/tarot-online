@@ -11,6 +11,14 @@ interface CardFaceProps {
   className?: string;
 }
 
+const SUIT_SHIMMER: Record<string, { color: string; duration: string }> = {
+  major:     { color: 'rgba(212,175,55,0.22)',  duration: '4s' },
+  wands:     { color: 'rgba(255,110,40,0.22)',  duration: '3.5s' },
+  cups:      { color: 'rgba(60,160,230,0.22)',  duration: '4.5s' },
+  swords:    { color: 'rgba(180,210,240,0.22)', duration: '3.8s' },
+  pentacles: { color: 'rgba(80,190,100,0.22)',  duration: '4.2s' },
+};
+
 export default function CardFace({
   card,
   isReversed,
@@ -19,6 +27,7 @@ export default function CardFace({
 }: CardFaceProps) {
   const [imgError, setImgError] = useState(false);
 
+  const shimmer = SUIT_SHIMMER[card.suit] ?? SUIT_SHIMMER.major;
   const name = locale === 'ru' ? card.name_ru : card.name_en;
   const meaning = isReversed
     ? locale === 'ru'
@@ -105,15 +114,26 @@ export default function CardFace({
               </span>
             </div>
           ) : (
-            <Image
-              src={card.image_url}
-              alt={name}
-              fill
-              className="object-cover"
-              onError={() => setImgError(true)}
-              sizes="(max-width: 768px) 40vw, 200px"
-              unoptimized
-            />
+            <>
+              <Image
+                src={card.image_url}
+                alt={name}
+                fill
+                className="object-cover"
+                onError={() => setImgError(true)}
+                sizes="(max-width: 768px) 40vw, 200px"
+                unoptimized
+              />
+              {/* Suit shimmer sweep */}
+              <div
+                className="card-shimmer absolute inset-0 overflow-hidden rounded-none"
+                style={{
+                  ['--shimmer-color' as string]: shimmer.color,
+                  ['--shimmer-duration' as string]: shimmer.duration,
+                  ['--shimmer-delay' as string]: `${(card.number ?? 0) % 3}s`,
+                }}
+              />
+            </>
           )}
         </div>
 
