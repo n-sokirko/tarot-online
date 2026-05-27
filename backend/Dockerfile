@@ -6,8 +6,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# psycopg[binary] ships its own compiled libs — no build tools needed.
+# We only need the runtime libpq for the psycopg binary wheel.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libpq-dev \
+    libpq5 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
