@@ -17,7 +17,6 @@ const labels = {
     placeholder:
       'О чём ты хочешь спросить руны? Опиши ситуацию, задай вопрос — камни ответят через призму твоих слов…',
     cta: 'Прочитать руны',
-    ctaEmpty: 'Прочитать без вопроса',
     loading: 'Руны говорят…',
     error: 'Что-то пошло не так. Попробуй ещё раз.',
     payRequired: 'Нужна Premium-подписка или кредиты, чтобы продолжить.',
@@ -30,7 +29,6 @@ const labels = {
     placeholder:
       'What do you want to ask the runes? Describe the situation, ask a question — the stones will answer through the lens of your words…',
     cta: 'Read the runes',
-    ctaEmpty: 'Read without a question',
     loading: 'The runes are speaking…',
     error: 'Something went wrong. Try again.',
     payRequired: 'Premium subscription or credits are needed to continue.',
@@ -252,16 +250,6 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
               >
                 ᛉ {t.cta}
               </motion.button>
-
-              {!question.trim() && (
-                <button
-                  onClick={run}
-                  className="text-[11px] tracking-wide underline underline-offset-4 transition-opacity hover:opacity-80"
-                  style={{ color: 'rgba(201,194,224,0.35)', letterSpacing: '0.05em' }}
-                >
-                  {t.ctaEmpty}
-                </button>
-              )}
             </div>
           </motion.div>
         )}

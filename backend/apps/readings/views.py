@@ -133,6 +133,17 @@ class ReadingViewSet(
             reading.question = question
             reading.save(update_fields=['question'])
 
+        # Require a question to avoid burning tokens on empty prompts.
+        if not reading.question.strip() and not hasattr(reading, 'interpretation'):
+            return Response(
+                {
+                    'detail': 'question_required',
+                    'message_ru': 'Напиши свой вопрос или историю, чтобы карты могли ответить.',
+                    'message_en': 'Write your question or story so the cards can respond.',
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if hasattr(reading, 'interpretation'):
             return Response(
                 InterpretationSerializer(reading.interpretation).data,

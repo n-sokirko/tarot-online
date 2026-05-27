@@ -116,6 +116,14 @@ class RuneCastViewSet(
             cast.question = question
             cast.save(update_fields=['question'])
 
+        # Require a question to avoid burning tokens on empty prompts.
+        if not cast.question.strip() and not hasattr(cast, 'interpretation'):
+            return Response({
+                'detail': 'question_required',
+                'message_ru': 'Напиши свой вопрос, чтобы руны могли ответить.',
+                'message_en': 'Write your question so the runes can respond.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         if hasattr(cast, 'interpretation'):
             return Response(RuneInterpretationSerializer(cast.interpretation).data)
 

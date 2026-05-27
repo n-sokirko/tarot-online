@@ -17,7 +17,6 @@ const labels = {
     placeholder:
       'O чём ты думаешь? Расскажи свою историю, задай вопрос — карты ответят через призму твоих слов…',
     cta: 'Раскрыть значение',
-    ctaEmpty: 'Раскрыть значение без вопроса',
     loading: 'Карты складываются в историю…',
     error: 'Что-то пошло не так. Попробуй ещё раз.',
     payRequired:
@@ -32,7 +31,6 @@ const labels = {
     placeholder:
       'What’s on your mind? Share your story, ask a question — the cards will answer through the lens of your words…',
     cta: 'Reveal the reading',
-    ctaEmpty: 'Reveal without a question',
     loading: 'The cards are weaving a story…',
     error: 'Something went wrong. Try again.',
     payRequired: 'Premium subscription or credits are needed to continue.',
@@ -266,16 +264,6 @@ export default function InterpretationPanel({ readingId, locale, initial }: Inte
               >
                 ✦ {t.cta}
               </motion.button>
-
-              {!question.trim() && (
-                <button
-                  onClick={fetchInterpretation}
-                  className="text-[11px] tracking-wide underline underline-offset-4 transition-opacity hover:opacity-80"
-                  style={{ color: 'rgba(201,194,224,0.35)', letterSpacing: '0.05em' }}
-                >
-                  {t.ctaEmpty}
-                </button>
-              )}
             </div>
           </motion.div>
         )}

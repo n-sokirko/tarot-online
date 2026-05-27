@@ -75,16 +75,35 @@ class TestRuneCast:
                               format='json').data['id']
         with patch('apps.runes.views.ai_client.generate_interpretation',
                    return_value=_mock_result()) as mock_gen:
-            res = api_client.post(f'/api/v1/runes/casts/{cid}/interpret/')
+            res = api_client.post(
+                f'/api/v1/runes/casts/{cid}/interpret/',
+                {'question': 'Что ждёт меня завтра?'},
+                format='json',
+            )
         assert res.status_code == 201
         assert mock_gen.called
         assert RuneInterpretation.objects.filter(cast_id=cid).exists()
+
+    def test_interpret_without_question_returns_400(self, api_client, runes):
+        cid = api_client.post('/api/v1/runes/casts/', {'layout': 'single', 'locale': 'ru'},
+                              format='json').data['id']
+        res = api_client.post(f'/api/v1/runes/casts/{cid}/interpret/', {}, format='json')
+        assert res.status_code == 400
+        assert res.data['detail'] == 'question_required'
 
     def test_interpret_is_idempotent(self, api_client, runes):
         cid = api_client.post('/api/v1/runes/casts/', {'layout': 'three', 'locale': 'ru'},
                               format='json').data['id']
         with patch('apps.runes.views.ai_client.generate_interpretation',
                    return_value=_mock_result()) as mock_gen:
-            api_client.post(f'/api/v1/runes/casts/{cid}/interpret/')
-            api_client.post(f'/api/v1/runes/casts/{cid}/interpret/')
+            api_client.post(
+                f'/api/v1/runes/casts/{cid}/interpret/',
+                {'question': 'Путешествие'},
+                format='json',
+            )
+            api_client.post(
+                f'/api/v1/runes/casts/{cid}/interpret/',
+                {'question': 'Путешествие'},
+                format='json',
+            )
         assert mock_gen.call_count == 1
