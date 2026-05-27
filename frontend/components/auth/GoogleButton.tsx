@@ -2,16 +2,18 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
+import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from '@react-oauth/google';
 import { saveTokens } from '@/lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+// Read once at module level so the value is stable and doesn't change on re-renders
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '';
 
 interface GoogleButtonProps {
   onError?: (msg: string) => void;
 }
 
-export default function GoogleButton({ onError }: GoogleButtonProps) {
+function GoogleLoginInner({ onError }: GoogleButtonProps) {
   const router = useRouter();
 
   const handleSuccess = useCallback(async (credentialResponse: CredentialResponse) => {
@@ -46,5 +48,18 @@ export default function GoogleButton({ onError }: GoogleButtonProps) {
         text="continue_with"
       />
     </div>
+  );
+}
+
+/**
+ * Self-contained Google Sign-In button.
+ * GoogleOAuthProvider is scoped here so its <script> tag is only rendered
+ * by this client component — avoids the root-layout hydration mismatch.
+ */
+export default function GoogleButton({ onError }: GoogleButtonProps) {
+  return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <GoogleLoginInner onError={onError} />
+    </GoogleOAuthProvider>
   );
 }

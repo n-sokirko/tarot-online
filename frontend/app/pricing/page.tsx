@@ -2,27 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
-import { ApiError, listPlans, startCheckout } from '@/lib/api';
+import { ApiError, listPlans, startTelegramCheckout, startTelegramInvoice } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
-import { openCheckout } from '@/lib/paddle';
 import type { Plan, PlansResponse } from '@/lib/types';
-
-const LOCALE = 'ru' as const;
 
 type PricingCopy = {
   title: string; subtitle: string;
   free_features: string[]; premium_features: string[]; credits_features: string[];
   cta_free: string; cta_premium: string; cta_credits: string; cta_login: string;
-  monthly: string; one_time: string; badge_recommended: string;
-  footnote: string; not_configured: string; error: string;
+  monthly: string; one_time: string; badge_recommended: string; stars: string;
+  footnote: string; not_configured: string; error: string; opening: string;
+  success: string;
 };
 
-const t: PricingCopy = ({
+const PRICING_COPY: Record<'ru' | 'en', PricingCopy> = {
   ru: {
     title: 'Тарифы',
-    subtitle: 'Выбери, что подходит. Платежи через Paddle — любая карта, любая валюта.',
+    subtitle: 'Оплата через Telegram Stars — без карт, без комиссий, работает везде.',
     free_features: ['3 расклада Таро в день', 'Базовые описания карт', 'Без AI-интерпретации'],
     premium_features: [
       '50 AI-интерпретаций в месяц',
@@ -32,19 +31,22 @@ const t: PricingCopy = ({
     ],
     credits_features: ['Не сгорают', 'Подходят для глубинных раскладов', 'Натальная карта (скоро)'],
     cta_free: 'Текущий тариф',
-    cta_premium: 'Оформить Premium',
-    cta_credits: 'Купить кредиты',
+    cta_premium: 'Оформить через Telegram',
+    cta_credits: 'Купить через Telegram',
     cta_login: 'Войти и оформить',
     monthly: '/мес',
     one_time: 'разово',
+    stars: '★',
     badge_recommended: 'Рекомендуем',
-    footnote: 'Платежи обрабатывает Paddle (merchant of record). Налоги и комиссии включены.',
-    not_configured: 'Этот тариф ещё не настроен в Paddle. Свяжись с автором.',
+    footnote: 'Оплата — Telegram Stars (XTR). Доступно в любой стране без банковской карты.',
+    not_configured: 'Этот тариф ещё не настроен. Напиши автору.',
     error: 'Не удалось открыть оплату. Попробуй ещё раз.',
+    opening: 'Открываю оплату…',
+    success: '✨ Premium активирован! Наслаждайся раскладами.',
   },
   en: {
     title: 'Pricing',
-    subtitle: 'Choose what fits. Payments via Paddle — any card, any currency.',
+    subtitle: 'Pay with Telegram Stars — no card needed, works everywhere.',
     free_features: ['3 tarot readings per day', 'Base card descriptions', 'No AI interpretation'],
     premium_features: [
       '50 AI interpretations / month',
@@ -54,62 +56,90 @@ const t: PricingCopy = ({
     ],
     credits_features: ['Never expire', 'Good for deep readings', 'Natal chart (soon)'],
     cta_free: 'Current plan',
-    cta_premium: 'Subscribe to Premium',
-    cta_credits: 'Buy credits',
+    cta_premium: 'Subscribe via Telegram',
+    cta_credits: 'Buy via Telegram',
     cta_login: 'Sign in to checkout',
     monthly: '/mo',
     one_time: 'one-time',
+    stars: '★',
     badge_recommended: 'Recommended',
-    footnote: 'Payments handled by Paddle (merchant of record). Taxes & fees included.',
-    not_configured: 'This plan is not yet configured in Paddle. Contact the maintainer.',
+    footnote: 'Payment via Telegram Stars (XTR). No bank card required, available worldwide.',
+    not_configured: 'This plan is not yet configured. Contact the maintainer.',
     error: 'Failed to open checkout. Try again.',
+    opening: 'Opening payment…',
+    success: '✨ Premium activated! Enjoy your readings.',
   },
-})[LOCALE];
-
-function formatPrice(cents: number, locale: 'ru' | 'en') {
-  const dollars = cents / 100;
-  if (locale === 'ru') {
-    return `$${dollars.toFixed(dollars % 1 === 0 ? 0 : 2)}`;
-  }
-  return `$${dollars.toFixed(dollars % 1 === 0 ? 0 : 2)}`;
-}
+};
 
 export default function PricingPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const locale = useLocale() as 'ru' | 'en';
+  const t = PRICING_COPY[locale];
   const [data, setData] = useState<PlansResponse | null>(null);
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   useEffect(() => {
     listPlans().then(setData).catch(() => setErrorMsg(t.error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePurchase = async (plan: Plan) => {
     setErrorMsg(null);
+    setSuccessMsg(null);
     if (!getAccessToken()) {
       router.push('/login?next=/pricing');
       return;
     }
     setPurchasing(plan.slug);
+
+    // Detect Telegram Mini App environment
+    type TgWebApp = {
+      openInvoice?: (url: string, cb: (s: string) => void) => void;
+      openTelegramLink?: (url: string) => void;
+      initData?: string;
+    };
+    const tgWebApp: TgWebApp | undefined =
+      (typeof window !== 'undefined')
+        ? (window as unknown as { Telegram?: { WebApp?: TgWebApp } }).Telegram?.WebApp
+        : undefined;
+
+    const insideMiniApp = !!tgWebApp?.initData;
+
     try {
-      const payload = await startCheckout(plan.slug);
-      await openCheckout({
-        env: payload.paddle_env,
-        token: payload.paddle_client_token,
-        priceId: payload.price_id,
-        email: payload.customer_email,
-        customData: payload.custom_data,
-        locale: LOCALE,
-      });
+      if (insideMiniApp && tgWebApp?.openInvoice) {
+        // ── Inside Telegram Mini App: native Stars payment sheet ──
+        const payload = await startTelegramInvoice(plan.slug);
+        tgWebApp.openInvoice(payload.invoice_link, (invoiceStatus: string) => {
+          setPurchasing(null);
+          if (invoiceStatus === 'paid') {
+            setSuccessMsg(t.success);
+          } else if (invoiceStatus === 'cancelled' || invoiceStatus === 'failed') {
+            setErrorMsg(t.error);
+          }
+        });
+        // purchasing stays true until the invoice callback fires
+      } else if (insideMiniApp && tgWebApp?.openTelegramLink) {
+        // ── Mini App on an older client without openInvoice ──
+        // Deep-link the bot through Telegram's native link handler (stays in-app).
+        const payload = await startTelegramCheckout(plan.slug);
+        tgWebApp.openTelegramLink(payload.url);
+        setPurchasing(null);
+      } else {
+        // ── Regular browser ──
+        const payload = await startTelegramCheckout(plan.slug);
+        window.open(payload.url, '_blank', 'noopener,noreferrer');
+        setPurchasing(null);
+      }
     } catch (e) {
+      setPurchasing(null);
       if (e instanceof ApiError && e.status === 503) {
         setErrorMsg(t.not_configured);
       } else {
         setErrorMsg(t.error);
       }
-    } finally {
-      setPurchasing(null);
     }
   };
 
@@ -141,6 +171,17 @@ export default function PricingPage() {
           </p>
         )}
 
+        {successMsg && (
+          <motion.p
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-sm mb-6 font-serif"
+            style={{ color: '#d4af37' }}
+          >
+            {successMsg}
+          </motion.p>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {data?.plans.map((plan, idx) => (
             <PlanCard
@@ -149,7 +190,7 @@ export default function PricingPage() {
               recommended={plan.slug === 'premium-monthly'}
               loading={purchasing === plan.slug}
               onPurchase={() => handlePurchase(plan)}
-              locale={LOCALE}
+              locale={locale}
               t={t}
               user={!!user}
               index={idx}
@@ -193,6 +234,7 @@ function PlanCard({
   let features: string[] = [];
   let cta = t.cta_premium;
   let priceLabel = '';
+  let starsLabel = '';
 
   if (plan.kind === 'free') {
     features = t.free_features;
@@ -201,12 +243,17 @@ function PlanCard({
   } else if (plan.kind === 'subscription') {
     features = t.premium_features;
     cta = user ? t.cta_premium : t.cta_login;
-    priceLabel = `${formatPrice(plan.price_usd_cents, locale)} ${t.monthly}`;
+    priceLabel = locale === 'ru' ? 'ежемесячно' : 'monthly';
+    starsLabel = plan.tg_stars_price ? `${plan.tg_stars_price} ${t.stars}` : '';
   } else {
     features = t.credits_features;
     cta = user ? t.cta_credits : t.cta_login;
-    priceLabel = `${formatPrice(plan.price_usd_cents, locale)} · ${t.one_time}`;
+    priceLabel = t.one_time;
+    starsLabel = plan.tg_stars_price ? `${plan.tg_stars_price} ${t.stars}` : '';
   }
+
+  const isFree = plan.kind === 'free';
+  const isLoading = loading && !isFree;
 
   return (
     <motion.div
@@ -236,13 +283,27 @@ function PlanCard({
         </span>
       )}
 
-      <h2 className="font-serif text-xl mb-2" style={{ color: '#d4af37' }}>
+      <h2 className="font-serif text-xl mb-1" style={{ color: '#d4af37' }}>
         {name}
       </h2>
-      <div className="font-serif text-2xl mb-4" style={{ color: 'rgba(201,194,224,0.95)' }}>
-        {priceLabel}
-      </div>
-      <p className="font-serif text-sm mb-5" style={{ color: 'rgba(201,194,224,0.65)' }}>
+
+      {/* Stars price */}
+      {starsLabel ? (
+        <div className="mb-1">
+          <span className="font-serif text-2xl" style={{ color: 'rgba(201,194,224,0.95)' }}>
+            {starsLabel}
+          </span>
+          <span className="font-serif text-sm ml-1" style={{ color: 'rgba(201,194,224,0.5)' }}>
+            · {priceLabel}
+          </span>
+        </div>
+      ) : (
+        <div className="font-serif text-2xl mb-1" style={{ color: 'rgba(201,194,224,0.95)' }}>
+          {priceLabel}
+        </div>
+      )}
+
+      <p className="font-serif text-sm mb-5 mt-2" style={{ color: 'rgba(201,194,224,0.65)' }}>
         {description}
       </p>
 
@@ -256,23 +317,28 @@ function PlanCard({
       </ul>
 
       <button
-        disabled={plan.kind === 'free' || loading}
+        disabled={isFree || isLoading}
         onClick={onPurchase}
-        className="w-full px-4 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all"
+        className="w-full px-4 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
         style={{
-          background: plan.kind === 'free'
+          background: isFree
             ? 'rgba(201,194,224,0.05)'
             : 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-          border: plan.kind === 'free'
-            ? '1px solid rgba(201,194,224,0.15)'
-            : '1px solid #d4af37',
-          color: plan.kind === 'free' ? 'rgba(201,194,224,0.45)' : '#d4af37',
+          border: isFree ? '1px solid rgba(201,194,224,0.15)' : '1px solid #d4af37',
+          color: isFree ? 'rgba(201,194,224,0.45)' : '#d4af37',
           letterSpacing: '0.18em',
-          opacity: loading ? 0.5 : 1,
-          cursor: plan.kind === 'free' || loading ? 'default' : 'pointer',
+          opacity: isLoading ? 0.6 : 1,
+          cursor: isFree || isLoading ? 'default' : 'pointer',
         }}
       >
-        {loading ? '...' : cta}
+        {isLoading ? (
+          t.opening
+        ) : (
+          <>
+            {!isFree && <span style={{ fontSize: '1.1em' }}>✈</span>}
+            {cta}
+          </>
+        )}
       </button>
     </motion.div>
   );

@@ -40,6 +40,11 @@ jobs:
       POSTGRES_DB: tarot
       ANTHROPIC_API_KEY: ci-placeholder
       PADDLE_WEBHOOK_SECRET: whsec_ci_placeholder
+      # Telegram stubs — real values live in production secrets only
+      TELEGRAM_BOT_TOKEN: "0000000000:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      TELEGRAM_PAYMENT_SECRET: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      TELEGRAM_BOT_USERNAME: ci_test_bot
+      WEBAPP_URL: "https://example.com"
     steps:
       - uses: actions/checkout@v4
 
@@ -60,6 +65,7 @@ jobs:
 
       - name: Seed data
         run: |
+          python manage.py seed_deck
           python manage.py seed_runes
           python manage.py seed_plans
 

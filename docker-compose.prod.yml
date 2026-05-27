@@ -85,12 +85,15 @@ services:
       - frontend
 
   # ── Cloudflare Tunnel ────────────────────────────────────────────────────────
-  # Creates a secure tunnel: sokirdon.com → nginx:80 (no port-forwarding needed)
-  # Token is created in: Cloudflare Dashboard → Zero Trust → Networks → Tunnels
+  # Routes sokirdon.com → nginx:80 via Cloudflare edge (no port-forwarding needed)
+  # Config generated from token: run scripts/gen-cloudflared-config.ps1 to regenerate
   tunnel:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/credentials.json:/etc/cloudflared/credentials.json:ro
     depends_on:
       - nginx
 

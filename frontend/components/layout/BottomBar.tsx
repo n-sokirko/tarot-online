@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { useAuth } from '@/lib/auth-context';
+
+const LABELS = {
+  ru: { tarot: 'Таро', runes: 'Руны', premium: 'Premium', profile: 'Профиль', login: 'Войти' },
+  en: { tarot: 'Tarot', runes: 'Runes', premium: 'Premium', profile: 'Profile', login: 'Log in' },
+} as const;
 
 const HomeIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -35,6 +41,8 @@ const PersonIcon = () => (
 export default function BottomBar() {
   const pathname = usePathname();
   const { user } = useAuth();
+  const locale = useLocale() as 'ru' | 'en';
+  const l = LABELS[locale];
 
   const activeColor = '#d4af37';
   const inactiveColor = 'rgba(201,194,224,0.35)';
@@ -62,7 +70,7 @@ export default function BottomBar() {
       >
         <HomeIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Таро
+          {l.tarot}
         </span>
       </Link>
 
@@ -73,7 +81,7 @@ export default function BottomBar() {
       >
         <RunesIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Руны
+          {l.runes}
         </span>
       </Link>
 
@@ -84,7 +92,7 @@ export default function BottomBar() {
       >
         <PricingIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Premium
+          {l.premium}
         </span>
       </Link>
 
@@ -95,7 +103,7 @@ export default function BottomBar() {
       >
         <PersonIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          {user ? 'Профиль' : 'Войти'}
+          {user ? l.profile : l.login}
         </span>
       </Link>
     </nav>

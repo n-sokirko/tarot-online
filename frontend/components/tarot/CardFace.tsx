@@ -121,7 +121,7 @@ export default function CardFace({
                 fill
                 className="object-cover object-top"
                 onError={() => setImgError(true)}
-                sizes="(max-width: 768px) 40vw, 200px"
+                sizes="(max-width: 768px) 75vw, 200px"
                 unoptimized
               />
               {/* Suit shimmer sweep */}

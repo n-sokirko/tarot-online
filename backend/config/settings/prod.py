@@ -21,3 +21,10 @@ CSRF_TRUSTED_ORIGINS = config(
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS', default='', cast=lambda s: [o for o in s.split(',') if o]
 )
+
+# Allow both http:// and https:// for the same domain so that mobile browsers
+# that follow an HTTP link (before Cloudflare upgrades it) are not blocked.
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https?://sokirdon\.com$',
+    r'^https?://www\.sokirdon\.com$',
+]

@@ -9,6 +9,8 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  // Allow the production domain to load /_next/* assets from the dev server
+  allowedDevOrigins: ['sokirdon.com'],
 };
 
 export default withNextIntl(nextConfig);

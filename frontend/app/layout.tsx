@@ -2,14 +2,12 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from '@/lib/auth-context';
 import Navbar from '@/components/layout/Navbar';
 import BottomBar from '@/components/layout/BottomBar';
+import TelegramInit from '@/components/telegram/TelegramInit';
 import type { Locale } from '@/i18n';
 import './globals.css';
-
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin', 'cyrillic'],
@@ -45,15 +43,15 @@ export default async function RootLayout({
     >
       <body className="min-h-screen bg-midnight text-mist font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <AuthProvider>
-              <Navbar locale={locale} />
-              <div style={{ paddingTop: '56px', paddingBottom: '60px' }} className="md:pb-0">
-                {children}
-              </div>
-              <BottomBar />
-            </AuthProvider>
-          </GoogleOAuthProvider>
+          <AuthProvider>
+            {/* Initialises Telegram WebApp and auto-logs-in Mini App users */}
+            <TelegramInit />
+            <Navbar locale={locale} />
+            <div style={{ paddingTop: '56px', paddingBottom: '60px' }} className="md:pb-0">
+              {children}
+            </div>
+            <BottomBar />
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

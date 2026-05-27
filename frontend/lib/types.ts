@@ -97,6 +97,7 @@ export interface Plan {
   description_en: string;
   kind: PlanKind;
   price_usd_cents: number;
+  tg_stars_price: number;
   monthly_included_credits: number;
   credits_granted: number;
   entitlement_keys: string[];
@@ -105,8 +106,21 @@ export interface Plan {
 
 export interface PlansResponse {
   plans: Plan[];
+  telegram_bot_username: string;
   paddle_client_token: string;
   paddle_env: 'sandbox' | 'production';
+}
+
+export interface TelegramCheckoutPayload {
+  url: string;
+  stars: number;
+  plan: Plan;
+}
+
+export interface TelegramInvoicePayload {
+  invoice_link: string;
+  stars: number;
+  plan: Plan;
 }
 
 export interface BillingMe {

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.billing',
     'apps.runes',
+    'apps.telegram_bot',
 ]
 
 MIDDLEWARE = [
@@ -130,11 +131,30 @@ ANTHROPIC_MODEL_FREE = config('ANTHROPIC_MODEL_FREE', default='claude-haiku-4-5-
 ANTHROPIC_MODEL_PREMIUM = config('ANTHROPIC_MODEL_PREMIUM', default='claude-sonnet-4-6')
 ANTHROPIC_MODEL_DEEP = config('ANTHROPIC_MODEL_DEEP', default='claude-opus-4-7')
 
-# Paddle (Merchant of Record)
-PADDLE_ENV = config('PADDLE_ENV', default='sandbox')  # sandbox | production
+# Paddle (kept for legacy/international users)
+PADDLE_ENV = config('PADDLE_ENV', default='sandbox')
 PADDLE_API_KEY = config('PADDLE_API_KEY', default='')
 PADDLE_WEBHOOK_SECRET = config('PADDLE_WEBHOOK_SECRET', default='')
-PADDLE_CLIENT_TOKEN = config('PADDLE_CLIENT_TOKEN', default='')  # public, fed to frontend
+PADDLE_CLIENT_TOKEN = config('PADDLE_CLIENT_TOKEN', default='')
+
+# CORS
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:3000',
+    cast=lambda s: [x.strip() for x in s.split(',') if x.strip()],
+)
+CORS_ALLOW_CREDENTIALS = True
+
+# Trust the X-Forwarded-Proto header set by nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Telegram Bot / Stars payments
+TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', default='')
+TELEGRAM_BOT_USERNAME = config('TELEGRAM_BOT_USERNAME', default='tarott_online_bot')
+TELEGRAM_PAYMENT_SECRET = config('TELEGRAM_PAYMENT_SECRET', default='change-me-in-production')
+
+# Telegram Mini App (Web App)
+WEBAPP_URL = config('WEBAPP_URL', default='https://sokirdon.com')
 
 # Celery
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')

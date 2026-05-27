@@ -3,14 +3,16 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
-export type SpreadSlug = 'three-card' | 'nine-card';
+export type SpreadSlug = 'three-card' | 'nine-card' | 'celtic-cross';
 
 interface SpreadOption {
-  slug: SpreadSlug | 'celtic-cross';
+  slug: SpreadSlug;
   nameKey: string;
   descKey: string;
   cardsKey: string;
   premium: boolean;
+  /** Entitlement key required to unlock when premium. */
+  entitlement?: string;
   symbol: string;
 }
 
@@ -37,15 +39,18 @@ const SPREADS: SpreadOption[] = [
     descKey: 'spread_celtic_desc',
     cardsKey: 'spread_celtic_cards',
     premium: true,
-    symbol: '✦',
+    entitlement: 'celtic_cross',
+    symbol: '  ✦\n✦✦✦  ✦\n  ✦    ✦\n       ✦',
   },
 ];
 
 interface SpreadSelectorProps {
   onSelect: (slug: SpreadSlug) => void;
+  /** Entitlement keys the current user has — used to unlock premium spreads. */
+  entitlements?: readonly string[];
 }
 
-export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
+export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSelectorProps) {
   const t = useTranslations('reading');
   const prefersReducedMotion = useReducedMotion();
 
@@ -65,29 +70,33 @@ export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
 
       <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
         {SPREADS.map((spread, i) => {
-          const isPremium = spread.premium;
+          const unlocked =
+            !spread.premium ||
+            (spread.entitlement !== undefined &&
+              entitlements.includes(spread.entitlement));
+          const isLocked = !unlocked;
 
           return (
             <motion.button
               key={spread.slug}
-              disabled={isPremium}
-              onClick={() => !isPremium && onSelect(spread.slug as SpreadSlug)}
+              disabled={isLocked}
+              onClick={() => unlocked && onSelect(spread.slug)}
               className="relative flex flex-col items-center gap-4 p-6 rounded-2xl text-left transition-all"
               style={{
-                background: isPremium
+                background: isLocked
                   ? 'rgba(212,175,55,0.03)'
                   : 'rgba(212,175,55,0.06)',
-                border: isPremium
+                border: isLocked
                   ? '1px solid rgba(212,175,55,0.15)'
                   : '1px solid rgba(212,175,55,0.35)',
-                cursor: isPremium ? 'not-allowed' : 'pointer',
-                opacity: isPremium ? 0.6 : 1,
+                cursor: isLocked ? 'not-allowed' : 'pointer',
+                opacity: isLocked ? 0.6 : 1,
               }}
               initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: isPremium ? 0.6 : 1, y: 0 }}
+              animate={{ opacity: isLocked ? 0.6 : 1, y: 0 }}
               transition={{ delay: i * 0.12, duration: 0.4 }}
               whileHover={
-                isPremium || prefersReducedMotion
+                isLocked || prefersReducedMotion
                   ? {}
                   : {
                       scale: 1.03,
@@ -95,9 +104,9 @@ export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
                       background: 'rgba(212,175,55,0.1)',
                     }
               }
-              whileTap={isPremium || prefersReducedMotion ? {} : { scale: 0.98 }}
+              whileTap={isLocked || prefersReducedMotion ? {} : { scale: 0.98 }}
             >
-              {isPremium && (
+              {spread.premium && (
                 <span
                   className="absolute top-3 right-3 text-xs px-2 py-0.5 rounded-full font-sans"
                   style={{
@@ -117,10 +126,10 @@ export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
                 <div
                   className="font-serif text-center leading-relaxed whitespace-pre-line"
                   style={{
-                    color: isPremium ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
-                    fontSize: spread.slug === 'nine-card' ? '0.6rem' : '1rem',
+                    color: isLocked ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
+                    fontSize: spread.slug === 'nine-card' || spread.slug === 'celtic-cross' ? '0.6rem' : '1rem',
                     letterSpacing: '0.3em',
-                    lineHeight: spread.slug === 'nine-card' ? '1.8' : '1',
+                    lineHeight: spread.slug === 'nine-card' || spread.slug === 'celtic-cross' ? '1.8' : '1',
                   }}
                 >
                   {spread.symbol}
@@ -130,7 +139,7 @@ export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
               <div className="flex flex-col items-center gap-1 text-center">
                 <p
                   className="font-serif text-base"
-                  style={{ color: isPremium ? 'rgba(212,175,55,0.4)' : '#d4af37' }}
+                  style={{ color: isLocked ? 'rgba(212,175,55,0.4)' : '#d4af37' }}
                 >
                   {t(spread.nameKey)}
                 </p>
@@ -143,11 +152,11 @@ export default function SpreadSelector({ onSelect }: SpreadSelectorProps) {
                 <p
                   className="text-xs mt-1"
                   style={{
-                    color: isPremium ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
+                    color: isLocked ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
                     letterSpacing: '0.08em',
                   }}
                 >
-                  {isPremium ? t('premium_locked') : t(spread.cardsKey)}
+                  {isLocked ? t('premium_locked') : t(spread.cardsKey)}
                 </p>
               </div>
             </motion.button>

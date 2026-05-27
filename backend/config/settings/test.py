@@ -16,3 +16,31 @@ DATABASES = {
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.MD5PasswordHasher',
 ]
+
+# Suppress Django's debug log handler that tries to render templates
+# (fails on Python 3.14 due to super() in template context __copy__)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
+
+# Stub credentials for tests (override in individual tests via settings fixture)
+TELEGRAM_BOT_TOKEN = 'test_bot_token:STUB'
+TELEGRAM_PAYMENT_SECRET = 'a' * 64
+TELEGRAM_BOT_USERNAME = 'test_bot'

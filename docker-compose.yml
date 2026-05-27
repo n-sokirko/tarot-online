@@ -30,13 +30,19 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py seed_deck &&
+             python manage.py seed_runes &&
+             python manage.py seed_plans &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app
+      - ./data:/data:ro
     ports:
       - "8000:8000"
     env_file:
       - .env
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       db:
         condition: service_healthy
@@ -50,9 +56,29 @@ services:
       - ./backend:/app
     env_file:
       - .env
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       - backend
       - redis
+
+  telegram_bot:
+    build: ./backend
+    command: python manage.py run_bot
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
 
   frontend:
     image: node:20-alpine
@@ -63,9 +89,30 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=https://sokirdon.com
     depends_on:
       - backend
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/credentials.json:/etc/cloudflared/credentials.json:ro
+    depends_on:
+      - nginx
 
 volumes:
   pgdata:

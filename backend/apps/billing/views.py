@@ -33,6 +33,7 @@ def plans_list(_request: Request) -> Response:
     plans = Plan.objects.filter(is_active=True).order_by('sort_order', 'price_usd_cents')
     return Response({
         'plans': PlanSerializer(plans, many=True).data,
+        'telegram_bot_username': settings.TELEGRAM_BOT_USERNAME,
         'paddle_client_token': settings.PADDLE_CLIENT_TOKEN,
         'paddle_env': settings.PADDLE_ENV,
     })
@@ -95,6 +96,90 @@ def checkout(request: Request) -> Response:
             'user_id': str(request.user.id),
             'plan_slug': plan.slug,
         },
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def telegram_checkout(request: Request) -> Response:
+    """Generate a Telegram deep-link for Stars payment."""
+    slug = request.data.get('plan_slug')
+    if not slug:
+        return Response({'detail': 'plan_slug is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        plan = Plan.objects.get(slug=slug, is_active=True)
+    except Plan.DoesNotExist:
+        return Response({'detail': 'plan not found'}, status=status.HTTP_404_NOT_FOUND)
+    if plan.kind == Plan.KIND_FREE:
+        return Response({'detail': 'free plan does not require checkout'},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if not plan.tg_stars_price:
+        return Response({'detail': 'plan_not_configured',
+                         'message': 'Set tg_stars_price in admin or via seed_plans.'},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    from apps.telegram_bot.tokens import generate_payment_token
+    token = generate_payment_token(request.user.id, plan.slug)
+    return Response({
+        'url': f"https://t.me/{settings.TELEGRAM_BOT_USERNAME}?start=buy_{token}",
+        'stars': plan.tg_stars_price,
+        'plan': PlanSerializer(plan).data,
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def telegram_invoice(request: Request) -> Response:
+    """
+    Create a Telegram invoice link for use with WebApp.openInvoice().
+
+    This is the Mini App payment path: instead of redirecting the user to the bot
+    via a deep-link, we create an invoice link server-side and let the Telegram
+    WebApp SDK show the native Stars payment sheet inline.
+    """
+    import requests as http_requests
+
+    slug = request.data.get('plan_slug')
+    if not slug:
+        return Response({'detail': 'plan_slug is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        plan = Plan.objects.get(slug=slug, is_active=True)
+    except Plan.DoesNotExist:
+        return Response({'detail': 'plan not found'}, status=status.HTTP_404_NOT_FOUND)
+    if plan.kind == Plan.KIND_FREE:
+        return Response({'detail': 'free plan does not require checkout'},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if not plan.tg_stars_price:
+        return Response({'detail': 'plan_not_configured'},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    if not settings.TELEGRAM_BOT_TOKEN:
+        return Response({'detail': 'telegram_not_configured'},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    tg_url = f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/createInvoiceLink'
+    try:
+        resp = http_requests.post(tg_url, json={
+            'title': plan.name_ru,
+            'description': plan.description_ru[:255],
+            'payload': f'buy|{plan.slug}|{request.user.id}',
+            'currency': 'XTR',
+            'prices': [{'label': plan.name_ru, 'amount': plan.tg_stars_price}],
+            'provider_token': '',
+        }, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception as exc:
+        log.error('createInvoiceLink failed: %s', exc)
+        return Response({'detail': 'telegram_api_error'}, status=status.HTTP_502_BAD_GATEWAY)
+
+    if not data.get('ok'):
+        log.error('createInvoiceLink error response: %s', data)
+        return Response({'detail': 'telegram_api_error'}, status=status.HTTP_502_BAD_GATEWAY)
+
+    return Response({
+        'invoice_link': data['result'],
+        'stars': plan.tg_stars_price,
+        'plan': PlanSerializer(plan).data,
     })
 
 

@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from apps.billing import services as billing
 from apps.billing.models import UsageLedger
+from apps.billing.rate_limit import ANON_DAILY_LIMIT, check_anon_daily_limit
 from apps.readings.models import Interpretation, Reading
 from apps.readings.serializers import (
     CreateReadingSerializer,
@@ -91,9 +92,36 @@ class ReadingViewSet(
         except Reading.DoesNotExist:
             raise NotFound(detail=f"Reading {pk} not found.")
 
+    # Spread slugs that require an active entitlement to draw.
+    PREMIUM_SPREADS = {
+        'celtic-cross': 'celtic_cross',
+    }
+
     def create(self, request: Request, *args, **kwargs) -> Response:
         serializer = CreateReadingSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        # Premium gating — block creation of premium spreads for users without
+        # the matching entitlement (anonymous users are blocked too).
+        spread_slug = (request.data.get('spread_slug') or '').strip()
+        required_key = self.PREMIUM_SPREADS.get(spread_slug)
+        if required_key:
+            user = (
+                request.user
+                if getattr(request, 'user', None) and request.user.is_authenticated
+                else None
+            )
+            if not billing.has_entitlement(user, required_key):
+                return Response(
+                    {
+                        'detail': 'premium_required',
+                        'required_entitlement': required_key,
+                        'message_ru': 'Этот расклад доступен по Premium-подписке.',
+                        'message_en': 'This spread is available with a Premium subscription.',
+                    },
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
         reading = serializer.save()
 
         # Attach the authenticated user when present (anonymous still allowed).
@@ -151,6 +179,25 @@ class ReadingViewSet(
             )
 
         user = request.user if getattr(request, 'user', None) and request.user.is_authenticated else None
+
+        # Anonymous users: enforce daily free limit before hitting the AI.
+        if user is None:
+            allowed, remaining = check_anon_daily_limit(request, kind='tarot')
+            if not allowed:
+                return Response(
+                    {
+                        'detail': 'rate_limited',
+                        'message_ru': (
+                            f'Ты уже использовал {ANON_DAILY_LIMIT} бесплатных интерпретации сегодня. '
+                            'Войди или зарегистрируйся — это бесплатно.'
+                        ),
+                        'message_en': (
+                            f"You've used all {ANON_DAILY_LIMIT} free interpretations for today. "
+                            "Log in or sign up — it's free."
+                        ),
+                    },
+                    status=429,
+                )
 
         # Decide which tier (and therefore which model) to use.
         info = billing.tier_for(user)

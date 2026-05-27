@@ -48,6 +48,26 @@
         {"index": 7, "label_ru": "Будущее", "label_en": "Future", "meaning_ru": "Ближайшее развитие событий", "meaning_en": "Near-term development of events"},
         {"index": 8, "label_ru": "Итог", "label_en": "Outcome", "meaning_ru": "Возможный финальный результат", "meaning_en": "The possible final outcome"}
       ]
+    },
+    {
+      "slug": "celtic-cross",
+      "name_ru": "Кельтский крест",
+      "name_en": "Celtic Cross",
+      "description_ru": "Классический глубинный расклад из 10 карт: крест ситуации и посох развития",
+      "description_en": "The classic 10-card in-depth spread: a cross of the situation and a staff of development",
+      "positions_count": 10,
+      "positions": [
+        {"index": 0, "label_ru": "Суть ситуации",       "label_en": "Present situation",  "meaning_ru": "Сердце вопроса — то, что прямо сейчас в центре твоего внимания.",                              "meaning_en": "The heart of the matter — what is at the centre of your attention right now."},
+        {"index": 1, "label_ru": "Вызов",               "label_en": "Challenge",          "meaning_ru": "То, что пересекает ситуацию: препятствие или, наоборот, поддержка, идущая поперёк привычного.", "meaning_en": "What crosses the situation: an obstacle, or sometimes a support arriving sideways."},
+        {"index": 2, "label_ru": "Основа",              "label_en": "Foundation",         "meaning_ru": "Бессознательная почва: давние чувства и опыт, на которых стоит сегодняшнее.",                   "meaning_en": "The unconscious ground: old feelings and experience on which today rests."},
+        {"index": 3, "label_ru": "Недавнее прошлое",    "label_en": "Recent past",        "meaning_ru": "То, что только что уходит из ситуации, но ещё отбрасывает тень.",                                "meaning_en": "What is just now leaving the situation but still casts a shadow."},
+        {"index": 4, "label_ru": "Венец",               "label_en": "Crown",              "meaning_ru": "Сознательная цель или возможный исход, к которому ты стремишься.",                                "meaning_en": "The conscious goal or possible outcome you are reaching for."},
+        {"index": 5, "label_ru": "Ближайшее будущее",   "label_en": "Near future",        "meaning_ru": "Что входит в ситуацию в ближайшее время — направление, а не приговор.",                          "meaning_en": "What is entering the situation soon — a direction, not a verdict."},
+        {"index": 6, "label_ru": "Ты сам",              "label_en": "The self",           "meaning_ru": "Твоё внутреннее состояние и отношение к ситуации.",                                              "meaning_en": "Your inner state and attitude toward the situation."},
+        {"index": 7, "label_ru": "Окружение",           "label_en": "External influences","meaning_ru": "Влияние людей, обстоятельств и среды вокруг тебя.",                                              "meaning_en": "The influence of people, circumstances and environment around you."},
+        {"index": 8, "label_ru": "Надежды и страхи",    "label_en": "Hopes and fears",    "meaning_ru": "Внутренние ожидания: и то, чего ты ждёшь, и то, чего избегаешь.",                                 "meaning_en": "Inner expectations: both what you long for and what you avoid."},
+        {"index": 9, "label_ru": "Итог",                "label_en": "Final outcome",      "meaning_ru": "Куда складывается всё вместе — итоговая нота истории, не приговор.",                              "meaning_en": "Where it all comes together — the final note of the story, not a verdict."}
+      ]
     }
   ]
 }

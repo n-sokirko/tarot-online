@@ -9,7 +9,7 @@ class PlanSerializer(serializers.ModelSerializer):
         model = Plan
         fields = [
             'slug', 'name_ru', 'name_en', 'description_ru', 'description_en',
-            'kind', 'price_usd_cents',
+            'kind', 'price_usd_cents', 'tg_stars_price',
             'monthly_included_credits', 'credits_granted',
             'entitlement_keys', 'paddle_price_id',
         ]

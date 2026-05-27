@@ -2,21 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { getRuneCast } from '@/lib/api';
 import RuneCastBoard from '@/components/runes/RuneCastBoard';
 import RuneInterpretationPanel from '@/components/runes/RuneInterpretationPanel';
 import type { RuneCastResponse } from '@/lib/types';
 
-const LOCALE = 'ru' as const;
-
-const t = {
+const COPY = {
   ru: { loading: 'Руны раскрываются...', back: 'Бросить снова', error: 'Не получилось загрузить бросок.' },
   en: { loading: 'The runes are revealing...', back: 'Cast again', error: 'Failed to load the cast.' },
-}[LOCALE];
+} as const;
 
 export default function RuneCastPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const locale = useLocale() as 'ru' | 'en';
+  const t = COPY[locale];
   const [cast, setCast] = useState<RuneCastResponse | null>(null);
   const [error, setError] = useState(false);
 
@@ -67,12 +68,12 @@ export default function RuneCastPage({ params }: { params: { id: string } }) {
           layout={cast.layout}
           items={cast.items}
           positions={cast.positions}
-          locale={LOCALE}
+          locale={locale}
         />
 
         <RuneInterpretationPanel
           castId={cast.id}
-          locale={LOCALE}
+          locale={locale}
           initial={cast.interpretation}
         />
 

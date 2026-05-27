@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { createRuneCast } from '@/lib/api';
 import type { RuneLayout } from '@/lib/types';
 
-const LOCALE = 'ru' as const;
-
-const t = {
+const COPY = {
   ru: {
     title: 'Бросок рун',
     subtitle: 'Старший Футарк. 24 знака, каждый — слово древнее любого языка.',
@@ -37,7 +36,7 @@ const t = {
     free: 'Free',
     premium: 'Premium',
   },
-}[LOCALE];
+} as const;
 
 const LAYOUTS: { id: RuneLayout; tier: 'free' | 'premium' }[] = [
   { id: 'single', tier: 'free' },
@@ -47,6 +46,8 @@ const LAYOUTS: { id: RuneLayout; tier: 'free' | 'premium' }[] = [
 
 export default function RunesPage() {
   const router = useRouter();
+  const locale = useLocale() as 'ru' | 'en';
+  const t = COPY[locale];
   const [selected, setSelected] = useState<RuneLayout>('three');
   const [question, setQuestion] = useState('');
   const [casting, setCasting] = useState(false);
@@ -54,7 +55,7 @@ export default function RunesPage() {
   const handleCast = async () => {
     setCasting(true);
     try {
-      const cast = await createRuneCast(selected, LOCALE, question.trim());
+      const cast = await createRuneCast(selected, locale, question.trim());
       router.push(`/runes/cast/${cast.id}`);
     } catch {
       setCasting(false);

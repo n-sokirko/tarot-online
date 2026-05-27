@@ -1,17 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import ThreeCardSpread from '@/components/tarot/ThreeCardSpread';
 import NineCardSpread from '@/components/tarot/NineCardSpread';
+import CelticCrossSpread from '@/components/tarot/CelticCrossSpread';
 import InterpretationPanel from '@/components/tarot/InterpretationPanel';
 import type { ReadingResponse, SpreadPosition } from '@/lib/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
-
-const LOCALE = 'ru' as const;
 
 const STAR_POSITIONS = [
   { top: '8%', left: '12%', size: '1px', opacity: 0.6 },
@@ -28,6 +27,7 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
   const tReading = useTranslations('reading');
+  const locale = useLocale() as 'ru' | 'en';
 
   const [reading, setReading] = useState<ReadingResponse | null>(null);
   const [error, setError] = useState(false);
@@ -113,14 +113,16 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
           transition={{ duration: 0.6 }}
         >
           {spreadSlug === 'nine-card' ? (
-            <NineCardSpread cards={reading.cards} spreadPositions={spreadPositions} locale={LOCALE} />
+            <NineCardSpread cards={reading.cards} spreadPositions={spreadPositions} locale={locale} />
+          ) : spreadSlug === 'celtic-cross' ? (
+            <CelticCrossSpread cards={reading.cards} spreadPositions={spreadPositions} locale={locale} />
           ) : (
-            <ThreeCardSpread cards={reading.cards} spreadPositions={spreadPositions} locale={LOCALE} />
+            <ThreeCardSpread cards={reading.cards} spreadPositions={spreadPositions} locale={locale} />
           )}
 
           <InterpretationPanel
             readingId={reading.id}
-            locale={LOCALE}
+            locale={locale}
             initial={reading.interpretation}
           />
 

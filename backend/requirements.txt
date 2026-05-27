@@ -10,6 +10,7 @@ celery==5.4.0
 redis==5.0.7
 python-decouple==3.8
 anthropic==0.104.1
+python-telegram-bot==21.6
 gunicorn==22.0.0
 pytest==8.2.2
 pytest-django==4.8.0

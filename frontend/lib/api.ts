@@ -7,6 +7,8 @@ import type {
   Rune,
   RuneCastResponse,
   RuneLayout,
+  TelegramCheckoutPayload,
+  TelegramInvoicePayload,
 } from './types';
 import { getAuthHeader } from './auth';
 
@@ -99,6 +101,20 @@ export async function getBillingMe(): Promise<BillingMe> {
 
 export async function startCheckout(planSlug: string): Promise<CheckoutPayload> {
   return request<CheckoutPayload>('/api/v1/billing/checkout/', {
+    method: 'POST',
+    body: JSON.stringify({ plan_slug: planSlug }),
+  });
+}
+
+export async function startTelegramCheckout(planSlug: string): Promise<TelegramCheckoutPayload> {
+  return request<TelegramCheckoutPayload>('/api/v1/billing/checkout/telegram/', {
+    method: 'POST',
+    body: JSON.stringify({ plan_slug: planSlug }),
+  });
+}
+
+export async function startTelegramInvoice(planSlug: string): Promise<TelegramInvoicePayload> {
+  return request<TelegramInvoicePayload>('/api/v1/billing/checkout/telegram-invoice/', {
     method: 'POST',
     body: JSON.stringify({ plan_slug: planSlug }),
   });

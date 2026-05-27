@@ -196,6 +196,46 @@ def apply_subscription_canceled(*, paddle_subscription_id: str) -> Optional[Subs
 
 
 @transaction.atomic
+def apply_tg_payment(*, user, plan: Plan, charge_id: str) -> None:
+    """Activate a plan paid via Telegram Stars — idempotent by charge_id."""
+    from datetime import timedelta
+
+    if Subscription.objects.filter(tg_payment_charge_id=charge_id).exists():
+        return
+
+    if plan.kind == Plan.KIND_CREDITS:
+        apply_pack_purchase(user=user, plan=plan, reference_id=f'tg:{charge_id}')
+        return
+
+    period_end = timezone.now() + timedelta(days=30)
+
+    Subscription.objects.create(
+        user=user,
+        plan=plan,
+        provider=Subscription.PROVIDER_TELEGRAM,
+        tg_payment_charge_id=charge_id,
+        paddle_subscription_id=None,
+        status=Subscription.STATUS_ACTIVE,
+        current_period_start=timezone.now(),
+        current_period_end=period_end,
+    )
+
+    for key in plan.entitlement_keys or []:
+        Entitlement.objects.update_or_create(
+            user=user, key=key,
+            defaults={'expires_at': period_end, 'source': f'telegram:{plan.slug}'},
+        )
+
+    if plan.monthly_included_credits:
+        grant_credits(
+            user=user,
+            amount=plan.monthly_included_credits,
+            kind=UsageLedger.KIND_GRANT_SUB,
+            reference_id=f'tg:{charge_id}',
+        )
+
+
+@transaction.atomic
 def apply_pack_purchase(*, user, plan: Plan, reference_id: str = '') -> int:
     if plan.kind != Plan.KIND_CREDITS or plan.credits_granted <= 0:
         return credits_balance(user)

@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from apps.billing import services as billing
 from apps.billing.models import UsageLedger
+from apps.billing.rate_limit import ANON_DAILY_LIMIT, check_anon_daily_limit
 from apps.runes.models import Rune, RuneCast, RuneInterpretation
 from apps.runes.serializers import (
     CreateRuneCastSerializer,
@@ -128,6 +129,23 @@ class RuneCastViewSet(
             return Response(RuneInterpretationSerializer(cast.interpretation).data)
 
         user = request.user if getattr(request, 'user', None) and request.user.is_authenticated else None
+
+        # Anonymous users: enforce daily free limit before hitting the AI.
+        if user is None:
+            allowed, remaining = check_anon_daily_limit(request, kind='runes')
+            if not allowed:
+                return Response({
+                    'detail': 'rate_limited',
+                    'message_ru': (
+                        f'Ты уже использовал {ANON_DAILY_LIMIT} бесплатных интерпретации сегодня. '
+                        'Войди или зарегистрируйся — это бесплатно.'
+                    ),
+                    'message_en': (
+                        f"You've used all {ANON_DAILY_LIMIT} free interpretations for today. "
+                        "Log in or sign up — it's free."
+                    ),
+                }, status=429)
+
         tier = billing.tier_for(user).tier
         model = ai_client.model_for_tier(tier)
 

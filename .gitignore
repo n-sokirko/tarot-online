@@ -55,6 +55,9 @@ Thumbs.db
 *.pid
 .docker/
 
+# ---- Cloudflare Tunnel (local credentials — never commit) ----
+cloudflared/credentials.json
+
 # ---- Claude Code ----
 .claude/cache/
 .claude/sessions/

@@ -37,6 +37,9 @@ class Plan(models.Model):
     paddle_product_id = models.CharField(max_length=64, blank=True)
     paddle_price_id = models.CharField(max_length=64, blank=True)
 
+    # Telegram Stars price (0 = not available via Telegram)
+    tg_stars_price = models.PositiveIntegerField(default=0)
+
     # For subscription plans: how many included credits per period
     monthly_included_credits = models.PositiveIntegerField(default=0)
     # For credit packs: how many credits the purchase grants
@@ -76,8 +79,17 @@ class Subscription(models.Model):
     )
     plan = models.ForeignKey(Plan, on_delete=models.PROTECT, related_name='subscriptions')
 
-    paddle_subscription_id = models.CharField(max_length=64, unique=True)
+    PROVIDER_PADDLE = 'paddle'
+    PROVIDER_TELEGRAM = 'telegram'
+    PROVIDER_CHOICES = [
+        (PROVIDER_PADDLE, 'Paddle'),
+        (PROVIDER_TELEGRAM, 'Telegram Stars'),
+    ]
+    provider = models.CharField(max_length=16, choices=PROVIDER_CHOICES, default=PROVIDER_PADDLE)
+
+    paddle_subscription_id = models.CharField(max_length=64, unique=True, null=True, blank=True)
     paddle_customer_id = models.CharField(max_length=64, blank=True)
+    tg_payment_charge_id = models.CharField(max_length=128, blank=True)
 
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_ACTIVE)
     current_period_start = models.DateTimeField(null=True, blank=True)

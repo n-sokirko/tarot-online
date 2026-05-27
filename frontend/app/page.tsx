@@ -1,16 +1,15 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import DeckPile from '@/components/tarot/DeckPile';
 import SpreadSelector, { type SpreadSlug } from '@/components/tarot/SpreadSelector';
-import { createReading } from '@/lib/api';
+import { createReading, getBillingMe } from '@/lib/api';
+import { getAccessToken } from '@/lib/auth';
 
 type PageState = 'selecting' | 'idle' | 'shuffled' | 'loading' | 'error';
-
-const LOCALE = 'ru' as const;
 
 const STAR_POSITIONS = [
   { top: '8%', left: '12%', size: '1px', opacity: 0.6 },
@@ -26,12 +25,22 @@ const STAR_POSITIONS = [
 export default function HomePage() {
   const t = useTranslations('home');
   const tReading = useTranslations('reading');
+  const locale = useLocale() as 'ru' | 'en';
   const prefersReducedMotion = useReducedMotion();
   const router = useRouter();
 
   const [pageState, setPageState] = useState<PageState>('selecting');
   const [selectedSpread, setSelectedSpread] = useState<SpreadSlug>('three-card');
   const [sessionKey, setSessionKey] = useState(0);
+  const [entitlements, setEntitlements] = useState<readonly string[]>([]);
+
+  // Fetch entitlements so premium spreads unlock for subscribers
+  useEffect(() => {
+    if (!getAccessToken()) return;
+    getBillingMe()
+      .then((me) => setEntitlements(me.entitlements ?? []))
+      .catch(() => {/* silently ignore — entitlements stay empty */});
+  }, []);
 
   const handleSpreadSelect = useCallback((slug: SpreadSlug) => {
     setSelectedSpread(slug);
@@ -45,7 +54,7 @@ export default function HomePage() {
   const handleDraw = useCallback(async () => {
     setPageState('loading');
     try {
-      const result = await createReading(LOCALE, selectedSpread);
+      const result = await createReading(locale, selectedSpread);
       router.push(`/reading/${result.id}`);
     } catch {
       setPageState('error');
@@ -126,7 +135,7 @@ export default function HomePage() {
               exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.35 }}
             >
-              <SpreadSelector key={sessionKey} onSelect={handleSpreadSelect} />
+              <SpreadSelector key={sessionKey} onSelect={handleSpreadSelect} entitlements={entitlements} />
             </motion.div>
           )}
         </AnimatePresence>

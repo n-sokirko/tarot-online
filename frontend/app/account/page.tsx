@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/auth-context';
 import { getBillingMe } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import type { BillingMe } from '@/lib/types';
 
-const LOCALE = 'ru' as const;
-
-const t = {
+const COPY = {
   ru: {
     title: 'Профиль',
     plan: 'Тариф',
@@ -41,12 +40,14 @@ const t = {
     tier_free: 'Free',
     tier_premium: 'Premium',
   },
-}[LOCALE];
+} as const;
 
 export default function AccountPage() {
   const router = useRouter();
   const params = useSearchParams();
   const { user, isLoading, logout } = useAuth();
+  const locale = useLocale() as 'ru' | 'en';
+  const t = COPY[locale];
   const [me, setMe] = useState<BillingMe | null>(null);
   const upgradeJustHappened = params.get('upgrade') === 'success';
 
@@ -115,7 +116,7 @@ export default function AccountPage() {
                   label={t.next_charge}
                   value={
                     me.subscription.current_period_end
-                      ? new Date(me.subscription.current_period_end).toLocaleDateString(LOCALE)
+                      ? new Date(me.subscription.current_period_end).toLocaleDateString(locale)
                       : '—'
                   }
                 />

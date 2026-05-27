@@ -34,7 +34,7 @@ export interface PaddleCheckoutOptions {
 
 const PADDLE_SCRIPT_URL = 'https://cdn.paddle.com/paddle/v2/paddle.js';
 let scriptPromise: Promise<void> | null = null;
-let initialized = false;
+let initializedEnv: string | null = null;
 
 function loadScript(): Promise<void> {
   if (typeof window === 'undefined') return Promise.reject(new Error('SSR'));
@@ -54,10 +54,11 @@ function loadScript(): Promise<void> {
 export async function ensurePaddle(env: 'sandbox' | 'production', token: string): Promise<NonNullable<Window['Paddle']>> {
   await loadScript();
   const paddle = window.Paddle!;
-  if (!initialized) {
+  // Re-initialize if env changes or first time
+  if (initializedEnv !== env) {
     paddle.Environment.set(env);
     paddle.Initialize({ token });
-    initialized = true;
+    initializedEnv = env;
   }
   return paddle;
 }
