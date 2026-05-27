@@ -15,7 +15,7 @@
       "reversed_meaning_en": "Reversed, The Fool warns of motion without direction — leaping for the sake of leaping. Pause and ask: what am I running toward, and what am I running from?",
       "keywords_ru": ["начало", "доверие", "наивность", "свобода", "путь"],
       "keywords_en": ["beginning", "trust", "innocence", "freedom", "leap"],
-      "image_url": "/cards/major/the-fool.png"
+      "image_url": "/cards/major/the-fool.jpg"
     },
     {
       "slug": "the-magician",
@@ -29,7 +29,7 @@
       "reversed_meaning_en": "Reversed, The Magician speaks of talent that hasn't found its outlet, or power turned against the self. Ask what you truly want before you start shaping reality.",
       "keywords_ru": ["намерение", "мастерство", "воля", "проявление", "ресурс"],
       "keywords_en": ["intention", "mastery", "will", "manifestation", "resource"],
-      "image_url": "/cards/major/the-magician.png"
+      "image_url": "/cards/major/the-magician.jpg"
     },
     {
       "slug": "the-high-priestess",
@@ -43,7 +43,7 @@
       "reversed_meaning_en": "Reversed, The Priestess speaks of a lost connection to the inner voice. Too much noise, not enough pause. Time to turn off the screen and hear yourself.",
       "keywords_ru": ["интуиция", "тайна", "тишина", "внутреннее знание", "пауза"],
       "keywords_en": ["intuition", "mystery", "silence", "inner knowing", "pause"],
-      "image_url": "/cards/major/the-high-priestess.png"
+      "image_url": "/cards/major/the-high-priestess.jpg"
     },
     {
       "slug": "the-empress",
@@ -57,7 +57,7 @@
       "reversed_meaning_en": "Reversed, The Empress is care that never reaches the one giving it. You pour out and forget you also need water and sun.",
       "keywords_ru": ["изобилие", "забота", "тело", "творчество", "природа"],
       "keywords_en": ["abundance", "care", "body", "creativity", "nature"],
-      "image_url": "/cards/major/the-empress.png"
+      "image_url": "/cards/major/the-empress.jpg"
     },
     {
       "slug": "the-emperor",
@@ -71,7 +71,7 @@
       "reversed_meaning_en": "Reversed, The Emperor is control without heart, or the absence of any spine at all. Somewhere authority hardened into rigidity, or vanished altogether.",
       "keywords_ru": ["структура", "власть", "границы", "ответственность", "опора"],
       "keywords_en": ["structure", "authority", "boundaries", "responsibility", "foundation"],
-      "image_url": "/cards/major/the-emperor.png"
+      "image_url": "/cards/major/the-emperor.jpg"
     },
     {
       "slug": "the-hierophant",
@@ -85,7 +85,7 @@
       "reversed_meaning_en": "Reversed, The Hierophant is rebellion against rules that no longer serve — or blind obedience where it is time to ask questions.",
       "keywords_ru": ["традиция", "учение", "сообщество", "вера", "наставник"],
       "keywords_en": ["tradition", "teaching", "community", "faith", "mentor"],
-      "image_url": "/cards/major/the-hierophant.png"
+      "image_url": "/cards/major/the-hierophant.jpg"
     },
     {
       "slug": "the-lovers",
@@ -99,7 +99,7 @@
       "reversed_meaning_en": "Reversed, The Lovers is being divided. The heart pulls one way, the head another, the body says nothing. Stop and listen to all three.",
       "keywords_ru": ["выбор", "близость", "ценности", "союз", "честность"],
       "keywords_en": ["choice", "intimacy", "values", "union", "honesty"],
-      "image_url": "/cards/major/the-lovers.png"
+      "image_url": "/cards/major/the-lovers.jpg"
     },
     {
       "slug": "the-chariot",
@@ -113,7 +113,7 @@
       "reversed_meaning_en": "Reversed, The Chariot is motion without a driver. You are speeding, but you have forgotten where. Stop and see the destination again.",
       "keywords_ru": ["воля", "направление", "контроль", "победа", "движение"],
       "keywords_en": ["will", "direction", "control", "victory", "momentum"],
-      "image_url": "/cards/major/the-chariot.png"
+      "image_url": "/cards/major/the-chariot.jpg"
     },
     {
       "slug": "strength",
@@ -127,7 +127,7 @@
       "reversed_meaning_en": "Reversed, Strength is either suppressed fear or an exhausting fight with the self. Stop pressing down and try to embrace what is asking for attention.",
       "keywords_ru": ["мягкая сила", "терпение", "смелость", "контроль страха", "доброта"],
       "keywords_en": ["soft power", "patience", "courage", "mastery of fear", "compassion"],
-      "image_url": "/cards/major/strength.png"
+      "image_url": "/cards/major/strength.jpg"
     },
     {
       "slug": "the-hermit",
@@ -141,7 +141,7 @@
       "reversed_meaning_en": "Reversed, The Hermit is solitude that has turned into isolation. Silence has stopped healing and become a wall. Let someone alive back in.",
       "keywords_ru": ["одиночество", "поиск", "внутренний свет", "рефлексия", "тишина"],
       "keywords_en": ["solitude", "seeking", "inner light", "reflection", "stillness"],
-      "image_url": "/cards/major/the-hermit.png"
+      "image_url": "/cards/major/the-hermit.jpg"
     },
     {
       "slug": "wheel-of-fortune",
@@ -155,7 +155,7 @@
       "reversed_meaning_en": "Reversed, the Wheel is resistance to change. You are holding what already wants to leave. Let go, and the wheel will carry you more gently.",
       "keywords_ru": ["цикл", "перемены", "судьба", "поворот", "ритм"],
       "keywords_en": ["cycle", "change", "fate", "turning point", "rhythm"],
-      "image_url": "/cards/major/wheel-of-fortune.png"
+      "image_url": "/cards/major/wheel-of-fortune.jpg"
     },
     {
       "slug": "justice",
@@ -169,7 +169,7 @@
       "reversed_meaning_en": "Reversed, Justice is the avoidance of responsibility — or its opposite, excessive self-blame. Somewhere the scales are uneven. Look at where.",
       "keywords_ru": ["баланс", "честность", "ответственность", "решение", "ясность"],
       "keywords_en": ["balance", "fairness", "responsibility", "decision", "clarity"],
-      "image_url": "/cards/major/justice.png"
+      "image_url": "/cards/major/justice.jpg"
     },
     {
       "slug": "the-hanged-man",
@@ -183,7 +183,7 @@
       "reversed_meaning_en": "Reversed, The Hanged Man is being stuck without it being a meditation anymore. You are hanging, but no longer learning. Time to come down.",
       "keywords_ru": ["пауза", "перспектива", "отказ", "ожидание", "перевернуть взгляд"],
       "keywords_en": ["pause", "perspective", "surrender", "waiting", "inversion"],
-      "image_url": "/cards/major/the-hanged-man.png"
+      "image_url": "/cards/major/the-hanged-man.jpg"
     },
     {
       "slug": "death",
@@ -197,7 +197,7 @@
       "reversed_meaning_en": "Reversed, Death is resistance to ending. You are holding what has already rotted away. The longer you hold, the longer the new is delayed.",
       "keywords_ru": ["окончание", "трансформация", "отпускание", "переход", "новое"],
       "keywords_en": ["ending", "transformation", "release", "transition", "renewal"],
-      "image_url": "/cards/major/death.png"
+      "image_url": "/cards/major/death.jpg"
     },
     {
       "slug": "temperance",
@@ -211,7 +211,7 @@
       "reversed_meaning_en": "Reversed, Temperance is either extremity or loss of rhythm. Something has become too much: too fast, too far, too long.",
       "keywords_ru": ["баланс", "терпение", "синтез", "ритм", "умеренность"],
       "keywords_en": ["balance", "patience", "synthesis", "rhythm", "moderation"],
-      "image_url": "/cards/major/temperance.png"
+      "image_url": "/cards/major/temperance.jpg"
     },
     {
       "slug": "the-devil",
@@ -225,7 +225,7 @@
       "reversed_meaning_en": "Reversed, The Devil is the moment you realise the chains are not locked. You can step out. Not easy at once, but possible.",
       "keywords_ru": ["привязанность", "тень", "соблазн", "иллюзия", "освобождение"],
       "keywords_en": ["attachment", "shadow", "temptation", "illusion", "release"],
-      "image_url": "/cards/major/the-devil.png"
+      "image_url": "/cards/major/the-devil.jpg"
     },
     {
       "slug": "the-tower",
@@ -239,7 +239,7 @@
       "reversed_meaning_en": "Reversed, The Tower is the foreboding of a collapse you have not yet let into awareness. Something is already cracking. Better to look directly.",
       "keywords_ru": ["разрушение", "откровение", "освобождение", "правда", "очищение"],
       "keywords_en": ["upheaval", "revelation", "release", "truth", "clearing"],
-      "image_url": "/cards/major/the-tower.png"
+      "image_url": "/cards/major/the-tower.jpg"
     },
     {
       "slug": "the-star",
@@ -253,7 +253,7 @@
       "reversed_meaning_en": "Reversed, The Star is the shadow of doubt. The light is somewhere, but you cannot see it yet. Let hope return slowly.",
       "keywords_ru": ["надежда", "исцеление", "вдохновение", "тишина", "вера"],
       "keywords_en": ["hope", "healing", "inspiration", "stillness", "faith"],
-      "image_url": "/cards/major/the-star.png"
+      "image_url": "/cards/major/the-star.jpg"
     },
     {
       "slug": "the-moon",
@@ -267,7 +267,7 @@
       "reversed_meaning_en": "Reversed, The Moon is the fog beginning to lift. What seemed terrifying turns out smaller than it looked.",
       "keywords_ru": ["подсознание", "сон", "страх", "интуиция", "туман"],
       "keywords_en": ["unconscious", "dream", "fear", "intuition", "fog"],
-      "image_url": "/cards/major/the-moon.png"
+      "image_url": "/cards/major/the-moon.jpg"
     },
     {
       "slug": "the-sun",
@@ -281,7 +281,7 @@
       "reversed_meaning_en": "Reversed, The Sun is joy you do not allow yourself. The light is near, but you keep the door closed.",
       "keywords_ru": ["радость", "ясность", "успех", "тепло", "видимость"],
       "keywords_en": ["joy", "clarity", "success", "warmth", "visibility"],
-      "image_url": "/cards/major/the-sun.png"
+      "image_url": "/cards/major/the-sun.jpg"
     },
     {
       "slug": "judgement",
@@ -295,7 +295,7 @@
       "reversed_meaning_en": "Reversed, Judgement is resistance to your own awakening. You hear the call and pretend you do not.",
       "keywords_ru": ["пробуждение", "призвание", "прощение", "обновление", "честность"],
       "keywords_en": ["awakening", "calling", "forgiveness", "renewal", "honesty"],
-      "image_url": "/cards/major/judgement.png"
+      "image_url": "/cards/major/judgement.jpg"
     },
     {
       "slug": "the-world",
@@ -309,7 +309,7 @@
       "reversed_meaning_en": "Reversed, The World is unfinished business. Something is waiting to be grieved, celebrated, or spoken aloud before the next thing can begin.",
       "keywords_ru": ["завершение", "целостность", "достижение", "интеграция", "новый виток"],
       "keywords_en": ["completion", "wholeness", "achievement", "integration", "next cycle"],
-      "image_url": "/cards/major/the-world.png"
+      "image_url": "/cards/major/the-world.jpg"
     },
 
     {
@@ -324,7 +324,7 @@
       "reversed_meaning_en": "Reversed, the Ace of Cups is feeling that seeks expression and finds none. The cup is full but sealed. Ask what is blocking the giving or the receiving.",
       "keywords_ru": ["новое чувство", "интуиция", "открытость", "дар", "начало"],
       "keywords_en": ["new feeling", "intuition", "openness", "gift", "emotional seed"],
-      "image_url": "/cards/cups/ace-of-cups.png"
+      "image_url": "/cards/cups/ace-of-cups.jpg"
     },
     {
       "slug": "two-of-cups",
@@ -338,7 +338,7 @@
       "reversed_meaning_en": "Reversed, the Two of Cups is discord in a bond — or within yourself. The connection exists, but something in it is stuck. Name what has been left unsaid.",
       "keywords_ru": ["союз", "взаимность", "признание", "партнёрство", "доверие"],
       "keywords_en": ["union", "reciprocity", "recognition", "partnership", "trust"],
-      "image_url": "/cards/cups/two-of-cups.png"
+      "image_url": "/cards/cups/two-of-cups.jpg"
     },
     {
       "slug": "three-of-cups",
@@ -352,7 +352,7 @@
       "reversed_meaning_en": "Reversed, the Three of Cups speaks of weariness with company, or of friendships that have grown shallow. Perhaps it is time to choose depth over breadth.",
       "keywords_ru": ["праздник", "дружба", "сообщество", "радость", "совместность"],
       "keywords_en": ["celebration", "friendship", "community", "joy", "togetherness"],
-      "image_url": "/cards/cups/three-of-cups.png"
+      "image_url": "/cards/cups/three-of-cups.jpg"
     },
     {
       "slug": "four-of-cups",
@@ -366,7 +366,7 @@
       "reversed_meaning_en": "Reversed, the Four of Cups is interest rekindling. Something that seemed dull begins to glow again. Reach out a hand.",
       "keywords_ru": ["апатия", "размышление", "насыщение", "уход в себя", "пропущенный шанс"],
       "keywords_en": ["apathy", "contemplation", "saturation", "withdrawal", "missed opportunity"],
-      "image_url": "/cards/cups/four-of-cups.png"
+      "image_url": "/cards/cups/four-of-cups.jpg"
     },
     {
       "slug": "five-of-cups",
@@ -380,7 +380,7 @@
       "reversed_meaning_en": "Reversed, the Five of Cups is the first step out of grief. Still painful, but the gaze begins to turn toward what has survived.",
       "keywords_ru": ["потеря", "горе", "сожаление", "скорбь", "принятие"],
       "keywords_en": ["loss", "grief", "regret", "mourning", "acceptance"],
-      "image_url": "/cards/cups/five-of-cups.png"
+      "image_url": "/cards/cups/five-of-cups.jpg"
     },
     {
       "slug": "six-of-cups",
@@ -394,7 +394,7 @@
       "reversed_meaning_en": "Reversed, the Six of Cups is being stuck in the past. Memory has become a refuge rather than a resource. Time to return to the present.",
       "keywords_ru": ["память", "детство", "невинность", "прошлое", "тепло"],
       "keywords_en": ["memory", "childhood", "innocence", "nostalgia", "warmth"],
-      "image_url": "/cards/cups/six-of-cups.png"
+      "image_url": "/cards/cups/six-of-cups.jpg"
     },
     {
       "slug": "seven-of-cups",
@@ -408,7 +408,7 @@
       "reversed_meaning_en": "Reversed, the Seven of Cups is returning to reality after daydreams. A choice is made or imminent. The haze begins to clear.",
       "keywords_ru": ["иллюзия", "выбор", "желание", "фантазия", "рассеянность"],
       "keywords_en": ["illusion", "choice", "desire", "fantasy", "distraction"],
-      "image_url": "/cards/cups/seven-of-cups.png"
+      "image_url": "/cards/cups/seven-of-cups.jpg"
     },
     {
       "slug": "eight-of-cups",
@@ -422,7 +422,7 @@
       "reversed_meaning_en": "Reversed, the Eight of Cups is hesitation before departure. You already know it is time, but you are not yet ready to release the familiar.",
       "keywords_ru": ["уход", "поиск", "отпускание", "честность с собой", "путь"],
       "keywords_en": ["departure", "seeking", "letting go", "self-honesty", "turning away"],
-      "image_url": "/cards/cups/eight-of-cups.png"
+      "image_url": "/cards/cups/eight-of-cups.jpg"
     },
     {
       "slug": "nine-of-cups",
@@ -436,7 +436,7 @@
       "reversed_meaning_en": "Reversed, the Nine of Cups is satiation without joy. The wish was granted, but the feeling did not arrive. Ask: was this what was truly wanted?",
       "keywords_ru": ["исполнение", "удовлетворение", "довольство", "самодостаточность", "радость"],
       "keywords_en": ["fulfillment", "satisfaction", "contentment", "self-sufficiency", "pleasure"],
-      "image_url": "/cards/cups/nine-of-cups.png"
+      "image_url": "/cards/cups/nine-of-cups.jpg"
     },
     {
       "slug": "ten-of-cups",
@@ -450,7 +450,7 @@
       "reversed_meaning_en": "Reversed, the Ten of Cups is a gap between outward wellbeing and inner state. Everything looks fine on the outside, but something is out of place within.",
       "keywords_ru": ["гармония", "дом", "счастье", "завершение", "семья"],
       "keywords_en": ["harmony", "home", "happiness", "emotional completion", "family"],
-      "image_url": "/cards/cups/ten-of-cups.png"
+      "image_url": "/cards/cups/ten-of-cups.jpg"
     },
     {
       "slug": "page-of-cups",
@@ -464,7 +464,7 @@
       "reversed_meaning_en": "Reversed, the Page of Cups is sensitivity that has become vulnerability. Emotions overwhelm and cloud the view. Some grounding is needed.",
       "keywords_ru": ["любопытство", "чувствительность", "воображение", "открытость", "послание"],
       "keywords_en": ["curiosity", "sensitivity", "imagination", "openness", "message"],
-      "image_url": "/cards/cups/page-of-cups.png"
+      "image_url": "/cards/cups/page-of-cups.jpg"
     },
     {
       "slug": "knight-of-cups",
@@ -478,7 +478,7 @@
       "reversed_meaning_en": "Reversed, the Knight of Cups is emotional instability or idealism detached from reality. Beautiful words, but no follow-through.",
       "keywords_ru": ["романтизм", "идеализм", "приглашение", "чувство", "творчество"],
       "keywords_en": ["romanticism", "idealism", "invitation", "feeling", "charm"],
-      "image_url": "/cards/cups/knight-of-cups.png"
+      "image_url": "/cards/cups/knight-of-cups.jpg"
     },
     {
       "slug": "queen-of-cups",
@@ -492,7 +492,7 @@
       "reversed_meaning_en": "Reversed, the Queen of Cups is emotional exhaustion or merging with others' states. Time to return to yourself and refill your own cup.",
       "keywords_ru": ["эмпатия", "мудрость", "глубина", "забота", "интуиция"],
       "keywords_en": ["empathy", "wisdom", "depth", "nurturing", "intuition"],
-      "image_url": "/cards/cups/queen-of-cups.png"
+      "image_url": "/cards/cups/queen-of-cups.jpg"
     },
     {
       "slug": "king-of-cups",
@@ -506,7 +506,7 @@
       "reversed_meaning_en": "Reversed, the King of Cups is suppressed emotion or, conversely, using feeling to manipulate. Check: are you guiding your state, or is it guiding you?",
       "keywords_ru": ["зрелость", "спокойствие", "эмоциональный интеллект", "мудрость", "руководство"],
       "keywords_en": ["maturity", "composure", "emotional intelligence", "wisdom", "leadership"],
-      "image_url": "/cards/cups/king-of-cups.png"
+      "image_url": "/cards/cups/king-of-cups.jpg"
     },
 
     {
@@ -521,7 +521,7 @@
       "reversed_meaning_en": "Reversed, the Ace of Wands is creative block or energy without an outlet. The fire is there, but the draw is blocked. Remove what is cutting off the air.",
       "keywords_ru": ["вдохновение", "импульс", "начало", "творчество", "энергия"],
       "keywords_en": ["inspiration", "impulse", "beginning", "creativity", "spark"],
-      "image_url": "/cards/wands/ace-of-wands.png"
+      "image_url": "/cards/wands/ace-of-wands.jpg"
     },
     {
       "slug": "two-of-wands",
@@ -535,7 +535,7 @@
       "reversed_meaning_en": "Reversed, the Two of Wands is fear of the horizon, or plans without motion. The world is held but the feet do not move.",
       "keywords_ru": ["планирование", "видение", "смелость", "горизонт", "выбор пути"],
       "keywords_en": ["planning", "vision", "boldness", "horizon", "future focus"],
-      "image_url": "/cards/wands/two-of-wands.png"
+      "image_url": "/cards/wands/two-of-wands.jpg"
     },
     {
       "slug": "three-of-wands",
@@ -549,7 +549,7 @@
       "reversed_meaning_en": "Reversed, the Three of Wands is delays or a return to the beginning. The ships have not come back in time. Check whether the direction chosen was right.",
       "keywords_ru": ["ожидание", "расширение", "уверенность", "результат", "дальновидность"],
       "keywords_en": ["anticipation", "expansion", "confidence", "result", "foresight"],
-      "image_url": "/cards/wands/three-of-wands.png"
+      "image_url": "/cards/wands/three-of-wands.jpg"
     },
     {
       "slug": "four-of-wands",
@@ -563,7 +563,7 @@
       "reversed_meaning_en": "Reversed, the Four of Wands is a celebration that did not happen, or harmony with a crack in it. Something prevents enjoying what has been reached.",
       "keywords_ru": ["праздник", "прибытие", "стабильность", "торжество", "дом"],
       "keywords_en": ["celebration", "arrival", "stability", "milestone", "homecoming"],
-      "image_url": "/cards/wands/four-of-wands.png"
+      "image_url": "/cards/wands/four-of-wands.jpg"
     },
     {
       "slug": "five-of-wands",
@@ -577,7 +577,7 @@
       "reversed_meaning_en": "Reversed, the Five of Wands is conflict winding down, or suppressed competition that erodes from within.",
       "keywords_ru": ["соперничество", "конфликт", "хаос", "соревнование", "столкновение"],
       "keywords_en": ["rivalry", "conflict", "chaos", "competition", "clash"],
-      "image_url": "/cards/wands/five-of-wands.png"
+      "image_url": "/cards/wands/five-of-wands.jpg"
     },
     {
       "slug": "six-of-wands",
@@ -591,7 +591,7 @@
       "reversed_meaning_en": "Reversed, the Six of Wands is recognition that did not arrive, or fear of being seen. The victory exists, but something prevents it being claimed.",
       "keywords_ru": ["победа", "признание", "успех", "лидерство", "публичность"],
       "keywords_en": ["victory", "recognition", "success", "leadership", "public acclaim"],
-      "image_url": "/cards/wands/six-of-wands.png"
+      "image_url": "/cards/wands/six-of-wands.jpg"
     },
     {
       "slug": "seven-of-wands",
@@ -605,7 +605,7 @@
       "reversed_meaning_en": "Reversed, the Seven of Wands is exhaustion from constant defence. Still holding on, but no longer knowing why. Decide what is worth protecting.",
       "keywords_ru": ["стойкость", "защита", "давление", "позиция", "упорство"],
       "keywords_en": ["perseverance", "defense", "pressure", "stance", "tenacity"],
-      "image_url": "/cards/wands/seven-of-wands.png"
+      "image_url": "/cards/wands/seven-of-wands.jpg"
     },
     {
       "slug": "eight-of-wands",
@@ -619,7 +619,7 @@
       "reversed_meaning_en": "Reversed, the Eight of Wands is slowdown or scattered energy without direction. The wands are flying, but not where they need to go.",
       "keywords_ru": ["скорость", "импульс", "движение", "ускорение", "новости"],
       "keywords_en": ["speed", "momentum", "swift action", "acceleration", "news"],
-      "image_url": "/cards/wands/eight-of-wands.png"
+      "image_url": "/cards/wands/eight-of-wands.jpg"
     },
     {
       "slug": "nine-of-wands",
@@ -633,7 +633,7 @@
       "reversed_meaning_en": "Reversed, the Nine of Wands is stubbornness mistaken for resilience. Continuing out of fear, not conviction. It is allowed to stop.",
       "keywords_ru": ["стойкость", "усталость", "последнее усилие", "бдительность", "сила воли"],
       "keywords_en": ["resilience", "fatigue", "last push", "vigilance", "willpower"],
-      "image_url": "/cards/wands/nine-of-wands.png"
+      "image_url": "/cards/wands/nine-of-wands.jpg"
     },
     {
       "slug": "ten-of-wands",
@@ -647,7 +647,7 @@
       "reversed_meaning_en": "Reversed, the Ten of Wands is the moment the burden is finally released. Something is delegated, simplified, or left behind.",
       "keywords_ru": ["бремя", "перегрузка", "ответственность", "усталость", "завершение"],
       "keywords_en": ["burden", "overload", "responsibility", "exhaustion", "completion"],
-      "image_url": "/cards/wands/ten-of-wands.png"
+      "image_url": "/cards/wands/ten-of-wands.jpg"
     },
     {
       "slug": "page-of-wands",
@@ -661,7 +661,7 @@
       "reversed_meaning_en": "Reversed, the Page of Wands is impatience that interferes. The fire burns, but splashes in all directions, preventing focus.",
       "keywords_ru": ["любопытство", "энтузиазм", "дерзость", "импульс", "начинание"],
       "keywords_en": ["curiosity", "enthusiasm", "boldness", "impulse", "fresh energy"],
-      "image_url": "/cards/wands/page-of-wands.png"
+      "image_url": "/cards/wands/page-of-wands.jpg"
     },
     {
       "slug": "knight-of-wands",
@@ -675,7 +675,7 @@
       "reversed_meaning_en": "Reversed, the Knight of Wands is recklessness or a sudden halt. The horse has bucked. Check whether this surge is heading in the right direction.",
       "keywords_ru": ["действие", "страсть", "авантюризм", "скорость", "энергия"],
       "keywords_en": ["action", "passion", "adventure", "speed", "restlessness"],
-      "image_url": "/cards/wands/knight-of-wands.png"
+      "image_url": "/cards/wands/knight-of-wands.jpg"
     },
     {
       "slug": "queen-of-wands",
@@ -689,7 +689,7 @@
       "reversed_meaning_en": "Reversed, the Queen of Wands is fire burning low, or jealousy masquerading as passion. Check where this intensity is actually coming from.",
       "keywords_ru": ["харизма", "уверенность", "жизненная сила", "притяжение", "лидерство"],
       "keywords_en": ["charisma", "confidence", "vitality", "magnetism", "leadership"],
-      "image_url": "/cards/wands/queen-of-wands.png"
+      "image_url": "/cards/wands/queen-of-wands.jpg"
     },
     {
       "slug": "king-of-wands",
@@ -703,7 +703,7 @@
       "reversed_meaning_en": "Reversed, the King of Wands is tyranny or creative stagnation. The fire either goes out or burns those nearby.",
       "keywords_ru": ["лидерство", "видение", "смелость", "воодушевление", "зрелость"],
       "keywords_en": ["leadership", "vision", "boldness", "inspiration", "mastery"],
-      "image_url": "/cards/wands/king-of-wands.png"
+      "image_url": "/cards/wands/king-of-wands.jpg"
     },
 
     {
@@ -718,7 +718,7 @@
       "reversed_meaning_en": "Reversed, the Ace of Swords is confusion or the cruelty of a word. Clarity exists but lands without compassion. Or the opposite — truth hides behind silence.",
       "keywords_ru": ["ясность", "истина", "прорыв", "разум", "честность"],
       "keywords_en": ["clarity", "truth", "breakthrough", "intellect", "honesty"],
-      "image_url": "/cards/swords/ace-of-swords.png"
+      "image_url": "/cards/swords/ace-of-swords.jpg"
     },
     {
       "slug": "two-of-swords",
@@ -732,7 +732,7 @@
       "reversed_meaning_en": "Reversed, the Two of Swords is the blindfold beginning to slip. Information arrives, the choice becomes unavoidable. Uncomfortable, but honest.",
       "keywords_ru": ["тупик", "избегание", "выбор", "равновесие", "закрытость"],
       "keywords_en": ["stalemate", "avoidance", "choice", "deadlock", "denial"],
-      "image_url": "/cards/swords/two-of-swords.png"
+      "image_url": "/cards/swords/two-of-swords.jpg"
     },
     {
       "slug": "three-of-swords",
@@ -746,7 +746,7 @@
       "reversed_meaning_en": "Reversed, the Three of Swords is the beginning of healing after pain — or, conversely, pain not allowed to be felt. The wound is there. Give it air.",
       "keywords_ru": ["боль", "горе", "разрыв", "правда", "рана"],
       "keywords_en": ["pain", "grief", "heartbreak", "truth", "wound"],
-      "image_url": "/cards/swords/three-of-swords.png"
+      "image_url": "/cards/swords/three-of-swords.jpg"
     },
     {
       "slug": "four-of-swords",
@@ -760,7 +760,7 @@
       "reversed_meaning_en": "Reversed, the Four of Swords is a pause that has gone on too long, or restless inaction. Rest is no longer restoring. Time to return.",
       "keywords_ru": ["отдых", "восстановление", "пауза", "уединение", "тишина"],
       "keywords_en": ["rest", "recovery", "pause", "retreat", "stillness"],
-      "image_url": "/cards/swords/four-of-swords.png"
+      "image_url": "/cards/swords/four-of-swords.jpg"
     },
     {
       "slug": "five-of-swords",
@@ -774,7 +774,7 @@
       "reversed_meaning_en": "Reversed, the Five of Swords is reconciliation after conflict, or a grudge held close. A way out of this field of tension can be found.",
       "keywords_ru": ["конфликт", "поражение", "победа", "ущерб", "честолюбие"],
       "keywords_en": ["conflict", "defeat", "hollow victory", "ambition", "aftermath"],
-      "image_url": "/cards/swords/five-of-swords.png"
+      "image_url": "/cards/swords/five-of-swords.jpg"
     },
     {
       "slug": "six-of-swords",
@@ -788,7 +788,7 @@
       "reversed_meaning_en": "Reversed, the Six of Swords is being stuck before the crossing, or returning to turbulent waters. Something prevents setting off.",
       "keywords_ru": ["переход", "движение", "уход", "исцеление", "перемена"],
       "keywords_en": ["transition", "passage", "moving on", "healing", "change"],
-      "image_url": "/cards/swords/six-of-swords.png"
+      "image_url": "/cards/swords/six-of-swords.jpg"
     },
     {
       "slug": "seven-of-swords",
@@ -802,7 +802,7 @@
       "reversed_meaning_en": "Reversed, the Seven of Swords is the hidden coming to light, or a return to honesty. Something done in secret emerges.",
       "keywords_ru": ["хитрость", "уклонение", "тактика", "обман", "стратегия"],
       "keywords_en": ["cunning", "evasion", "strategy", "deception", "stealth"],
-      "image_url": "/cards/swords/seven-of-swords.png"
+      "image_url": "/cards/swords/seven-of-swords.jpg"
     },
     {
       "slug": "eight-of-swords",
@@ -816,7 +816,7 @@
       "reversed_meaning_en": "Reversed, the Eight of Swords is the first step toward freedom. The blindfold falls. You begin to see the way is open.",
       "keywords_ru": ["ловушка", "беспомощность", "самоограничение", "страх", "убеждения"],
       "keywords_en": ["entrapment", "helplessness", "self-restriction", "fear", "limiting belief"],
-      "image_url": "/cards/swords/eight-of-swords.png"
+      "image_url": "/cards/swords/eight-of-swords.jpg"
     },
     {
       "slug": "nine-of-swords",
@@ -830,7 +830,7 @@
       "reversed_meaning_en": "Reversed, the Nine of Swords is emerging from a cycle of anxiety. Dawn arrives, and in daylight the fears prove smaller than they were at night.",
       "keywords_ru": ["тревога", "бессонница", "страх", "катастрофизация", "ночь"],
       "keywords_en": ["anxiety", "insomnia", "fear", "catastrophizing", "dark thoughts"],
-      "image_url": "/cards/swords/nine-of-swords.png"
+      "image_url": "/cards/swords/nine-of-swords.jpg"
     },
     {
       "slug": "ten-of-swords",
@@ -844,7 +844,7 @@
       "reversed_meaning_en": "Reversed, the Ten of Swords is slow recovery or the refusal to acknowledge the end. Dawn is near, but you are still lying there.",
       "keywords_ru": ["конец", "поражение", "боль", "рассвет", "завершение"],
       "keywords_en": ["ending", "defeat", "pain", "rock bottom", "dawn"],
-      "image_url": "/cards/swords/ten-of-swords.png"
+      "image_url": "/cards/swords/ten-of-swords.jpg"
     },
     {
       "slug": "page-of-swords",
@@ -858,7 +858,7 @@
       "reversed_meaning_en": "Reversed, the Page of Swords is a sharp tongue without wisdom, or words that outrun understanding. Curiosity serves when it serves truth, not ego.",
       "keywords_ru": ["любопытство", "острый ум", "вопросы", "бдительность", "анализ"],
       "keywords_en": ["curiosity", "sharp mind", "questioning", "vigilance", "analysis"],
-      "image_url": "/cards/swords/page-of-swords.png"
+      "image_url": "/cards/swords/page-of-swords.jpg"
     },
     {
       "slug": "knight-of-swords",
@@ -872,7 +872,7 @@
       "reversed_meaning_en": "Reversed, the Knight of Swords is aggression without direction, or words spoken without thought. Speed is good when there is somewhere to go.",
       "keywords_ru": ["решительность", "скорость", "действие", "убеждение", "напор"],
       "keywords_en": ["decisiveness", "speed", "action", "conviction", "force"],
-      "image_url": "/cards/swords/knight-of-swords.png"
+      "image_url": "/cards/swords/knight-of-swords.jpg"
     },
     {
       "slug": "queen-of-swords",
@@ -886,7 +886,7 @@
       "reversed_meaning_en": "Reversed, the Queen of Swords is coldness that has become cruelty, or pain hiding behind impeccable logic.",
       "keywords_ru": ["ясность", "независимость", "честность", "разум", "мудрость"],
       "keywords_en": ["clarity", "independence", "honesty", "intellect", "discernment"],
-      "image_url": "/cards/swords/queen-of-swords.png"
+      "image_url": "/cards/swords/queen-of-swords.jpg"
     },
     {
       "slug": "king-of-swords",
@@ -900,7 +900,7 @@
       "reversed_meaning_en": "Reversed, the King of Swords is intellect serving power rather than truth. Or suppressed feeling imitating composure.",
       "keywords_ru": ["суждение", "принципы", "разум", "власть", "справедливость"],
       "keywords_en": ["judgement", "principles", "intellect", "authority", "justice"],
-      "image_url": "/cards/swords/king-of-swords.png"
+      "image_url": "/cards/swords/king-of-swords.jpg"
     },
 
     {
@@ -915,7 +915,7 @@
       "reversed_meaning_en": "Reversed, the Ace of Pentacles is an opportunity missed or unrecognised. Or a chance that is real but needs more ground before it can take root.",
       "keywords_ru": ["возможность", "изобилие", "начало", "стабильность", "ресурс"],
       "keywords_en": ["opportunity", "abundance", "beginning", "stability", "resource"],
-      "image_url": "/cards/pentacles/ace-of-pentacles.png"
+      "image_url": "/cards/pentacles/ace-of-pentacles.jpg"
     },
     {
       "slug": "two-of-pentacles",
@@ -929,7 +929,7 @@
       "reversed_meaning_en": "Reversed, the Two of Pentacles is overload when the juggling becomes too complex. Something must be set aside to avoid dropping everything.",
       "keywords_ru": ["баланс", "адаптация", "многозадачность", "гибкость", "равновесие"],
       "keywords_en": ["balance", "adaptation", "multitasking", "flexibility", "juggling"],
-      "image_url": "/cards/pentacles/two-of-pentacles.png"
+      "image_url": "/cards/pentacles/two-of-pentacles.jpg"
     },
     {
       "slug": "three-of-pentacles",
@@ -943,7 +943,7 @@
       "reversed_meaning_en": "Reversed, the Three of Pentacles is conflict within a team, or work that went unnoticed. Consider how the collaboration is structured.",
       "keywords_ru": ["мастерство", "сотрудничество", "труд", "признание", "команда"],
       "keywords_en": ["mastery", "collaboration", "craftsmanship", "recognition", "teamwork"],
-      "image_url": "/cards/pentacles/three-of-pentacles.png"
+      "image_url": "/cards/pentacles/three-of-pentacles.jpg"
     },
     {
       "slug": "four-of-pentacles",
@@ -957,7 +957,7 @@
       "reversed_meaning_en": "Reversed, the Four of Pentacles is the beginning of release from hoarding. Something is let go: money, control, fear of loss.",
       "keywords_ru": ["безопасность", "скупость", "контроль", "стабильность", "страх потери"],
       "keywords_en": ["security", "possessiveness", "control", "stability", "fear of loss"],
-      "image_url": "/cards/pentacles/four-of-pentacles.png"
+      "image_url": "/cards/pentacles/four-of-pentacles.jpg"
     },
     {
       "slug": "five-of-pentacles",
@@ -971,7 +971,7 @@
       "reversed_meaning_en": "Reversed, the Five of Pentacles is emerging from hardship, or the first step toward asking for help. The door turns out to be open.",
       "keywords_ru": ["нужда", "изоляция", "трудности", "тревога", "поддержка"],
       "keywords_en": ["hardship", "isolation", "scarcity", "worry", "support"],
-      "image_url": "/cards/pentacles/five-of-pentacles.png"
+      "image_url": "/cards/pentacles/five-of-pentacles.jpg"
     },
     {
       "slug": "six-of-pentacles",
@@ -985,7 +985,7 @@
       "reversed_meaning_en": "Reversed, the Six of Pentacles is imbalance in giving and receiving. Or generosity with unspoken conditions attached.",
       "keywords_ru": ["щедрость", "обмен", "помощь", "баланс", "поток"],
       "keywords_en": ["generosity", "exchange", "giving", "balance", "flow"],
-      "image_url": "/cards/pentacles/six-of-pentacles.png"
+      "image_url": "/cards/pentacles/six-of-pentacles.jpg"
     },
     {
       "slug": "seven-of-pentacles",
@@ -999,7 +999,7 @@
       "reversed_meaning_en": "Reversed, the Seven of Pentacles is impatience or doubt about whether to keep waiting. Check: is this the right harvest you are tending?",
       "keywords_ru": ["терпение", "урожай", "ожидание", "труд", "оценка"],
       "keywords_en": ["patience", "harvest", "waiting", "investment", "assessment"],
-      "image_url": "/cards/pentacles/seven-of-pentacles.png"
+      "image_url": "/cards/pentacles/seven-of-pentacles.jpg"
     },
     {
       "slug": "eight-of-pentacles",
@@ -1013,7 +1013,7 @@
       "reversed_meaning_en": "Reversed, the Eight of Pentacles is work without meaning, or mastery that is seeking a new challenge. The routine no longer teaches.",
       "keywords_ru": ["мастерство", "практика", "труд", "развитие", "сосредоточенность"],
       "keywords_en": ["mastery", "practice", "diligence", "skill-building", "focus"],
-      "image_url": "/cards/pentacles/eight-of-pentacles.png"
+      "image_url": "/cards/pentacles/eight-of-pentacles.jpg"
     },
     {
       "slug": "nine-of-pentacles",
@@ -1027,7 +1027,7 @@
       "reversed_meaning_en": "Reversed, the Nine of Pentacles is dependence not yet acknowledged, or success that costs an inner emptiness.",
       "keywords_ru": ["независимость", "самодостаточность", "роскошь", "плод труда", "достоинство"],
       "keywords_en": ["independence", "self-sufficiency", "luxury", "earned reward", "dignity"],
-      "image_url": "/cards/pentacles/nine-of-pentacles.png"
+      "image_url": "/cards/pentacles/nine-of-pentacles.jpg"
     },
     {
       "slug": "ten-of-pentacles",
@@ -1041,7 +1041,7 @@
       "reversed_meaning_en": "Reversed, the Ten of Pentacles is conflict around inheritance or prosperity built on an unstable foundation.",
       "keywords_ru": ["наследие", "изобилие", "семья", "традиция", "завершение"],
       "keywords_en": ["legacy", "abundance", "family", "tradition", "lasting wealth"],
-      "image_url": "/cards/pentacles/ten-of-pentacles.png"
+      "image_url": "/cards/pentacles/ten-of-pentacles.jpg"
     },
     {
       "slug": "page-of-pentacles",
@@ -1055,7 +1055,7 @@
       "reversed_meaning_en": "Reversed, the Page of Pentacles is daydreaming without action, or practical beginnings stalled at the starting line.",
       "keywords_ru": ["учёба", "старательность", "практика", "новичок", "любознательность"],
       "keywords_en": ["study", "diligence", "practicality", "beginner", "curiosity"],
-      "image_url": "/cards/pentacles/page-of-pentacles.png"
+      "image_url": "/cards/pentacles/page-of-pentacles.jpg"
     },
     {
       "slug": "knight-of-pentacles",
@@ -1069,7 +1069,7 @@
       "reversed_meaning_en": "Reversed, the Knight of Pentacles is stagnation, or stubborn adherence to a plan that no longer works. Sometimes reliability hardens into inflexibility.",
       "keywords_ru": ["методичность", "надёжность", "упорство", "стабильность", "практичность"],
       "keywords_en": ["methodical", "reliability", "perseverance", "stability", "practicality"],
-      "image_url": "/cards/pentacles/knight-of-pentacles.png"
+      "image_url": "/cards/pentacles/knight-of-pentacles.jpg"
     },
     {
       "slug": "queen-of-pentacles",
@@ -1083,7 +1083,7 @@
       "reversed_meaning_en": "Reversed, the Queen of Pentacles is self-sacrifice without limits, or material worry that prevents enjoying what is already present.",
       "keywords_ru": ["забота", "щедрость", "дом", "практичность", "изобилие"],
       "keywords_en": ["nurturing", "generosity", "home", "practicality", "abundance"],
-      "image_url": "/cards/pentacles/queen-of-pentacles.png"
+      "image_url": "/cards/pentacles/queen-of-pentacles.jpg"
     },
     {
       "slug": "king-of-pentacles",
@@ -1097,7 +1097,7 @@
       "reversed_meaning_en": "Reversed, the King of Pentacles is greed, corruption, or a loss of meaning in what has been accumulated. Wealth exists, but it has stopped serving life.",
       "keywords_ru": ["зрелость", "богатство", "мудрость", "стабильность", "процветание"],
       "keywords_en": ["maturity", "wealth", "wisdom", "stability", "prosperity"],
-      "image_url": "/cards/pentacles/king-of-pentacles.png"
+      "image_url": "/cards/pentacles/king-of-pentacles.jpg"
     }
   ]
 }

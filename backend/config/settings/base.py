@@ -1,8 +1,27 @@
 """Base Django settings — extended by dev.py and prod.py."""
+import os
+from datetime import timedelta
 from pathlib import Path
-from decouple import config
+
+from decouple import Config, RepositoryEnv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Load .env explicitly so values in the file always win, even when an empty
+# env var has been injected into the process (some shells/harnesses do this,
+# and decouple's default `config()` reads os.environ first which then
+# silently overrides the .env value with an empty string).
+# .env lives in the project root, one level above BASE_DIR (= backend/).
+_ENV_FILE = BASE_DIR.parent / '.env'
+if _ENV_FILE.exists():
+    _repo = RepositoryEnv(str(_ENV_FILE))
+    for _k, _v in _repo.data.items():
+        # Override only when the existing env value is missing or empty.
+        if not os.environ.get(_k):
+            os.environ[_k] = _v
+    config = Config(_repo)
+else:
+    from decouple import config  # noqa: F401  fallback to AutoConfig
 
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='dev-only-change-me')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
@@ -25,6 +44,8 @@ INSTALLED_APPS = [
     'apps.tarot',
     'apps.readings',
     'apps.users',
+    'apps.billing',
+    'apps.runes',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +104,15 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
 }
 
 SPECTACULAR_SETTINGS = {
@@ -90,8 +120,20 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '0.1.0',
 }
 
+# Google OAuth
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
+
 # Anthropic
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+ANTHROPIC_MODEL_FREE = config('ANTHROPIC_MODEL_FREE', default='claude-haiku-4-5-20251001')
+ANTHROPIC_MODEL_PREMIUM = config('ANTHROPIC_MODEL_PREMIUM', default='claude-sonnet-4-6')
+ANTHROPIC_MODEL_DEEP = config('ANTHROPIC_MODEL_DEEP', default='claude-opus-4-7')
+
+# Paddle (Merchant of Record)
+PADDLE_ENV = config('PADDLE_ENV', default='sandbox')  # sandbox | production
+PADDLE_API_KEY = config('PADDLE_API_KEY', default='')
+PADDLE_WEBHOOK_SECRET = config('PADDLE_WEBHOOK_SECRET', default='')
+PADDLE_CLIENT_TOKEN = config('PADDLE_CLIENT_TOKEN', default='')  # public, fed to frontend
 
 # Celery
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')

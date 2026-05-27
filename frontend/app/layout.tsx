@@ -1,9 +1,15 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getLocale } from 'next-intl/server';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
-import { defaultLocale } from '@/i18n';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider } from '@/lib/auth-context';
+import Navbar from '@/components/layout/Navbar';
+import BottomBar from '@/components/layout/BottomBar';
+import type { Locale } from '@/i18n';
 import './globals.css';
+
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin', 'cyrillic'],
@@ -30,15 +36,24 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const messages = await getMessages();
+  const locale = (await getLocale()) as Locale;
 
   return (
     <html
-      lang={defaultLocale}
+      lang={locale}
       className={`${cormorant.variable} ${inter.variable}`}
     >
       <body className="min-h-screen bg-midnight text-mist font-sans antialiased">
-        <NextIntlClientProvider locale={defaultLocale} messages={messages}>
-          {children}
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+            <AuthProvider>
+              <Navbar locale={locale} />
+              <div style={{ paddingTop: '56px', paddingBottom: '60px' }} className="md:pb-0">
+                {children}
+              </div>
+              <BottomBar />
+            </AuthProvider>
+          </GoogleOAuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

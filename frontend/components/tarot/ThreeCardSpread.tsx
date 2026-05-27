@@ -26,6 +26,7 @@ export default function ThreeCardSpread({
   const prefersReducedMotion = useReducedMotion();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
+  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [flippedCards, setFlippedCards] = useState<[boolean, boolean, boolean]>([
     false,
     false,
@@ -137,26 +138,41 @@ export default function ThreeCardSpread({
 
               {/* Card slot */}
               <motion.div
-                className="w-full"
+                className="w-full cursor-pointer"
                 style={{ maxWidth: '140px' }}
-                whileHover={
-                  drawnCard !== null && (flippedCards[i] ?? false)
-                    ? { scale: 1.05 }
-                    : {}
+                animate={
+                  !prefersReducedMotion && clickedIndex === i
+                    ? { scale: 1.18 }
+                    : { scale: 1 }
                 }
+                whileHover={drawnCard !== null ? { scale: 1.08 } : {}}
                 transition={{ duration: 0.2, ease: 'easeOut' }}
                 onClick={() => {
-                  if (drawnCard !== null && (flippedCards[i] ?? false)) {
-                    setSelectedCardIndex(i);
+                  if (drawnCard === null) return;
+                  const isFaceUp = flippedCards[i] ?? false;
+                  if (!isFaceUp) {
+                    // Flip the card manually
+                    setFlippedCards((prev) => {
+                      const next: [boolean, boolean, boolean] = [...prev] as [boolean, boolean, boolean];
+                      next[i] = true;
+                      return next;
+                    });
+                  } else {
+                    // Open detail modal
+                    if (prefersReducedMotion) {
+                      setSelectedCardIndex(i);
+                    } else {
+                      setClickedIndex(i);
+                      setTimeout(() => {
+                        setSelectedCardIndex(i);
+                        setClickedIndex(null);
+                      }, 300);
+                    }
                   }
                 }}
               >
                 {drawnCard !== null ? (
-                  <div
-                    className={
-                      flippedCards[i] ?? false ? 'cursor-pointer' : ''
-                    }
-                  >
+                  <div>
                     <CardFlip
                       isFaceUp={flippedCards[i] ?? false}
                       front={

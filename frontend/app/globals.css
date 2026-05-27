@@ -28,3 +28,29 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Card shimmer sweep animation */
+@keyframes card-shimmer {
+  0%   { transform: translateX(-140%) skewX(-18deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(240%) skewX(-18deg); opacity: 0; }
+}
+
+.card-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    var(--shimmer-color, rgba(212,175,55,0.38)) 45%,
+    rgba(255,255,255,0.08) 50%,
+    var(--shimmer-color, rgba(212,175,55,0.38)) 55%,
+    transparent 75%
+  );
+  animation: card-shimmer var(--shimmer-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--shimmer-delay, 0s);
+  pointer-events: none;
+  border-radius: inherit;
+}

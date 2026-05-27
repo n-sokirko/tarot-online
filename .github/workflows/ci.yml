@@ -2,29 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [main, staging]
+    branches: [master]
   pull_request:
-    branches: [main, staging]
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  frontend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run type-check
-      - run: npm run build
-
   backend:
+    name: Backend (lint + test)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -45,15 +33,65 @@ jobs:
     env:
       DJANGO_SETTINGS_MODULE: config.settings.dev
       DJANGO_SECRET_KEY: ci-secret
+      DJANGO_DEBUG: "True"
       POSTGRES_HOST: localhost
+      POSTGRES_USER: tarot
+      POSTGRES_PASSWORD: tarot
+      POSTGRES_DB: tarot
       ANTHROPIC_API_KEY: ci-placeholder
+      PADDLE_WEBHOOK_SECRET: whsec_ci_placeholder
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements.txt
-      - run: ruff check .
-      - run: python manage.py migrate --noinput
-      - run: pytest -x
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Migrations
+        run: python manage.py migrate --noinput
+
+      - name: Seed data
+        run: |
+          python manage.py seed_runes
+          python manage.py seed_plans
+
+      - name: Tests
+        run: pytest -x -q
+
+  frontend:
+    name: Frontend (lint + type-check + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    env:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ci-placeholder
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Build
+        run: npm run build
