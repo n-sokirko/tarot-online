@@ -1,0 +1,98 @@
+services:
+
+  # ── Database ────────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-tarot}
+      POSTGRES_USER:     ${POSTGRES_USER:-tarot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tarot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Cache / queue broker ─────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ── Django backend (Gunicorn) ────────────────────────────────────────────────
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py seed_deck &&
+             python manage.py seed_runes &&
+             python manage.py seed_plans &&
+             python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application
+               --bind 0.0.0.0:8000
+               --workers 2
+               --timeout 120"
+    volumes:
+      - static_files:/app/staticfiles
+    env_file: .env.prod
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Celery worker ────────────────────────────────────────────────────────────
+  worker:
+    build: ./backend
+    restart: unless-stopped
+    command: celery -A config worker -l info --concurrency 2
+    env_file: .env.prod
+    depends_on:
+      - backend
+      - redis
+
+  # ── Next.js frontend ─────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL:          ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  # ── Nginx reverse proxy ──────────────────────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_files:/app/staticfiles:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+  # ── Cloudflare Tunnel ────────────────────────────────────────────────────────
+  # Creates a secure tunnel: sokirdon.com → nginx:80 (no port-forwarding needed)
+  # Token is created in: Cloudflare Dashboard → Zero Trust → Networks → Tunnels
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - nginx
+
+volumes:
+  pgdata:
+  static_files:
