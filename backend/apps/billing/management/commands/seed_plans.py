@@ -8,7 +8,6 @@ in sandbox and production.
 Usage:
     python manage.py seed_plans
 """
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from decouple import config
 

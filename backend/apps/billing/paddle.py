@@ -9,7 +9,6 @@ from __future__ import annotations
 import hashlib
 import hmac
 import time
-from typing import Iterable
 
 
 def _parse_signature_header(header: str) -> dict[str, list[str]]:

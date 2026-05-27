@@ -1,6 +1,5 @@
 """API tests for Stage 1 — deck, spreads, readings (no AI)."""
 import pytest
-from django.urls import reverse
 from rest_framework.test import APIClient
 
 from apps.tarot.models import Card, SpreadType

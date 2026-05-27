@@ -1,6 +1,8 @@
 """Base Django settings — extended by dev.py and prod.py."""
 import os
+from datetime import timedelta
 from pathlib import Path
+
 from decouple import Config, RepositoryEnv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -107,7 +109,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),

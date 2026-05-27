@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 from rest_framework.test import APIClient
 
-from apps.runes.models import Rune, RuneCast, RuneInterpretation
+from apps.runes.models import Rune, RuneInterpretation
 
 
 @pytest.fixture

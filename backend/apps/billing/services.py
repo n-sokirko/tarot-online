@@ -42,9 +42,6 @@ def tier_for(user) -> TierInfo:
     if user is None or not getattr(user, 'is_authenticated', False):
         return TierInfo(tier='free', has_active_subscription=False, entitlements=set())
 
-    keys = set(
-        Entitlement.objects.filter(user=user).values_list('key', flat=True)
-    )
     valid = {e.key for e in Entitlement.objects.filter(user=user) if e.is_valid()}
     has_sub = Subscription.objects.filter(
         user=user,
