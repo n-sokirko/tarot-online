@@ -113,6 +113,11 @@ class ReadingViewSet(
     def interpret(self, request: Request, pk=None) -> Response:
         """Generate an AI interpretation for the reading. Synchronous for MVP.
 
+        Accepts optional ``question`` in the request body — the user's story,
+        context, or specific question.  If provided, ``reading.question`` is
+        updated **before** the prompt is built so the AI can weave its
+        response around the user's narrative.
+
         - Tier resolved from authenticated user. Anonymous → free tier (Haiku).
         - Free tier on Haiku is permitted; premium uses Sonnet.
         - Credits are charged via billing.services. Free users without credits
@@ -121,6 +126,12 @@ class ReadingViewSet(
         - Idempotent: if an Interpretation already exists, return it.
         """
         reading = self.get_object()
+
+        # ── Accept user question / story ─────────────────────────────
+        question = (request.data.get('question') or '').strip()
+        if question and not hasattr(reading, 'interpretation'):
+            reading.question = question
+            reading.save(update_fields=['question'])
 
         if hasattr(reading, 'interpretation'):
             return Response(

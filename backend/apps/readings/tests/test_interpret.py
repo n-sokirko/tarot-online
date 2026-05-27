@@ -98,6 +98,23 @@ class TestInterpret:
         assert CreditWallet.objects.get(user=user).balance == 9
         assert UsageLedger.objects.filter(user=user, kind=UsageLedger.KIND_AI_TAROT).exists()
 
+    def test_question_passed_to_reading_before_interpret(self, api_client, deck, three_card_spread):
+        """The interpret endpoint saves the user question before building the prompt."""
+        rid = self._new_reading(api_client, deck, three_card_spread)
+        with patch('apps.readings.views.ai_client.generate_interpretation',
+                   return_value=_mock_result()) as mock_gen:
+            res = api_client.post(
+                f'/api/v1/readings/{rid}/interpret/',
+                {'question': 'Меня бросила девушка, что мне делать?'},
+                format='json',
+            )
+        assert res.status_code == 201
+        reading = Reading.objects.get(pk=rid)
+        assert 'бросила' in reading.question
+        # The user message passed to AI should include the question.
+        user_msg = mock_gen.call_args.kwargs['user_message']
+        assert 'бросила' in user_msg
+
     def test_idempotent_returns_existing(self, api_client, deck, three_card_spread):
         rid = self._new_reading(api_client, deck, three_card_spread)
         with patch('apps.readings.views.ai_client.generate_interpretation',

@@ -109,6 +109,13 @@ class RuneCastViewSet(
     @action(detail=True, methods=['post'], url_path='interpret')
     def interpret(self, request: Request, pk=None) -> Response:
         cast = self.get_object()
+
+        # Accept user question / story before interpreting.
+        question = (request.data.get('question') or '').strip()
+        if question and not hasattr(cast, 'interpretation'):
+            cast.question = question
+            cast.save(update_fields=['question'])
+
         if hasattr(cast, 'interpretation'):
             return Response(RuneInterpretationSerializer(cast.interpretation).data)
 

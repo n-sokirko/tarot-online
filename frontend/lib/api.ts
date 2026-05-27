@@ -52,8 +52,11 @@ export async function getReading(id: number | string): Promise<ReadingResponse> 
   return request<ReadingResponse>(`/api/v1/readings/${id}/`);
 }
 
-export async function interpretReading(id: number | string): Promise<Interpretation> {
-  return request<Interpretation>(`/api/v1/readings/${id}/interpret/`, { method: 'POST' });
+export async function interpretReading(id: number | string, question?: string): Promise<Interpretation> {
+  return request<Interpretation>(`/api/v1/readings/${id}/interpret/`, {
+    method: 'POST',
+    body: JSON.stringify({ question: question ?? '' }),
+  });
 }
 
 // ---- Runes ----
@@ -77,8 +80,11 @@ export async function getRuneCast(id: number | string): Promise<RuneCastResponse
   return request<RuneCastResponse>(`/api/v1/runes/casts/${id}/`);
 }
 
-export async function interpretRuneCast(id: number | string): Promise<Interpretation> {
-  return request<Interpretation>(`/api/v1/runes/casts/${id}/interpret/`, { method: 'POST' });
+export async function interpretRuneCast(id: number | string, question?: string): Promise<Interpretation> {
+  return request<Interpretation>(`/api/v1/runes/casts/${id}/interpret/`, {
+    method: 'POST',
+    body: JSON.stringify({ question: question ?? '' }),
+  });
 }
 
 // ---- Billing ----
