@@ -73,7 +73,6 @@ class ReadingViewSet(
     """
 
     permission_classes = [AllowAny]
-    authentication_classes = []
 
     def get_queryset(self):
         return Reading.objects.select_related('spread_type', 'interpretation').prefetch_related(
