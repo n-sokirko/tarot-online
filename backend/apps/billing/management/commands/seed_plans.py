@@ -42,7 +42,7 @@ PLANS = [
         "tg_stars_price": 250,  # ~$3.25 at ~$0.013/Star
         "monthly_included_credits": 50,
         "credits_granted": 0,
-        "entitlement_keys": ["premium_spreads", "sonnet_ai", "celtic_cross", "runes_ai", "history_unlimited"],
+        "entitlement_keys": ["premium_spreads", "sonnet_ai", "celtic_cross", "runes_ai", "history_unlimited", "natal_chart"],
         "sort_order": 10,
         "_env_product": "PADDLE_PRODUCT_PREMIUM_MONTHLY",
         "_env_price": "PADDLE_PRICE_PREMIUM_MONTHLY",

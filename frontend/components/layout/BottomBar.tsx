@@ -6,8 +6,8 @@ import { useLocale } from 'next-intl';
 import { useAuth } from '@/lib/auth-context';
 
 const LABELS = {
-  ru: { tarot: 'Таро', runes: 'Руны', premium: 'Premium', profile: 'Профиль', login: 'Войти' },
-  en: { tarot: 'Tarot', runes: 'Runes', premium: 'Premium', profile: 'Profile', login: 'Log in' },
+  ru: { tarot: 'Таро', runes: 'Руны', natal: 'Карта', premium: 'Premium', profile: 'Профиль', login: 'Войти' },
+  en: { tarot: 'Tarot', runes: 'Runes', natal: 'Natal', premium: 'Premium', profile: 'Profile', login: 'Log in' },
 } as const;
 
 const HomeIcon = () => (
@@ -22,6 +22,17 @@ const RunesIcon = () => (
     <path d="M6 3v18"/>
     <path d="M18 3v18"/>
     <path d="M6 8l12 8"/>
+  </svg>
+);
+
+const NatalIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <circle cx="12" cy="12" r="3"/>
+    <line x1="12" y1="3" x2="12" y2="6"/>
+    <line x1="12" y1="18" x2="12" y2="21"/>
+    <line x1="3" y1="12" x2="6" y2="12"/>
+    <line x1="18" y1="12" x2="21" y2="12"/>
   </svg>
 );
 
@@ -49,6 +60,7 @@ export default function BottomBar() {
 
   const isHome = pathname === '/';
   const isRunes = pathname?.startsWith('/runes') ?? false;
+  const isNatal = pathname?.startsWith('/natal') ?? false;
   const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
 
@@ -82,6 +94,17 @@ export default function BottomBar() {
         <RunesIcon />
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           {l.runes}
+        </span>
+      </Link>
+
+      <Link
+        href="/natal"
+        className="flex flex-col items-center gap-1"
+        style={{ color: isNatal ? activeColor : inactiveColor }}
+      >
+        <NatalIcon />
+        <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {l.natal}
         </span>
       </Link>
 

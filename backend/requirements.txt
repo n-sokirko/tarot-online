@@ -15,3 +15,7 @@ gunicorn==22.0.0
 pytest==8.2.2
 pytest-django==4.8.0
 ruff==0.5.5
+# Natal chart dependencies (no C compiler required — binary wheels available)
+ephem>=4.1.0            # astronomical calculations
+geopy==2.4.1             # city geocoding (Nominatim)
+timezonefinder>=5.0.0   # lat/lng → IANA timezone (pure-Python wheel)

@@ -144,3 +144,53 @@ export interface CheckoutPayload {
   customer_email: string;
   custom_data: { user_id: string; plan_slug: string };
 }
+
+// ---- Natal Chart ----
+
+export interface NatalPlanet {
+  name: string;
+  sign: string;
+  sign_num: number;
+  position: number;
+  abs_pos: number;
+  emoji: string;
+  house: number;
+  retrograde: boolean;
+  glyph: string;
+}
+
+export interface NatalHouse {
+  number: number;
+  abs_pos: number;
+}
+
+export interface NatalAspect {
+  planet1: string;
+  planet2: string;
+  aspect: string;
+  orb: number;
+}
+
+export interface NatalInterpretation {
+  body_md: string;
+  model_used: string;
+  generated_at: string;
+}
+
+export interface NatalChart {
+  id: number;
+  birth_name: string;
+  birth_date: string;
+  birth_time: string | null;
+  birth_city: string;
+  birth_lat: number;
+  birth_lng: number;
+  birth_tz: string;
+  locale: 'ru' | 'en';
+  planets: NatalPlanet[];
+  houses: NatalHouse[];
+  aspects: NatalAspect[];
+  ascendant: number | null;
+  interpretation: NatalInterpretation | null;
+  created_at: string;
+}

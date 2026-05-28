@@ -49,3 +49,8 @@ def tarot_spread(spread_slug: str, locale: str) -> str:
 def runes_cast(locale: str) -> str:
     locale = "ru" if locale not in ("ru", "en") else locale
     return _read(f"runes_cast_{locale}.md")
+
+
+def natal_chart(locale: str) -> str:
+    locale = "ru" if locale not in ("ru", "en") else locale
+    return _read(f"natal_chart_{locale}.md")

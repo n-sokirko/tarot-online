@@ -2,6 +2,8 @@ import type {
   BillingMe,
   CheckoutPayload,
   Interpretation,
+  NatalChart,
+  NatalInterpretation,
   PlansResponse,
   ReadingResponse,
   Rune,
@@ -86,6 +88,32 @@ export async function interpretRuneCast(id: number | string, question?: string):
   return request<Interpretation>(`/api/v1/runes/casts/${id}/interpret/`, {
     method: 'POST',
     body: JSON.stringify({ question: question ?? '' }),
+  });
+}
+
+// ---- Natal Chart ----
+
+export async function createNatalChart(data: {
+  birth_name: string;
+  birth_date: string;
+  birth_time?: string;
+  birth_city: string;
+  locale: string;
+}): Promise<NatalChart> {
+  return request<NatalChart>('/api/v1/natal/', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getNatalChart(id: number | string): Promise<NatalChart> {
+  return request<NatalChart>(`/api/v1/natal/${id}/`);
+}
+
+export async function interpretNatalChart(id: number | string): Promise<NatalInterpretation> {
+  return request<NatalInterpretation>(`/api/v1/natal/${id}/interpret/`, {
+    method: 'POST',
+    body: JSON.stringify({}),
   });
 }
 

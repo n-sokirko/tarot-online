@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.billing',
     'apps.runes',
     'apps.telegram_bot',
+    'apps.natal',
 ]
 
 MIDDLEWARE = [
