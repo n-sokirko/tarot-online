@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from '@react-oauth/google';
 import { saveTokens } from '@/lib/auth';
+import { useAuth } from '@/lib/auth-context';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '';
@@ -14,6 +15,7 @@ interface GoogleButtonProps {
 
 function GoogleLoginInner({ onError }: GoogleButtonProps) {
   const router = useRouter();
+  const { refetch } = useAuth();
 
   const handleSuccess = useCallback(async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) return;
@@ -29,12 +31,12 @@ function GoogleLoginInner({ onError }: GoogleButtonProps) {
       }
       const data = await res.json() as { access: string; refresh: string };
       saveTokens(data.access, data.refresh);
+      await refetch();
       router.push('/');
-      router.refresh();
     } catch {
       onError?.('Google sign-in failed. Please try again.');
     }
-  }, [router, onError]);
+  }, [router, onError, refetch]);
 
   return (
     <div className="flex justify-center">

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { saveTokens } from '@/lib/auth';
+import { useAuth } from '@/lib/auth-context';
 import GoogleButton from '@/components/auth/GoogleButton';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
@@ -13,6 +14,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 export default function RegisterPage() {
   const t = useTranslations('auth');
   const router = useRouter();
+  const { refetch } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -42,14 +44,14 @@ export default function RegisterPage() {
       if (!res.ok) { setError(t('error_generic')); return; }
       const data = await res.json() as { access: string; refresh: string };
       saveTokens(data.access, data.refresh);
+      await refetch();
       router.push('/');
-      router.refresh();
     } catch {
       setError(t('error_generic'));
     } finally {
       setLoading(false);
     }
-  }, [email, password, displayName, router, t]);
+  }, [email, password, displayName, router, t, refetch]);
 
   return (
     <main

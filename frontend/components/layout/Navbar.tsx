@@ -34,13 +34,20 @@ export default function Navbar({ locale }: NavbarProps) {
       </Link>
 
       {/* Center nav (desktop only) */}
-      <nav className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+      <nav className="hidden md:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
         <Link
           href="/"
           className="text-xs font-sans tracking-widest uppercase"
           style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
         >
           {locale === 'ru' ? 'Таро' : 'Tarot'}
+        </Link>
+        <Link
+          href="/daily"
+          className="text-xs font-sans tracking-widest uppercase"
+          style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Карта дня' : 'Daily'}
         </Link>
         <Link
           href="/runes"
@@ -55,6 +62,13 @@ export default function Navbar({ locale }: NavbarProps) {
           style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
         >
           {locale === 'ru' ? 'Карта' : 'Natal'}
+        </Link>
+        <Link
+          href="/numerology"
+          className="text-xs font-sans tracking-widest uppercase"
+          style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Числа' : 'Numbers'}
         </Link>
         <Link
           href="/pricing"

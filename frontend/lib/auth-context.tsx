@@ -45,6 +45,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { void fetchMe(); }, [fetchMe]);
 
+  // Sync auth state across browser tabs.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'tarot_access' || e.key === null) {
+        void fetchMe();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [fetchMe]);
+
   const logout = useCallback(() => {
     clearTokens();
     setUser(null);

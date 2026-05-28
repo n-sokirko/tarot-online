@@ -54,3 +54,8 @@ def runes_cast(locale: str) -> str:
 def natal_chart(locale: str) -> str:
     locale = "ru" if locale not in ("ru", "en") else locale
     return _read(f"natal_chart_{locale}.md")
+
+
+def numerology(locale: str) -> str:
+    locale = "ru" if locale not in ("ru", "en") else locale
+    return _read(f"numerology_{locale}.md")

@@ -4,6 +4,8 @@ import type {
   Interpretation,
   NatalChart,
   NatalInterpretation,
+  NumerologyReading,
+  NumerologyInterpretation,
   PlansResponse,
   ReadingResponse,
   Rune,
@@ -37,6 +39,18 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new ApiError(res.status, payload);
   }
   return res.json() as Promise<T>;
+}
+
+// ---- Daily Card ----
+
+export interface DailyCardResponse {
+  date: string;
+  card: import('./types').TarotCard;
+  is_reversed: boolean;
+}
+
+export async function getDailyCard(): Promise<DailyCardResponse> {
+  return request<DailyCardResponse>('/api/v1/cards/daily/');
 }
 
 // ---- Tarot readings ----
@@ -100,18 +114,38 @@ export async function createNatalChart(data: {
   birth_city: string;
   locale: string;
 }): Promise<NatalChart> {
-  return request<NatalChart>('/api/v1/natal/', {
+  return request<NatalChart>('/api/v1/natal/charts/', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function getNatalChart(id: number | string): Promise<NatalChart> {
-  return request<NatalChart>(`/api/v1/natal/${id}/`);
+  return request<NatalChart>(`/api/v1/natal/charts/${id}/`);
 }
 
 export async function interpretNatalChart(id: number | string): Promise<NatalInterpretation> {
-  return request<NatalInterpretation>(`/api/v1/natal/${id}/interpret/`, {
+  return request<NatalInterpretation>(`/api/v1/natal/charts/${id}/interpret/`, {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
+}
+
+// ---- Numerology ----
+
+export async function createNumerologyReading(data: {
+  full_name: string;
+  birth_date: string;
+  locale: string;
+}): Promise<NumerologyReading> {
+  return request<NumerologyReading>('/api/v1/numerology/readings/', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function interpretNumerology(id: number | string): Promise<NumerologyInterpretation> {
+  return request<NumerologyInterpretation>(`/api/v1/numerology/readings/${id}/interpret/`, {
     method: 'POST',
     body: JSON.stringify({}),
   });

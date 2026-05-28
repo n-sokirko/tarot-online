@@ -177,6 +177,36 @@ export interface NatalInterpretation {
   generated_at: string;
 }
 
+// ---- Numerology ----
+
+export interface NumerologyInterpretation {
+  body_md: string;
+  model_used: string;
+  generated_at: string;
+}
+
+export interface NumerologyReading {
+  id: number;
+  full_name: string;
+  birth_date: string;
+  locale: 'ru' | 'en';
+  life_path: number;
+  destiny: number;
+  soul_urge: number;
+  personality: number;
+  birthday: number;
+  titles: {
+    life_path: string;
+    destiny: string;
+    soul_urge: string;
+    personality: string;
+    birthday: string;
+  };
+  life_path_summary: string;
+  interpretation: NumerologyInterpretation | null;
+  created_at: string;
+}
+
 export interface NatalChart {
   id: number;
   birth_name: string;

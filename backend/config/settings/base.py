@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.runes',
     'apps.telegram_bot',
     'apps.natal',
+    'apps.numerology',
 ]
 
 MIDDLEWARE = [
