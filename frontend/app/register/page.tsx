@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { saveTokens } from '@/lib/auth';
-import GoogleButton from '@/components/auth/GoogleButton';
+
+const GoogleButton = dynamic(() => import('@/components/auth/GoogleButton'), { ssr: false });
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 

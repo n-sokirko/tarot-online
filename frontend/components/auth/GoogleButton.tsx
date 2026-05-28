@@ -6,7 +6,6 @@ import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from '@reac
 import { saveTokens } from '@/lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
-// Read once at module level so the value is stable and doesn't change on re-renders
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '';
 
 interface GoogleButtonProps {
@@ -52,11 +51,18 @@ function GoogleLoginInner({ onError }: GoogleButtonProps) {
 }
 
 /**
- * Self-contained Google Sign-In button.
- * GoogleOAuthProvider is scoped here so its <script> tag is only rendered
- * by this client component — avoids the root-layout hydration mismatch.
+ * Google Sign-In — rendered client-only (no SSR).
+ *
+ * GoogleOAuthProvider injects a <script> tag into <head>. When server-rendered,
+ * this confuses React's hydration reconciler in Next.js 14 App Router and causes
+ * "In HTML, <script> cannot be a child of <html>" errors. The fix: never render
+ * this component on the server — the parent must import it via dynamic({ ssr: false }).
+ *
+ * If NEXT_PUBLIC_GOOGLE_CLIENT_ID is not configured, renders nothing (graceful degradation).
  */
 export default function GoogleButton({ onError }: GoogleButtonProps) {
+  if (!GOOGLE_CLIENT_ID) return null;
+
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <GoogleLoginInner onError={onError} />
