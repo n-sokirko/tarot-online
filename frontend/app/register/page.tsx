@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import dynamic from 'next/dynamic';
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { saveTokens } from '@/lib/auth';
-
-const GoogleButton = dynamic(() => import('@/components/auth/GoogleButton'), { ssr: false });
+import GoogleButton from '@/components/auth/GoogleButton';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
@@ -20,6 +18,8 @@ export default function RegisterPage() {
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => { setIsClient(true); }, []);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,7 +138,7 @@ export default function RegisterPage() {
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.15)' }} />
         </div>
 
-        <GoogleButton onError={setError} />
+        {isClient && <GoogleButton onError={setError} />}
 
         <p className="text-xs text-center" style={{ color: 'rgba(201,194,224,0.4)' }}>
           <Link href="/login" style={{ color: 'rgba(212,175,55,0.6)' }}>
