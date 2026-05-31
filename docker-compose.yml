@@ -83,12 +83,18 @@ services:
   frontend:
     image: node:20-alpine
     working_dir: /app
-    command: sh -c "npm install && npm run dev"
+    # Production build: minified bundles + no on-demand recompiles → much faster
+    # for end users than `next dev`. NEXT_PUBLIC_* vars are inlined at build time,
+    # so they must be present in this service's environment (they are, below).
+    command: sh -c "npm install && npm run build && npm start"
     volumes:
       - ./frontend:/app
     ports:
       - "3000:3000"
     environment:
+      # Don't set NODE_ENV=production here — it makes `npm install` skip the
+      # devDependencies (typescript, tailwind, postcss) that `next build` needs.
+      # `next build`/`next start` switch to production mode on their own.
       - NEXT_PUBLIC_API_URL=https://sokirdon.com
       - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
     depends_on:

@@ -59,3 +59,8 @@ def natal_chart(locale: str) -> str:
 def numerology(locale: str) -> str:
     locale = "ru" if locale not in ("ru", "en") else locale
     return _read(f"numerology_{locale}.md")
+
+
+def horoscope(locale: str) -> str:
+    locale = "ru" if locale not in ("ru", "en") else locale
+    return _read(f"horoscope_{locale}.md")

@@ -6,6 +6,9 @@ import type {
   NatalInterpretation,
   NumerologyReading,
   NumerologyInterpretation,
+  DailyHoroscope,
+  HoroscopeAIReading,
+  ZodiacSign,
   PlansResponse,
   ReadingResponse,
   Rune,
@@ -151,6 +154,23 @@ export async function interpretNumerology(id: number | string): Promise<Numerolo
   });
 }
 
+// ---- Horoscope ----
+
+export async function listZodiacSigns(locale: string): Promise<{ signs: ZodiacSign[] }> {
+  return request<{ signs: ZodiacSign[] }>(`/api/v1/horoscope/signs/?locale=${locale}`);
+}
+
+export async function getDailyHoroscope(sign: string, locale: string): Promise<DailyHoroscope> {
+  return request<DailyHoroscope>(`/api/v1/horoscope/${sign}/?locale=${locale}`);
+}
+
+export async function interpretHoroscope(sign: string, locale: string): Promise<HoroscopeAIReading> {
+  return request<HoroscopeAIReading>(`/api/v1/horoscope/${sign}/interpret/`, {
+    method: 'POST',
+    body: JSON.stringify({ locale }),
+  });
+}
+
 // ---- Billing ----
 
 export async function listPlans(): Promise<PlansResponse> {
@@ -179,5 +199,17 @@ export async function startTelegramInvoice(planSlug: string): Promise<TelegramIn
   return request<TelegramInvoicePayload>('/api/v1/billing/checkout/telegram-invoice/', {
     method: 'POST',
     body: JSON.stringify({ plan_slug: planSlug }),
+  });
+}
+
+export interface TelegramDonationPayload {
+  invoice_link: string;
+  stars: number;
+}
+
+export async function startTelegramDonation(stars: number): Promise<TelegramDonationPayload> {
+  return request<TelegramDonationPayload>('/api/v1/billing/donate/telegram-invoice/', {
+    method: 'POST',
+    body: JSON.stringify({ stars }),
   });
 }

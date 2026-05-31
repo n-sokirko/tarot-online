@@ -9,5 +9,6 @@ urlpatterns = [
     path('billing/checkout/', views.checkout, name='billing-checkout'),
     path('billing/checkout/telegram/', views.telegram_checkout, name='billing-checkout-telegram'),
     path('billing/checkout/telegram-invoice/', views.telegram_invoice, name='billing-checkout-telegram-invoice'),
+    path('billing/donate/telegram-invoice/', views.telegram_donation_invoice, name='billing-donate-telegram-invoice'),
     path('billing/webhooks/paddle/', views.paddle_webhook, name='billing-webhook-paddle'),
 ]

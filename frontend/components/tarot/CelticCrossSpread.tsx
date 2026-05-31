@@ -311,8 +311,10 @@ export default function CelticCrossSpread({
       {/* Detail modal */}
       {selectedDrawnCard && selectedPos && (
         <CardDetailModal
-          drawnCard={selectedDrawnCard}
-          position={selectedPos}
+          card={selectedDrawnCard.card}
+          isReversed={selectedDrawnCard.is_reversed}
+          positionLabel={locale === 'ru' ? selectedPos.label_ru : selectedPos.label_en}
+          positionMeaning={locale === 'ru' ? selectedPos.meaning_ru : selectedPos.meaning_en}
           locale={locale}
           onClose={() => setSelectedCardIndex(null)}
         />

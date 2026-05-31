@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.telegram_bot',
     'apps.natal',
     'apps.numerology',
+    'apps.horoscope',
 ]
 
 MIDDLEWARE = [

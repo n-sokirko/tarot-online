@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
@@ -41,6 +42,15 @@ export default async function RootLayout({
       lang={locale}
       className={`${cormorant.variable} ${inter.variable}`}
     >
+      <head>
+        {/* Telegram Mini App SDK — must load before hydration so
+            window.Telegram.WebApp exists when TelegramInit / openInvoice run.
+            Without this, auto-login and the native Stars sheet never fire. */}
+        <Script
+          src="https://telegram.org/js/telegram-web-app.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className="min-h-screen bg-midnight text-mist font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
