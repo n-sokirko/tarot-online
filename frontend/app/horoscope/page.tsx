@@ -12,6 +12,8 @@ import {
 } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import ZodiacConstellation from '@/components/horoscope/ZodiacConstellation';
+import Starfield from '@/components/visual/Starfield';
+import SpeakButton from '@/components/a11y/SpeakButton';
 import type { ZodiacSign, DailyHoroscope, HoroscopeAIReading } from '@/lib/types';
 
 const STRINGS = {
@@ -145,11 +147,12 @@ export default function HoroscopePage() {
 
   return (
     <main
-      className="min-h-screen flex flex-col items-center px-4 py-12"
+      className="relative overflow-hidden min-h-screen flex flex-col items-center px-4 py-12"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.85) 0%, #0b0b1f 60%)' }}
     >
+      <Starfield seed={selected ?? 'horoscope'} count={54} />
       <motion.div
-        className="w-full max-w-2xl flex flex-col gap-8"
+        className="relative z-10 w-full max-w-2xl flex flex-col gap-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -284,6 +287,14 @@ export default function HoroscopePage() {
                   <Section label={t.career} text={horo.career} accent="#d4af37" />
                   <Section label={t.wellbeing} text={horo.wellbeing} accent="#9ad9c0" />
 
+                  {/* Listen to the daily horoscope */}
+                  <div className="flex justify-center">
+                    <SpeakButton
+                      text={`${horo.overall} ${horo.love} ${horo.career} ${horo.wellbeing}`}
+                      lang={locale}
+                    />
+                  </div>
+
                   {/* AI deep reading */}
                   {aiReading ? (
                     <div
@@ -299,6 +310,9 @@ export default function HoroscopePage() {
                       >
                         ✦ {t.deep}
                       </p>
+                      <div className="flex justify-center mb-4">
+                        <SpeakButton text={aiReading.body_md} lang={locale} />
+                      </div>
                       <div
                         className="font-serif text-sm leading-relaxed whitespace-pre-wrap"
                         style={{ color: 'rgba(201,194,224,0.9)' }}

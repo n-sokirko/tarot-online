@@ -4,7 +4,6 @@ Tests for Telegram payment token generation and validation.
 The token is embedded in the t.me deep-link used to redirect users
 from the website to the bot for Stars payment.
 """
-import time
 import pytest
 
 from apps.telegram_bot.tokens import generate_payment_token, validate_payment_token
@@ -51,7 +50,8 @@ class TestValidateToken:
 
     def test_tampered_payload_returns_none(self):
         token = generate_payment_token(user_id=1, plan_slug='premium-monthly')
-        import base64, json
+        import base64
+        import json
         b64, sig = token.rsplit('.', 1)
         pad = (4 - len(b64) % 4) % 4
         data = json.loads(base64.urlsafe_b64decode(b64 + '=' * pad))

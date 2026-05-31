@@ -9,6 +9,7 @@ import { getAccessToken } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
 import type { Plan, PlansResponse } from '@/lib/types';
 import DonateModal from '@/components/donate/DonateModal';
+import Starfield from '@/components/visual/Starfield';
 
 type PricingCopy = {
   title: string; subtitle: string;
@@ -147,10 +148,11 @@ export default function PricingPage() {
 
   return (
     <main
-      className="min-h-screen px-4 py-12 md:py-20"
+      className="relative overflow-hidden min-h-screen px-4 py-12 md:py-20"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
     >
-      <div className="max-w-5xl mx-auto">
+      <Starfield seed="pricing" count={50} />
+      <div className="relative z-10 max-w-5xl mx-auto">
         <motion.header
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

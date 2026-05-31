@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ApiError, interpretRuneCast } from '@/lib/api';
 import { MarkdownProse } from '@/lib/markdown';
+import SpeakButton from '@/components/a11y/SpeakButton';
 import type { Interpretation } from '@/lib/types';
 
 interface Props {
@@ -89,6 +90,9 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
             ᛟ
           </span>
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
+        </div>
+        <div className="flex justify-center mb-6">
+          <SpeakButton text={interpretation.body_md} lang={locale} />
         </div>
         <MarkdownProse
           body={interpretation.body_md}
