@@ -207,6 +207,52 @@ export interface NumerologyReading {
   created_at: string;
 }
 
+// ---- Horoscope ----
+
+export interface ZodiacSign {
+  slug: string;
+  name: string;
+  name_ru: string;
+  name_en: string;
+  symbol: string;
+  element: 'fire' | 'earth' | 'air' | 'water';
+  element_label: string;
+  planet: string;
+  date_range: string;
+}
+
+export interface DailyHoroscope {
+  sign: string;
+  name_ru: string;
+  name_en: string;
+  symbol: string;
+  element: 'fire' | 'earth' | 'air' | 'water';
+  element_ru: string;
+  element_en: string;
+  planet_ru: string;
+  planet_en: string;
+  date: string;
+  locale: 'ru' | 'en';
+  overall: string;
+  love: string;
+  career: string;
+  wellbeing: string;
+  mood: string;
+  lucky_color: string;
+  lucky_number: number;
+  energy: number;
+}
+
+export interface HoroscopeAIReading {
+  id: number;
+  sign: string;
+  date: string;
+  locale: 'ru' | 'en';
+  body_md: string;
+  model_used: string;
+  generated_at: string;
+}
+
 export interface NatalChart {
   id: number;
   birth_name: string;

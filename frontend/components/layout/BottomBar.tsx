@@ -10,13 +10,13 @@ import { useAuth } from '@/lib/auth-context';
 const LABELS = {
   ru: {
     tarot: 'Таро', runes: 'Руны', natal: 'Карта',
-    daily: 'Карта дня', numerology: 'Числа',
+    daily: 'Карта дня', numerology: 'Числа', horoscope: 'Гороскоп',
     more: 'Ещё', premium: 'Premium',
     profile: 'Профиль', login: 'Войти',
   },
   en: {
     tarot: 'Tarot', runes: 'Runes', natal: 'Natal',
-    daily: 'Card of the day', numerology: 'Numbers',
+    daily: 'Card of the day', numerology: 'Numbers', horoscope: 'Horoscope',
     more: 'More', premium: 'Premium',
     profile: 'Profile', login: 'Log in',
   },
@@ -62,6 +62,12 @@ const PricingIcon = () => (
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
   </svg>
 );
+const ZodiacIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 3a9 9 0 000 18M7 6l10 12M17 6L7 18"/>
+  </svg>
+);
 const PersonIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
@@ -102,9 +108,10 @@ export default function BottomBar() {
   const isNatal = pathname?.startsWith('/natal') ?? false;
   const isDaily = pathname?.startsWith('/daily') ?? false;
   const isNumerology = pathname?.startsWith('/numerology') ?? false;
+  const isHoroscope = pathname?.startsWith('/horoscope') ?? false;
   const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
-  const isMoreActive = isDaily || isNumerology || isPricing;
+  const isMoreActive = isDaily || isNumerology || isHoroscope || isPricing;
 
   return (
     <nav
@@ -172,6 +179,14 @@ export default function BottomBar() {
               >
                 <NumIcon />
                 <span className="font-sans text-sm">{l.numerology}</span>
+              </Link>
+              <Link
+                href="/horoscope"
+                className="flex items-center gap-3 px-4 py-2.5"
+                style={{ color: isHoroscope ? activeColor : 'rgba(201,194,224,0.85)' }}
+              >
+                <ZodiacIcon />
+                <span className="font-sans text-sm">{l.horoscope}</span>
               </Link>
               <div style={{ height: 1, background: 'rgba(212,175,55,0.12)', margin: '4px 12px' }} />
               <Link

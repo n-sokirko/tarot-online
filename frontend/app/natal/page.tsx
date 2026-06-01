@@ -8,6 +8,7 @@ import BigThree from '@/components/natal/BigThree';
 import { MarkdownProse } from '@/lib/markdown';
 import { ApiError, createNatalChart, interpretNatalChart, getBillingMe } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
+import SpeakButton from '@/components/a11y/SpeakButton';
 import type { NatalChart, NatalInterpretation } from '@/lib/types';
 
 // ---- Copy ----
@@ -169,6 +170,9 @@ function NatalInterpretationBlock({
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
           <span style={{ color: 'rgba(212,175,55,0.6)', fontSize: '0.75rem' }}>✦</span>
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
+        </div>
+        <div className="flex justify-center mb-6">
+          <SpeakButton text={interp.body_md} lang={locale} />
         </div>
         <MarkdownProse
           body={interp.body_md}

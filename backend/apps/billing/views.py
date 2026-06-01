@@ -183,6 +183,62 @@ def telegram_invoice(request: Request) -> Response:
     })
 
 
+DONATION_MIN_STARS = 1
+DONATION_MAX_STARS = 100_000
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def telegram_donation_invoice(request: Request) -> Response:
+    """
+    Create a Telegram Stars invoice link for a *donation* of an arbitrary amount.
+
+    Unlike plan checkout, a donation is not tied to a Plan and grants no
+    entitlement — it is a tip. Used with WebApp.openInvoice() so the native
+    Stars sheet opens right inside the Mini App.
+    """
+    import requests as http_requests
+
+    raw_stars = request.data.get('stars')
+    try:
+        stars = int(raw_stars)
+    except (TypeError, ValueError):
+        return Response({'detail': 'stars_must_be_integer'}, status=status.HTTP_400_BAD_REQUEST)
+    if stars < DONATION_MIN_STARS or stars > DONATION_MAX_STARS:
+        return Response(
+            {'detail': 'stars_out_of_range',
+             'min': DONATION_MIN_STARS, 'max': DONATION_MAX_STARS},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    if not settings.TELEGRAM_BOT_TOKEN:
+        return Response({'detail': 'telegram_not_configured'},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    title = '✨ Поддержать Tarot Online'
+    description = f'Спасибо за поддержку проекта! Ваш дар: {stars} ⭐'
+    tg_url = f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/createInvoiceLink'
+    try:
+        resp = http_requests.post(tg_url, json={
+            'title': title,
+            'description': description[:255],
+            'payload': f'donate|{stars}|{request.user.id}',
+            'currency': 'XTR',
+            'prices': [{'label': f'{stars} ⭐', 'amount': stars}],
+            'provider_token': '',
+        }, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception as exc:  # noqa: BLE001
+        log.error('createInvoiceLink (donation) failed: %s', exc)
+        return Response({'detail': 'telegram_api_error'}, status=status.HTTP_502_BAD_GATEWAY)
+
+    if not data.get('ok'):
+        log.error('createInvoiceLink (donation) error response: %s', data)
+        return Response({'detail': 'telegram_api_error'}, status=status.HTTP_502_BAD_GATEWAY)
+
+    return Response({'invoice_link': data['result'], 'stars': stars})
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @authentication_classes([])

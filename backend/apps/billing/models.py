@@ -154,6 +154,7 @@ class UsageLedger(models.Model):
     KIND_AI_TAROT = 'ai_tarot'
     KIND_AI_RUNES = 'ai_runes'
     KIND_AI_NATAL = 'ai_natal'
+    KIND_AI_HOROSCOPE = 'ai_horoscope'
     KIND_AI_DEEP = 'ai_deep'
     KIND_GRANT_SUB = 'grant_subscription'
     KIND_GRANT_PACK = 'grant_pack'
@@ -161,6 +162,7 @@ class UsageLedger(models.Model):
         (KIND_AI_TAROT, 'AI tarot reading'),
         (KIND_AI_RUNES, 'AI rune cast'),
         (KIND_AI_NATAL, 'AI natal chart'),
+        (KIND_AI_HOROSCOPE, 'AI daily horoscope'),
         (KIND_AI_DEEP, 'AI deep reading'),
         (KIND_GRANT_SUB, 'Subscription monthly grant'),
         (KIND_GRANT_PACK, 'Credit pack purchase'),

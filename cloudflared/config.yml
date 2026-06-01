@@ -1,0 +1,7 @@
+tunnel: 9369d676-1291-47e5-a621-b35d4cfd4535
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: sokirdon.com
+    service: http://nginx:80
+  - service: http_status:404

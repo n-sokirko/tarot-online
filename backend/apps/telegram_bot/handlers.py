@@ -68,6 +68,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if args and args[0].startswith('buy_'):
         await _handle_buy(update, context, args[0][4:])
         return
+    if args and args[0].startswith('donate_'):
+        await _handle_donate(update, context, args[0][7:])
+        return
 
     webapp_url = getattr(settings, 'WEBAPP_URL', 'https://sokirdon.com')
     keyboard = InlineKeyboardMarkup([[
@@ -141,10 +144,37 @@ async def _handle_buy(update: Update, context: ContextTypes.DEFAULT_TYPE, token:
     )
 
 
+DONATION_MIN_STARS = 1
+DONATION_MAX_STARS = 100_000
+
+
+async def _handle_donate(update: Update, context: ContextTypes.DEFAULT_TYPE, raw_stars: str) -> None:
+    """Send a Stars invoice for a donation initiated via deep-link (browser fallback)."""
+    try:
+        stars = int(raw_stars)
+    except (TypeError, ValueError):
+        stars = 0
+    if stars < DONATION_MIN_STARS or stars > DONATION_MAX_STARS:
+        await update.message.reply_text('❌ Некорректная сумма доната.')
+        return
+
+    tg = update.effective_user
+    await _link_tg_user(tg.id, tg.username or '', tg.first_name or '', None)
+
+    await update.message.reply_invoice(
+        title='✨ Поддержать Tarot Online',
+        description=f'Спасибо за поддержку проекта! Ваш дар: {stars} ⭐',
+        payload=f'donate|{stars}|0',
+        currency='XTR',
+        prices=[LabeledPrice(f'{stars} ⭐', stars)],
+        provider_token='',  # empty = Telegram Stars
+    )
+
+
 async def pre_checkout_query(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.pre_checkout_query
     parts = query.invoice_payload.split('|')
-    if len(parts) != 3 or parts[0] != 'buy':
+    if len(parts) != 3 or parts[0] not in ('buy', 'donate'):
         await query.answer(ok=False, error_message='Ошибка платежа. Попробуй ещё раз.')
         return
     await query.answer(ok=True)
@@ -152,13 +182,31 @@ async def pre_checkout_query(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     payment = update.message.successful_payment
+    payer_id = update.effective_user.id if update.effective_user else None
+    charge_id = payment.telegram_payment_charge_id
+    # Always log payer + charge id so a payment can be looked up / refunded later
+    # (refund needs payer tg_id + telegram_payment_charge_id).
+    log.info(
+        'STARS PAYMENT ok: payer_tg_id=%s charge_id=%s amount=%s payload=%s',
+        payer_id, charge_id, payment.total_amount, payment.invoice_payload,
+    )
+
     parts = payment.invoice_payload.split('|')
     if len(parts) != 3:
         log.error('unexpected invoice payload: %s', payment.invoice_payload)
         return
 
+    # Donations grant no entitlement — just say thank you.
+    if parts[0] == 'donate':
+        stars = parts[1]
+        await update.message.reply_text(
+            f"✨ Спасибо за поддержку! Твой дар в {stars} ⭐ согревает проект.\n"
+            "Пусть карты будут к тебе благосклонны. 🌙",
+            parse_mode='Markdown',
+        )
+        return
+
     _, plan_slug, user_id_str = parts
-    charge_id = payment.telegram_payment_charge_id
 
     try:
         plan_name = await _activate(int(user_id_str), plan_slug, charge_id)

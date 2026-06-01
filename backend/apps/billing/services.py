@@ -26,8 +26,9 @@ from apps.billing.models import (
 CREDIT_COST = {
     UsageLedger.KIND_AI_TAROT: 1,
     UsageLedger.KIND_AI_RUNES: 1,
-    UsageLedger.KIND_AI_NATAL: 3,
-    UsageLedger.KIND_AI_DEEP: 5,
+    UsageLedger.KIND_AI_HOROSCOPE: 1,
+    UsageLedger.KIND_AI_NATAL: 2,
+    UsageLedger.KIND_AI_DEEP: 4,
 }
 
 

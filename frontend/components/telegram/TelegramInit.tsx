@@ -43,43 +43,66 @@ export default function TelegramInit() {
 
   useEffect(() => {
     if (ran.current) return;
-    ran.current = true;
 
-    const tg = window.Telegram?.WebApp;
-    if (!tg?.initData) return; // not running inside Telegram — do nothing
+    let cancelled = false;
 
-    // Tell Telegram the app is ready (hides the native loading spinner)
-    tg.ready();
-    // Expand to full available height
-    tg.expand();
-    // Match the dark mystical theme
-    try {
-      tg.setHeaderColor('#0b0b1f');
-      tg.setBackgroundColor('#0b0b1f');
-    } catch {
-      // Older Telegram clients may not support colour customisation — ignore
-    }
+    const init = (tg: NonNullable<NonNullable<Window['Telegram']>['WebApp']>) => {
+      if (ran.current) return;
+      ran.current = true;
 
-    // Auto-login: only if no token stored yet
-    const stored = localStorage.getItem('tarot_access');
-    if (stored) return;
+      // Tell Telegram the app is ready (hides the native loading spinner)
+      tg.ready();
+      // Expand to full available height
+      tg.expand();
+      // Match the dark mystical theme
+      try {
+        tg.setHeaderColor('#0b0b1f');
+        tg.setBackgroundColor('#0b0b1f');
+      } catch {
+        // Older Telegram clients may not support colour customisation — ignore
+      }
 
-    fetch(`${API_BASE}/api/v1/auth/telegram-webapp/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ init_data: tg.initData }),
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((data: { access: string; refresh: string }) => {
-        if (data?.access && data?.refresh) {
-          saveTokens(data.access, data.refresh);
-          // Refresh the auth context so Navbar / routes reflect the logged-in state
-          return refetch();
-        }
+      // Auto-login: only if no token stored yet
+      if (localStorage.getItem('tarot_access')) return;
+
+      fetch(`${API_BASE}/api/v1/auth/telegram-webapp/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ init_data: tg.initData }),
       })
-      .catch(() => {
-        // Silent failure — user can still log in manually via the login page
-      });
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then((data: { access: string; refresh: string }) => {
+          if (data?.access && data?.refresh) {
+            saveTokens(data.access, data.refresh);
+            // Refresh the auth context so Navbar / routes reflect the logged-in state
+            return refetch();
+          }
+        })
+        .catch(() => {
+          // Silent failure — user can still log in manually via the login page
+        });
+    };
+
+    // The SDK script may still be loading when this effect first runs. Poll a few
+    // times for window.Telegram.WebApp.initData before giving up (≈2s max).
+    let attempts = 0;
+    const tryInit = () => {
+      if (cancelled || ran.current) return;
+      const tg = window.Telegram?.WebApp;
+      if (tg?.initData) {
+        init(tg);
+        return;
+      }
+      // No initData → either SDK not loaded yet, or not inside Telegram.
+      if (++attempts < 20) {
+        setTimeout(tryInit, 100);
+      }
+    };
+    tryInit();
+
+    return () => {
+      cancelled = true;
+    };
   }, [refetch]);
 
   return null;

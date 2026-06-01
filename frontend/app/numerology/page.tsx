@@ -11,6 +11,7 @@ import {
   ApiError,
 } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import SpeakButton from '@/components/a11y/SpeakButton';
 import type { NumerologyReading, NumerologyInterpretation } from '@/lib/types';
 
 const STRINGS = {
@@ -354,6 +355,9 @@ export default function NumerologyPage() {
                   >
                     ✦ {t.interpret}
                   </p>
+                  <div className="flex justify-center mb-4">
+                    <SpeakButton text={interpretation.body_md} lang={locale} />
+                  </div>
                   <div
                     className="font-serif text-sm leading-relaxed whitespace-pre-wrap"
                     style={{ color: 'rgba(201,194,224,0.9)' }}

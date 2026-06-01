@@ -39,7 +39,7 @@ PLANS = [
         "description_en": "50 AI interpretations per month on Sonnet, Celtic Cross spread, rune casts, unlimited history.",
         "kind": Plan.KIND_SUBSCRIPTION,
         "price_usd_cents": 500,
-        "tg_stars_price": 250,  # ~$3.25 at ~$0.013/Star
+        "tg_stars_price": 150,  # ~$2 — lowered entry barrier
         "monthly_included_credits": 50,
         "credits_granted": 0,
         "entitlement_keys": ["premium_spreads", "sonnet_ai", "celtic_cross", "runes_ai", "history_unlimited", "natal_chart"],
@@ -51,11 +51,11 @@ PLANS = [
         "slug": "credits-small",
         "name_ru": "10 кредитов",
         "name_en": "10 credits",
-        "description_ru": "Разовая покупка 10 кредитов. Подходит для углублённых раскладов и натальной карты.",
-        "description_en": "One-time purchase of 10 credits. Good for deep readings and natal charts.",
+        "description_ru": "Разовая покупка 10 кредитов. Хватит на 10 гороскопов или 5 натальных карт.",
+        "description_en": "One-time purchase of 10 credits. Enough for 10 horoscopes or 5 natal charts.",
         "kind": Plan.KIND_CREDITS,
         "price_usd_cents": 300,
-        "tg_stars_price": 75,   # ~$1
+        "tg_stars_price": 40,   # cheap starter pack
         "monthly_included_credits": 0,
         "credits_granted": 10,
         "entitlement_keys": [],
@@ -71,7 +71,7 @@ PLANS = [
         "description_en": "One-time purchase of 50 credits. Best per-credit price.",
         "kind": Plan.KIND_CREDITS,
         "price_usd_cents": 1000,
-        "tg_stars_price": 250,  # ~$3.25 for 50 credits
+        "tg_stars_price": 160,  # best per-credit value
         "monthly_included_credits": 0,
         "credits_granted": 50,
         "entitlement_keys": [],

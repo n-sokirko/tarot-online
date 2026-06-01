@@ -8,6 +8,8 @@ import { ApiError, listPlans, startTelegramCheckout, startTelegramInvoice } from
 import { getAccessToken } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
 import type { Plan, PlansResponse } from '@/lib/types';
+import DonateModal from '@/components/donate/DonateModal';
+import Starfield from '@/components/visual/Starfield';
 
 type PricingCopy = {
   title: string; subtitle: string;
@@ -80,6 +82,7 @@ export default function PricingPage() {
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [donateOpen, setDonateOpen] = useState(false);
 
   useEffect(() => {
     listPlans().then(setData).catch(() => setErrorMsg(t.error));
@@ -145,10 +148,11 @@ export default function PricingPage() {
 
   return (
     <main
-      className="min-h-screen px-4 py-12 md:py-20"
+      className="relative overflow-hidden min-h-screen px-4 py-12 md:py-20"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
     >
-      <div className="max-w-5xl mx-auto">
+      <Starfield seed="pricing" count={50} />
+      <div className="relative z-10 max-w-5xl mx-auto">
         <motion.header
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -198,13 +202,39 @@ export default function PricingPage() {
           ))}
         </div>
 
+        {/* Support / donate */}
+        <div className="mt-12 flex flex-col items-center gap-3">
+          <motion.button
+            onClick={() => setDonateOpen(true)}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="px-7 py-3 rounded-full font-serif text-sm tracking-widest uppercase flex items-center gap-2"
+            style={{
+              background: 'linear-gradient(135deg, rgba(212,175,55,0.14), rgba(212,175,55,0.04))',
+              border: '1px solid rgba(212,175,55,0.5)',
+              color: '#d4af37',
+              letterSpacing: '0.12em',
+            }}
+          >
+            <span style={{ fontSize: '1.1em' }}>⭐</span>
+            {locale === 'ru' ? 'Поддержать звёздами' : 'Support with stars'}
+          </motion.button>
+        </div>
+
         <p
-          className="mt-10 text-center text-[10px] tracking-widest uppercase"
+          className="mt-8 text-center text-[10px] tracking-widest uppercase"
           style={{ color: 'rgba(201,194,224,0.4)', letterSpacing: '0.18em' }}
         >
           {t.footnote}
         </p>
       </div>
+
+      <DonateModal
+        open={donateOpen}
+        onClose={() => setDonateOpen(false)}
+        locale={locale}
+        botUsername={data?.telegram_bot_username}
+      />
     </main>
   );
 }

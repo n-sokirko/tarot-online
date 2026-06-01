@@ -71,6 +71,13 @@ export default function Navbar({ locale }: NavbarProps) {
           {locale === 'ru' ? 'Числа' : 'Numbers'}
         </Link>
         <Link
+          href="/horoscope"
+          className="text-xs font-sans tracking-widest uppercase"
+          style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Гороскоп' : 'Horoscope'}
+        </Link>
+        <Link
           href="/pricing"
           className="text-xs font-sans tracking-widest uppercase"
           style={{ color: '#d4af37', letterSpacing: '0.18em' }}
