@@ -27,7 +27,9 @@ def get_client() -> Anthropic:
     key = settings.ANTHROPIC_API_KEY
     if not key:
         raise RuntimeError('ANTHROPIC_API_KEY not set')
-    return Anthropic(api_key=key)
+    # Extra resilience against transient network blips (esp. on a home uplink):
+    # the SDK retries APIConnectionError / 429 / 5xx with exponential backoff.
+    return Anthropic(api_key=key, max_retries=5, timeout=60.0)
 
 
 def model_for_tier(tier: str) -> str:
@@ -56,27 +58,31 @@ def generate_interpretation(
     """
     client = get_client()
     chosen_model = model or settings.ANTHROPIC_MODEL_FREE
-    response = client.messages.create(
+    # Stream the response. Long generations (1500–2000 tokens) over a slow/flaky
+    # uplink can drop a non-streaming connection mid-flight (APIConnectionError);
+    # streaming keeps the connection warm with incremental SSE chunks and is the
+    # provider-recommended path for long outputs.
+    system = [
+        {
+            'type': 'text',
+            'text': base_system_prompt,
+            'cache_control': {'type': 'ephemeral'},
+        },
+        {
+            'type': 'text',
+            'text': spread_system_prompt,
+        },
+    ]
+    with client.messages.stream(
         model=chosen_model,
         max_tokens=max_tokens,
         temperature=temperature,
-        system=[
-            {
-                'type': 'text',
-                'text': base_system_prompt,
-                'cache_control': {'type': 'ephemeral'},
-            },
-            {
-                'type': 'text',
-                'text': spread_system_prompt,
-            },
-        ],
+        system=system,
         messages=[{'role': 'user', 'content': user_message}],
-    )
+    ) as stream:
+        body = ''.join(stream.text_stream)
+        response = stream.get_final_message()
 
-    body = ''.join(
-        block.text for block in response.content if getattr(block, 'type', None) == 'text'
-    )
     usage = response.usage
     return GenerationResult(
         body=body,

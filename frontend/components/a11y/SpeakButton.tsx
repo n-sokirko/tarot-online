@@ -46,16 +46,30 @@ const COPY = {
   en: { listen: 'Listen', stop: 'Stop' },
 } as const;
 
+// Voice name hints — prefer a deep male voice, avoid obviously female ones.
+const MALE_HINTS = [
+  'male', 'dmitr', 'yuri', 'pavel', 'maxim', 'artyom', 'aleksandr',
+  'david', 'daniel', 'alex', 'george', 'arthur', 'fred', 'guy', 'aaron', 'mark', 'james',
+];
+const FEMALE_HINTS = [
+  'female', 'milena', 'katya', 'irina', 'svetlana', 'tatyana', 'elena', 'alyona',
+  'samantha', 'victoria', 'zira', 'aria', 'jenny', 'susan', 'hazel', 'karen',
+];
+
 export default function SpeakButton({
   text,
   lang,
+  autoPlay = false,
 }: {
   text: string;
   lang: 'ru' | 'en';
+  /** Start narrating automatically once (e.g. right after AI generation). */
+  autoPlay?: boolean;
 }) {
   const [supported, setSupported] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const cancelledRef = useRef(false);
+  const autoRan = useRef(false);
   const t = COPY[lang];
 
   useEffect(() => {
@@ -77,7 +91,15 @@ export default function SpeakButton({
   const pickVoice = useCallback((code: 'ru' | 'en') => {
     const voices = window.speechSynthesis.getVoices();
     const prefix = code === 'ru' ? 'ru' : 'en';
-    return voices.find((v) => v.lang.toLowerCase().startsWith(prefix)) ?? null;
+    const langVoices = voices.filter((v) => v.lang.toLowerCase().startsWith(prefix));
+    if (langVoices.length === 0) return null;
+    const isMale = (n: string) => MALE_HINTS.some((h) => n.includes(h));
+    const isFemale = (n: string) => FEMALE_HINTS.some((h) => n.includes(h));
+    return (
+      langVoices.find((v) => isMale(v.name.toLowerCase())) ??
+      langVoices.find((v) => !isFemale(v.name.toLowerCase())) ??
+      langVoices[0]
+    );
   }, []);
 
   const stop = useCallback(() => {
@@ -102,8 +124,8 @@ export default function SpeakButton({
       const u = new SpeechSynthesisUtterance(chunk);
       u.lang = langCode;
       if (voice) u.voice = voice;
-      u.rate = 0.96;
-      u.pitch = 1;
+      u.rate = 0.9;     // slower = calmer
+      u.pitch = 0.7;    // lower = deeper, soothing bass
       if (idx === chunks.length - 1) {
         u.onend = () => { if (!cancelledRef.current) setSpeaking(false); };
         u.onerror = () => setSpeaking(false);
@@ -111,6 +133,15 @@ export default function SpeakButton({
       window.speechSynthesis.speak(u);
     });
   }, [supported, text, lang, pickVoice]);
+
+  // Auto-narrate once when requested (e.g. right after AI generation).
+  // A short delay lets the OS voice list finish loading so the bass voice is picked.
+  useEffect(() => {
+    if (!autoPlay || !supported || autoRan.current || !text.trim()) return;
+    autoRan.current = true;
+    const id = setTimeout(() => speak(), 400);
+    return () => clearTimeout(id);
+  }, [autoPlay, supported, text, speak]);
 
   if (!supported) return null;
 

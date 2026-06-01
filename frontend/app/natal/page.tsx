@@ -172,7 +172,7 @@ function NatalInterpretationBlock({
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
         </div>
         <div className="flex justify-center mb-6">
-          <SpeakButton text={interp.body_md} lang={locale} />
+          <SpeakButton text={interp.body_md} lang={locale} autoPlay={initial === null} />
         </div>
         <MarkdownProse
           body={interp.body_md}

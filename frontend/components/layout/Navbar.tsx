@@ -50,11 +50,11 @@ export default function Navbar({ locale }: NavbarProps) {
           {locale === 'ru' ? 'Карта дня' : 'Daily'}
         </Link>
         <Link
-          href="/runes"
+          href="/horoscope"
           className="text-xs font-sans tracking-widest uppercase"
           style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
         >
-          {locale === 'ru' ? 'Руны' : 'Runes'}
+          {locale === 'ru' ? 'Гороскоп' : 'Horoscope'}
         </Link>
         <Link
           href="/natal"
@@ -71,11 +71,11 @@ export default function Navbar({ locale }: NavbarProps) {
           {locale === 'ru' ? 'Числа' : 'Numbers'}
         </Link>
         <Link
-          href="/horoscope"
+          href="/runes"
           className="text-xs font-sans tracking-widest uppercase"
           style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
         >
-          {locale === 'ru' ? 'Гороскоп' : 'Horoscope'}
+          {locale === 'ru' ? 'Руны' : 'Runes'}
         </Link>
         <Link
           href="/pricing"

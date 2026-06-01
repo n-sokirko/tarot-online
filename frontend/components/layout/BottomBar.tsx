@@ -111,7 +111,7 @@ export default function BottomBar() {
   const isHoroscope = pathname?.startsWith('/horoscope') ?? false;
   const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
-  const isMoreActive = isDaily || isNumerology || isHoroscope || isPricing;
+  const isMoreActive = isDaily || isNumerology || isRunes || isPricing;
 
   return (
     <nav
@@ -129,9 +129,9 @@ export default function BottomBar() {
         <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l.tarot}</span>
       </Link>
 
-      <Link href="/runes" className="flex flex-col items-center gap-1" style={{ color: isRunes ? activeColor : inactiveColor }}>
-        <RunesIcon />
-        <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l.runes}</span>
+      <Link href="/horoscope" className="flex flex-col items-center gap-1" style={{ color: isHoroscope ? activeColor : inactiveColor }}>
+        <ZodiacIcon />
+        <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l.horoscope}</span>
       </Link>
 
       <Link href="/natal" className="flex flex-col items-center gap-1" style={{ color: isNatal ? activeColor : inactiveColor }}>
@@ -181,12 +181,12 @@ export default function BottomBar() {
                 <span className="font-sans text-sm">{l.numerology}</span>
               </Link>
               <Link
-                href="/horoscope"
+                href="/runes"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isHoroscope ? activeColor : 'rgba(201,194,224,0.85)' }}
+                style={{ color: isRunes ? activeColor : 'rgba(201,194,224,0.85)' }}
               >
-                <ZodiacIcon />
-                <span className="font-sans text-sm">{l.horoscope}</span>
+                <RunesIcon />
+                <span className="font-sans text-sm">{l.runes}</span>
               </Link>
               <div style={{ height: 1, background: 'rgba(212,175,55,0.12)', margin: '4px 12px' }} />
               <Link
