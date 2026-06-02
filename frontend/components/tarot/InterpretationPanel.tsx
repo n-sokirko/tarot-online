@@ -54,7 +54,6 @@ export default function InterpretationPanel({ readingId, locale, initial }: Inte
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<'generic' | 'payment' | 'rate_limit' | null>(null);
-  const [streamText, setStreamText] = useState('');
   const [streaming, setStreaming] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,11 +69,12 @@ export default function InterpretationPanel({ readingId, locale, initial }: Inte
   const fetchInterpretation = async () => {
     setLoading(true);
     setError(null);
-    setStreamText('');
     setStreaming(true);
     try {
+      // Stream under the hood (resilient to long generations / connection drops),
+      // but don't render partial text — reveal the finished reading all at once.
       await interpretReadingStream(readingId, question, {
-        onDelta: (txt) => setStreamText((prev) => prev + txt),
+        onDelta: () => { /* ignore partial text — wait for the full reading */ },
         onDone: (interp) => { setInterpretation(interp); setStreaming(false); },
         onError: () => { setError('generic'); setStreaming(false); },
       });
@@ -144,42 +144,24 @@ export default function InterpretationPanel({ readingId, locale, initial }: Inte
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-4 w-full"
           >
-            {streamText ? (
-              // Live AI typing
-              <div className="w-full max-w-2xl">
-                <div className="flex items-center gap-4 mb-6" aria-hidden>
-                  <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
-                  <span style={{ color: 'rgba(212,175,55,0.6)', fontSize: '0.75rem', letterSpacing: '0.3em' }}>✦</span>
-                  <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
-                </div>
+            <>
+              <motion.p
+                className="font-serif italic"
+                style={{ color: 'rgba(212,175,55,0.75)' }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                {t.loading}
+              </motion.p>
+              {question && (
                 <p
-                  className="font-serif text-[15px] md:text-base leading-relaxed whitespace-pre-wrap"
-                  style={{ color: 'rgba(201,194,224,0.92)' }}
+                  className="font-serif text-sm italic text-center max-w-md"
+                  style={{ color: 'rgba(201,194,224,0.4)' }}
                 >
-                  {streamText}
-                  <span className="animate-pulse" style={{ color: '#d4af37' }}>▌</span>
+                  &laquo;{question}&raquo;
                 </p>
-              </div>
-            ) : (
-              <>
-                <motion.p
-                  className="font-serif italic"
-                  style={{ color: 'rgba(212,175,55,0.75)' }}
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  {t.loading}
-                </motion.p>
-                {question && (
-                  <p
-                    className="font-serif text-sm italic text-center max-w-md"
-                    style={{ color: 'rgba(201,194,224,0.4)' }}
-                  >
-                    &laquo;{question}&raquo;
-                  </p>
-                )}
-              </>
-            )}
+              )}
+            </>
           </motion.div>
         ) : error === 'rate_limit' ? (
           <motion.div

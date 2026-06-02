@@ -42,18 +42,24 @@ def _mysterious(wav_bytes: bytes) -> bytes:
         raw = wf.readframes(wf.getnframes())
 
     audio = np.frombuffer(raw, dtype=np.int16).astype(np.float32)
+
+    # Warmth: a short moving-average low-pass softens harsh highs → gentle, lulling.
+    kernel = np.ones(7, dtype=np.float32) / 7.0
+    audio = np.convolve(audio, kernel, mode="same")
+
     out = audio.copy()
-    # Sum a few decaying delayed copies → an ethereal cathedral-like reverb tail.
-    for delay_ms, gain in ((45, 0.34), (95, 0.22), (160, 0.14), (240, 0.08)):
+    # Dreamy, longer reverb tail → soothing, lullaby-like space.
+    for delay_ms, gain in ((50, 0.30), (110, 0.22), (190, 0.15), (290, 0.09), (400, 0.05)):
         d = int(rate * delay_ms / 1000)
         if d < len(audio):
             out[d:] += audio[: len(audio) - d] * gain
 
     peak = float(np.max(np.abs(out))) or 1.0
-    out = (out / peak * 31000.0).astype(np.int16)
+    # Quieter (24k vs 32k full-scale) so it sits gently under the ambient drone.
+    out = (out / peak * 24000.0).astype(np.int16)
 
-    # Lower the playback rate ~8% → deeper timbre + slower, more deliberate pace.
-    out_rate = int(rate * 0.92)
+    # Lower the playback rate ~12% → deeper, slower, calmer (a soft lullaby pace).
+    out_rate = int(rate * 0.88)
     buf = io.BytesIO()
     with wave.open(buf, "wb") as wf:
         wf.setnchannels(nch)

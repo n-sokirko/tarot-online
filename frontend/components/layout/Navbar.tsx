@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import LocaleSwitcher from './LocaleSwitcher';
+import AmbientPlayer from '@/components/audio/AmbientPlayer';
 import type { Locale } from '@/i18n';
 
 interface NavbarProps {
@@ -81,6 +82,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
       {/* Right side */}
       <div className="flex items-center gap-4 md:gap-6">
+        <AmbientPlayer />
         <LocaleSwitcher currentLocale={locale} />
 
         {!isLoading && (

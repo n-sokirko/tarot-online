@@ -116,17 +116,15 @@ export default function AmbientPlayer() {
       type="button"
       onClick={toggle}
       aria-label={on ? 'Выключить фоновую музыку' : 'Включить фоновую музыку'}
+      title={on ? 'Музыка: вкл' : 'Музыка: выкл'}
       aria-pressed={on}
-      className="fixed z-40 flex items-center justify-center rounded-full transition-colors"
+      className="flex items-center justify-center rounded-full transition-colors"
       style={{
-        left: 14,
-        bottom: 74,
-        width: 40,
-        height: 40,
-        background: on ? 'rgba(212,175,55,0.18)' : 'rgba(11,11,31,0.7)',
-        border: `1px solid ${on ? '#d4af37' : 'rgba(212,175,55,0.3)'}`,
-        backdropFilter: 'blur(8px)',
-        color: on ? '#d4af37' : 'rgba(201,194,224,0.6)',
+        width: 32,
+        height: 32,
+        background: on ? 'rgba(212,175,55,0.16)' : 'transparent',
+        border: `1px solid ${on ? '#d4af37' : 'rgba(212,175,55,0.25)'}`,
+        color: on ? '#d4af37' : 'rgba(201,194,224,0.55)',
       }}
     >
       {on ? (
