@@ -16,7 +16,7 @@ import type { NatalChart, NatalInterpretation } from '@/lib/types';
 const COPY = {
   ru: {
     title: 'Натальная карта',
-    subtitle: 'Карта звёздного неба в момент вашего рождения',
+    subtitle: 'Узнай свой характер, дары и жизненные темы по дате, времени и месту рождения',
     name_label: 'Имя (необязательно)',
     date_label: 'Дата рождения',
     time_label: 'Время рождения',
@@ -42,7 +42,7 @@ const COPY = {
   },
   en: {
     title: 'Natal Chart',
-    subtitle: 'A map of the sky at the moment of your birth',
+    subtitle: 'Discover your character, gifts and life themes from your date, time and place of birth',
     name_label: 'Name (optional)',
     date_label: 'Birth date',
     time_label: 'Birth time',

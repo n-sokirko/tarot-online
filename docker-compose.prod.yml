@@ -85,6 +85,13 @@ services:
     depends_on:
       - backend
 
+  # ── Self-hosted Piper TTS (neural voice, CPU) ────────────────────────────────
+  tts:
+    build: ./tts
+    restart: unless-stopped
+    expose:
+      - "5000"
+
   # ── Nginx reverse proxy ──────────────────────────────────────────────────────
   nginx:
     image: nginx:alpine

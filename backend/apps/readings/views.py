@@ -168,17 +168,7 @@ class ReadingViewSet(
             reading.question = question
             reading.save(update_fields=['question'])
 
-        # Require a question to avoid burning tokens on empty prompts.
-        if not reading.question.strip() and not hasattr(reading, 'interpretation'):
-            return Response(
-                {
-                    'detail': 'question_required',
-                    'message_ru': 'Напиши свой вопрос или историю, чтобы карты могли ответить.',
-                    'message_en': 'Write your question or story so the cards can respond.',
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+        # Question is optional — without one, the cards give a general reading.
         if hasattr(reading, 'interpretation'):
             return Response(
                 InterpretationSerializer(reading.interpretation).data,
@@ -284,14 +274,7 @@ class ReadingViewSet(
             resp['Cache-Control'] = 'no-cache'
             return resp
 
-        if not reading.question.strip():
-            return Response(
-                {'detail': 'question_required',
-                 'message_ru': 'Напиши свой вопрос или историю, чтобы карты могли ответить.',
-                 'message_en': 'Write your question or story so the cards can respond.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+        # Question is optional — without one, the cards give a general reading.
         user = request.user if getattr(request, 'user', None) and request.user.is_authenticated else None
 
         if user is None:
