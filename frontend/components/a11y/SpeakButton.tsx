@@ -93,13 +93,18 @@ export default function SpeakButton({
     const prefix = code === 'ru' ? 'ru' : 'en';
     const langVoices = voices.filter((v) => v.lang.toLowerCase().startsWith(prefix));
     if (langVoices.length === 0) return null;
-    const isMale = (n: string) => MALE_HINTS.some((h) => n.includes(h));
-    const isFemale = (n: string) => FEMALE_HINTS.some((h) => n.includes(h));
-    return (
-      langVoices.find((v) => isMale(v.name.toLowerCase())) ??
-      langVoices.find((v) => !isFemale(v.name.toLowerCase())) ??
-      langVoices[0]
-    );
+    // Score voices: prefer high-quality network voices (Google/Neural/Online),
+    // then male timbre, penalise obviously female ones. Highest score wins.
+    const QUALITY = ['google', 'natural', 'neural', 'online', 'premium', 'enhanced'];
+    const score = (raw: string) => {
+      const n = raw.toLowerCase();
+      let s = 0;
+      if (QUALITY.some((h) => n.includes(h))) s += 3;
+      if (MALE_HINTS.some((h) => n.includes(h))) s += 2;
+      if (FEMALE_HINTS.some((h) => n.includes(h))) s -= 3;
+      return s;
+    };
+    return [...langVoices].sort((a, b) => score(b.name) - score(a.name))[0];
   }, []);
 
   const stop = useCallback(() => {
@@ -124,8 +129,8 @@ export default function SpeakButton({
       const u = new SpeechSynthesisUtterance(chunk);
       u.lang = langCode;
       if (voice) u.voice = voice;
-      u.rate = 0.9;     // slower = calmer
-      u.pitch = 0.7;    // lower = deeper, soothing bass
+      u.rate = 0.92;    // slightly slower = calmer
+      u.pitch = 0.9;    // gently lowered — deep but natural (0.7 sounded robotic)
       if (idx === chunks.length - 1) {
         u.onend = () => { if (!cancelledRef.current) setSpeaking(false); };
         u.onerror = () => setSpeaking(false);

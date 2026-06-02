@@ -28,11 +28,6 @@ const HomeIcon = () => (
     <polyline points="9 22 9 12 15 12 15 22"/>
   </svg>
 );
-const RunesIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M6 3v18"/><path d="M18 3v18"/><path d="M6 8l12 8"/>
-  </svg>
-);
 const NatalIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>
@@ -104,14 +99,13 @@ export default function BottomBar() {
   const inactiveColor = 'rgba(201,194,224,0.35)';
 
   const isHome = pathname === '/';
-  const isRunes = pathname?.startsWith('/runes') ?? false;
   const isNatal = pathname?.startsWith('/natal') ?? false;
   const isDaily = pathname?.startsWith('/daily') ?? false;
   const isNumerology = pathname?.startsWith('/numerology') ?? false;
   const isHoroscope = pathname?.startsWith('/horoscope') ?? false;
   const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
-  const isMoreActive = isDaily || isNumerology || isRunes || isPricing;
+  const isMoreActive = isDaily || isNumerology || isPricing;
 
   return (
     <nav
@@ -179,14 +173,6 @@ export default function BottomBar() {
               >
                 <NumIcon />
                 <span className="font-sans text-sm">{l.numerology}</span>
-              </Link>
-              <Link
-                href="/runes"
-                className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isRunes ? activeColor : 'rgba(201,194,224,0.85)' }}
-              >
-                <RunesIcon />
-                <span className="font-sans text-sm">{l.runes}</span>
               </Link>
               <div style={{ height: 1, background: 'rgba(212,175,55,0.12)', margin: '4px 12px' }} />
               <Link
