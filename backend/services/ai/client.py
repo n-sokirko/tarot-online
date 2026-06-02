@@ -7,7 +7,7 @@ tarot-ai-agent: owns the prompts (in apps/tarot/prompts/) and their parameters.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Iterator, Optional, Tuple
 
 from anthropic import Anthropic
 from django.conf import settings
@@ -92,3 +92,47 @@ def generate_interpretation(
         cache_creation_input_tokens=getattr(usage, 'cache_creation_input_tokens', 0) or 0,
         cache_read_input_tokens=getattr(usage, 'cache_read_input_tokens', 0) or 0,
     )
+
+
+def stream_interpretation(
+    *,
+    base_system_prompt: str,
+    spread_system_prompt: str,
+    user_message: str,
+    model: Optional[str] = None,
+    max_tokens: int = 1500,
+    temperature: float = 0.85,
+) -> Iterator[Tuple[str, object]]:
+    """Generator for live (SSE) generation.
+
+    Yields ('delta', text_chunk) for each streamed token, then exactly one
+    ('done', GenerationResult) with the full body + usage at the end.
+    """
+    client = get_client()
+    chosen_model = model or settings.ANTHROPIC_MODEL_FREE
+    system = [
+        {'type': 'text', 'text': base_system_prompt, 'cache_control': {'type': 'ephemeral'}},
+        {'type': 'text', 'text': spread_system_prompt},
+    ]
+    parts: list[str] = []
+    with client.messages.stream(
+        model=chosen_model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        system=system,
+        messages=[{'role': 'user', 'content': user_message}],
+    ) as stream:
+        for text in stream.text_stream:
+            parts.append(text)
+            yield ('delta', text)
+        final = stream.get_final_message()
+
+    usage = final.usage
+    yield ('done', GenerationResult(
+        body=''.join(parts),
+        model=final.model,
+        input_tokens=getattr(usage, 'input_tokens', 0) or 0,
+        output_tokens=getattr(usage, 'output_tokens', 0) or 0,
+        cache_creation_input_tokens=getattr(usage, 'cache_creation_input_tokens', 0) or 0,
+        cache_read_input_tokens=getattr(usage, 'cache_read_input_tokens', 0) or 0,
+    ))

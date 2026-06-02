@@ -1,4 +1,7 @@
 """Views for reading sessions."""
+import json
+
+from django.http import StreamingHttpResponse
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -17,6 +20,11 @@ from apps.readings.serializers import (
 )
 from services.ai import client as ai_client
 from services.ai import prompts as ai_prompts
+
+
+def _sse(payload: dict) -> str:
+    """Format one Server-Sent Event line."""
+    return f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
 def _format_user_message(reading: Reading) -> str:
@@ -248,3 +256,101 @@ class ReadingViewSet(
             InterpretationSerializer(interpretation).data,
             status=status.HTTP_201_CREATED,
         )
+
+    @action(detail=True, methods=['post'], url_path='interpret-stream')
+    def interpret_stream(self, request: Request, pk=None):
+        """Live (SSE) interpretation: streams the text token-by-token.
+
+        Same gating/credits as ``interpret``, but returns text/event-stream:
+          data: {"type":"delta","text":"..."}
+          data: {"type":"done","interpretation":{...}}
+          data: {"type":"error","detail":"..."}
+        """
+        reading = self.get_object()
+
+        question = (request.data.get('question') or '').strip()
+        if question and not hasattr(reading, 'interpretation'):
+            reading.question = question
+            reading.save(update_fields=['question'])
+
+        if hasattr(reading, 'interpretation'):
+            # Already generated — emit it as a single done event.
+            data = InterpretationSerializer(reading.interpretation).data
+            resp = StreamingHttpResponse(
+                iter([_sse({'type': 'done', 'interpretation': data})]),
+                content_type='text/event-stream',
+            )
+            resp['X-Accel-Buffering'] = 'no'
+            resp['Cache-Control'] = 'no-cache'
+            return resp
+
+        if not reading.question.strip():
+            return Response(
+                {'detail': 'question_required',
+                 'message_ru': 'Напиши свой вопрос или историю, чтобы карты могли ответить.',
+                 'message_en': 'Write your question or story so the cards can respond.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = request.user if getattr(request, 'user', None) and request.user.is_authenticated else None
+
+        if user is None:
+            allowed, _ = check_anon_daily_limit(request, kind='tarot')
+            if not allowed:
+                return Response(
+                    {'detail': 'rate_limited',
+                     'message_ru': f'Ты уже использовал {ANON_DAILY_LIMIT} бесплатных интерпретации сегодня.',
+                     'message_en': f"You've used all {ANON_DAILY_LIMIT} free interpretations for today."},
+                    status=429,
+                )
+
+        tier = billing.tier_for(user).tier
+        model = ai_client.model_for_tier(tier)
+        charged, balance = billing.charge_credits(
+            user=user, kind=UsageLedger.KIND_AI_TAROT, model_used=model,
+            reference_id=f'reading:{reading.pk}',
+        )
+        if not charged:
+            return Response(
+                {'detail': 'out_of_credits',
+                 'message_ru': 'Закончились бесплатные интерпретации. Оформи Premium или купи кредиты.',
+                 'message_en': 'No credits left. Subscribe to Premium or buy a credit pack.',
+                 'balance': balance},
+                status=status.HTTP_402_PAYMENT_REQUIRED,
+            )
+
+        base_prompt = ai_prompts.base_system(reading.locale)
+        spread_prompt = ai_prompts.tarot_spread(reading.spread_type.slug, reading.locale)
+        user_msg = _format_user_message(reading)
+
+        def event_stream():
+            try:
+                final = None
+                for kind, payload in ai_client.stream_interpretation(
+                    base_system_prompt=base_prompt,
+                    spread_system_prompt=spread_prompt,
+                    user_message=user_msg,
+                    model=model,
+                    max_tokens=1800,
+                    temperature=0.85,
+                ):
+                    if kind == 'delta':
+                        yield _sse({'type': 'delta', 'text': payload})
+                    else:
+                        final = payload
+                interpretation = Interpretation.objects.create(
+                    reading=reading,
+                    body_md=final.body,
+                    model_used=final.model,
+                    prompt_version=ai_prompts.PROMPT_VERSION,
+                    token_count=final.input_tokens + final.output_tokens,
+                )
+                yield _sse({'type': 'done',
+                            'interpretation': InterpretationSerializer(interpretation).data})
+            except Exception as exc:  # noqa: BLE001 — surface as SSE error
+                yield _sse({'type': 'error', 'detail': str(exc)[:200]})
+
+        resp = StreamingHttpResponse(event_stream(), content_type='text/event-stream')
+        resp['X-Accel-Buffering'] = 'no'   # tell nginx not to buffer the stream
+        resp['Cache-Control'] = 'no-cache'
+        return resp
