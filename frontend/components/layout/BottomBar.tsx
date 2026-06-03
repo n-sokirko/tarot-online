@@ -11,12 +11,14 @@ const LABELS = {
   ru: {
     tarot: 'Таро', runes: 'Руны', natal: 'Карта',
     daily: 'Карта дня', numerology: 'Числа', horoscope: 'Гороскоп',
+    journal: 'Дневник',
     more: 'Ещё', premium: 'Premium',
     profile: 'Профиль', login: 'Войти',
   },
   en: {
     tarot: 'Tarot', runes: 'Runes', natal: 'Natal',
     daily: 'Card of the day', numerology: 'Numbers', horoscope: 'Horoscope',
+    journal: 'Journal',
     more: 'More', premium: 'Premium',
     profile: 'Profile', login: 'Log in',
   },
@@ -63,6 +65,12 @@ const ZodiacIcon = () => (
     <path d="M12 3a9 9 0 000 18M7 6l10 12M17 6L7 18"/>
   </svg>
 );
+const JournalIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2z"/>
+    <path d="M8 2v20M12 7h4M12 11h4"/>
+  </svg>
+);
 const PersonIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
@@ -105,7 +113,8 @@ export default function BottomBar() {
   const isHoroscope = pathname?.startsWith('/horoscope') ?? false;
   const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
-  const isMoreActive = isDaily || isNumerology || isPricing;
+  const isHistory = pathname?.startsWith('/history') ?? false;
+  const isMoreActive = isDaily || isNumerology || isHistory || isPricing;
 
   return (
     <nav
@@ -173,6 +182,14 @@ export default function BottomBar() {
               >
                 <NumIcon />
                 <span className="font-sans text-sm">{l.numerology}</span>
+              </Link>
+              <Link
+                href="/history"
+                className="flex items-center gap-3 px-4 py-2.5"
+                style={{ color: isHistory ? activeColor : 'rgba(201,194,224,0.85)' }}
+              >
+                <JournalIcon />
+                <span className="font-sans text-sm">{l.journal}</span>
               </Link>
               <div style={{ height: 1, background: 'rgba(212,175,55,0.12)', margin: '4px 12px' }} />
               <Link
