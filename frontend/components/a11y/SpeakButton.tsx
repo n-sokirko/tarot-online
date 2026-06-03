@@ -41,6 +41,10 @@ function chunkText(text: string): string[] {
   return chunks;
 }
 
+// Voice narration is temporarily disabled (the synthesized voice felt off).
+// Flip back to true to bring the "Listen" button + autoplay back.
+const VOICE_ENABLED = false;
+
 const COPY = {
   ru: { listen: 'Озвучить', stop: 'Стоп' },
   en: { listen: 'Listen', stop: 'Stop' },
@@ -171,11 +175,13 @@ export default function SpeakButton({
 
   // Auto-narrate once when requested (e.g. right after AI generation).
   useEffect(() => {
-    if (!autoPlay || autoRan.current || !text.trim()) return;
+    if (!VOICE_ENABLED || !autoPlay || autoRan.current || !text.trim()) return;
     autoRan.current = true;
     const id = setTimeout(() => { void speak(); }, 300);
     return () => clearTimeout(id);
   }, [autoPlay, text, speak]);
+
+  if (!VOICE_ENABLED) return null;
 
   return (
     <button
