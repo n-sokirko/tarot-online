@@ -12,6 +12,7 @@ import {
 } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import ZodiacConstellation from '@/components/horoscope/ZodiacConstellation';
+import ZodiacImage from '@/components/horoscope/ZodiacImage';
 import Starfield from '@/components/visual/Starfield';
 import SpeakButton from '@/components/a11y/SpeakButton';
 import type { ZodiacSign, DailyHoroscope, HoroscopeAIReading } from '@/lib/types';
@@ -198,7 +199,7 @@ export default function HoroscopePage() {
                     whileHover={{ backgroundColor: 'rgba(212,175,55,0.1)', scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
                   >
-                    <span style={{ fontSize: '1.8rem', color: a, lineHeight: 1 }}>{s.symbol}</span>
+                    <ZodiacImage sign={s.slug} symbol={s.symbol} size={40} accent={a} />
                     <span
                       className="font-serif text-sm"
                       style={{ color: 'rgba(201,194,224,0.9)' }}
