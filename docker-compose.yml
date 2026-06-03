@@ -44,6 +44,11 @@ services:
       - POSTGRES_HOST=db
       - REDIS_URL=redis://redis:6379/0
       - TTS_URL=http://tts:5000
+      # Local LLM stays OFF until the Ollama model is pulled (then flip to true
+      # and start ollama via `docker compose --profile llm up -d ollama`).
+      - LOCAL_LLM_ENABLED=false
+      - OLLAMA_URL=http://ollama:11434
+      - LOCAL_LLM_MODEL=qwen2.5:3b
     depends_on:
       db:
         condition: service_healthy
@@ -52,7 +57,7 @@ services:
 
   worker:
     build: ./backend
-    command: celery -A config worker -l info
+    command: celery -A config worker --beat -l info
     volumes:
       - ./backend:/app
     env_file:
@@ -107,6 +112,26 @@ services:
     expose:
       - "5000"
 
+  # Local LLM for the free/budget tier (premium still uses the Claude API).
+  # Behind the "llm" profile so it does NOT auto-start with `docker compose up`
+  # (a failed large image pull can destabilise the engine). Start explicitly:
+  #   docker compose --profile llm up -d ollama
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["llm"]
+    restart: unless-stopped
+    volumes:
+      - ollama_models:/root/.ollama
+    expose:
+      - "11434"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
   nginx:
     image: nginx:alpine
     restart: unless-stopped
@@ -130,3 +155,4 @@ services:
 
 volumes:
   pgdata:
+  ollama_models:
