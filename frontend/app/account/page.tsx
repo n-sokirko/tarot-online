@@ -18,6 +18,7 @@ const COPY = {
     next_charge: 'Следующее списание',
     no_subscription: 'Нет активной подписки',
     upgrade: 'Перейти к тарифам',
+    journal: '📓 Дневник раскладов',
     logout: 'Выйти',
     loading: 'Загрузка...',
     none: 'нет',
@@ -33,6 +34,7 @@ const COPY = {
     next_charge: 'Next charge',
     no_subscription: 'No active subscription',
     upgrade: 'Open pricing',
+    journal: '📓 Reading journal',
     logout: 'Log out',
     loading: 'Loading...',
     none: 'none',
@@ -144,6 +146,17 @@ export default function AccountPage() {
             }}
           >
             {t.upgrade}
+          </a>
+          <a
+            href="/history"
+            className="px-6 py-2.5 rounded-full text-xs tracking-widest uppercase"
+            style={{
+              border: '1px solid rgba(212,175,55,0.3)',
+              color: 'rgba(201,194,224,0.75)',
+              letterSpacing: '0.18em',
+            }}
+          >
+            {t.journal}
           </a>
           <button
             onClick={() => { logout(); router.push('/'); }}
