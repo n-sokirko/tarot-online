@@ -211,22 +211,24 @@ class ReadingViewSet(
         model = ai_client.model_for_tier(tier)
 
         # Charge credits before generating, so over-quota free users get a clean 402.
-        charged, balance = billing.charge_credits(
-            user=user,
-            kind=UsageLedger.KIND_AI_TAROT,
-            model_used=model,
-            reference_id=f'reading:{reading.pk}',
-        )
-        if not charged:
-            return Response(
-                {
-                    'detail': 'out_of_credits',
-                    'message_ru': 'Закончились бесплатные интерпретации. Оформи Premium или купи кредиты.',
-                    'message_en': 'No credits left. Subscribe to Premium or buy a credit pack.',
-                    'balance': balance,
-                },
-                status=status.HTTP_402_PAYMENT_REQUIRED,
+        # The local model costs us no API tokens — it's free, so no credit charge.
+        if not model.startswith('local:'):
+            charged, balance = billing.charge_credits(
+                user=user,
+                kind=UsageLedger.KIND_AI_TAROT,
+                model_used=model,
+                reference_id=f'reading:{reading.pk}',
             )
+            if not charged:
+                return Response(
+                    {
+                        'detail': 'out_of_credits',
+                        'message_ru': 'Закончились бесплатные интерпретации. Оформи Premium или купи кредиты.',
+                        'message_en': 'No credits left. Subscribe to Premium or buy a credit pack.',
+                        'balance': balance,
+                    },
+                    status=status.HTTP_402_PAYMENT_REQUIRED,
+                )
 
         try:
             base_prompt = ai_prompts.base_system(reading.locale)
@@ -298,18 +300,20 @@ class ReadingViewSet(
 
         tier = billing.tier_for(user).tier
         model = ai_client.model_for_tier(tier)
-        charged, balance = billing.charge_credits(
-            user=user, kind=UsageLedger.KIND_AI_TAROT, model_used=model,
-            reference_id=f'reading:{reading.pk}',
-        )
-        if not charged:
-            return Response(
-                {'detail': 'out_of_credits',
-                 'message_ru': 'Закончились бесплатные интерпретации. Оформи Premium или купи кредиты.',
-                 'message_en': 'No credits left. Subscribe to Premium or buy a credit pack.',
-                 'balance': balance},
-                status=status.HTTP_402_PAYMENT_REQUIRED,
+        # The local model costs us no API tokens — it's free, no credit charge.
+        if not model.startswith('local:'):
+            charged, balance = billing.charge_credits(
+                user=user, kind=UsageLedger.KIND_AI_TAROT, model_used=model,
+                reference_id=f'reading:{reading.pk}',
             )
+            if not charged:
+                return Response(
+                    {'detail': 'out_of_credits',
+                     'message_ru': 'Закончились бесплатные интерпретации. Оформи Premium или купи кредиты.',
+                     'message_en': 'No credits left. Subscribe to Premium or buy a credit pack.',
+                     'balance': balance},
+                    status=status.HTTP_402_PAYMENT_REQUIRED,
+                )
 
         base_prompt = ai_prompts.base_system(reading.locale)
         spread_prompt = ai_prompts.tarot_spread(reading.spread_type.slug, reading.locale)
