@@ -99,6 +99,15 @@ class ReadingViewSet(
         except Reading.DoesNotExist:
             raise NotFound(detail=f"Reading {pk} not found.")
 
+    @action(detail=False, methods=['get'], url_path='mine')
+    def mine(self, request: Request) -> Response:
+        """The authenticated user's reading history (journal), newest first."""
+        user = request.user if getattr(request, 'user', None) and request.user.is_authenticated else None
+        if user is None:
+            return Response({'detail': 'authentication_required'}, status=status.HTTP_401_UNAUTHORIZED)
+        qs = self.get_queryset().filter(user=user).order_by('-created_at')[:50]
+        return Response(ReadingSerializer(qs, many=True).data)
+
     # Spread slugs that require an active entitlement to draw.
     PREMIUM_SPREADS = {
         'celtic-cross': 'celtic_cross',

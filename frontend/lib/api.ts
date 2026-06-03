@@ -73,6 +73,10 @@ export async function getReading(id: number | string): Promise<ReadingResponse> 
   return request<ReadingResponse>(`/api/v1/readings/${id}/`);
 }
 
+export async function getMyReadings(): Promise<ReadingResponse[]> {
+  return request<ReadingResponse[]>('/api/v1/readings/mine/');
+}
+
 export async function interpretReading(id: number | string, question?: string): Promise<Interpretation> {
   return request<Interpretation>(`/api/v1/readings/${id}/interpret/`, {
     method: 'POST',
