@@ -47,15 +47,54 @@ def model_for_tier(tier: str) -> str:
     return settings.ANTHROPIC_MODEL_FREE
 
 
+# Small local models follow a short, directive prompt far better than the long,
+# poetic Claude system prompt. These are tuned to reveal each card's meaning.
+_LOCAL_SYS_RU = (
+    "Ты — тёплый, мудрый таролог. Тебе дают вопрос человека и вытянутые карты с их позициями. "
+    "Твоя задача — раскрыть значение карт и собрать их в живой поддерживающий ответ.\n\n"
+    "Как отвечать:\n"
+    "- Разбери каждую карту по очереди: назови её (выдели **жирным**) и объясни, что она значит "
+    "именно в этой позиции и для этого вопроса. Учитывай, перевёрнута ли карта.\n"
+    "- Свяжи карты в одну историю, а не в отдельные абзацы.\n"
+    "- В конце дай короткий вывод и один мягкий совет.\n"
+    "- Тон тёплый и образный, по-русски. Без шарлатанства и без категоричных предсказаний "
+    "болезней, смертей, разводов.\n"
+    "- Объём 200–350 слов. Markdown, без заголовков верхнего уровня, без эмодзи."
+)
+_LOCAL_SYS_EN = (
+    "You are a warm, wise tarot reader. You are given the person's question and the drawn cards "
+    "with their positions. Your task is to reveal the meaning of the cards and weave them into a "
+    "living, supportive reading.\n\n"
+    "How to answer:\n"
+    "- Go through each card in turn: name it (in **bold**) and explain what it means in this "
+    "position and for this question. Account for whether it is reversed.\n"
+    "- Tie the cards into one story, not separate paragraphs.\n"
+    "- End with a short conclusion and one gentle piece of advice.\n"
+    "- Warm, vivid tone, in English. No charlatanry, no categorical predictions of illness, "
+    "death, divorce.\n"
+    "- Length 200–350 words. Markdown, no top-level headers, no emoji."
+)
+
+
+def _looks_russian(text: str) -> bool:
+    return any('Ѐ' <= ch <= 'ӿ' for ch in text[:300])
+
+
 def _ollama_payload(base_system_prompt, spread_system_prompt, user_message, model, max_tokens, temperature, stream):
+    system = _LOCAL_SYS_RU if _looks_russian(base_system_prompt + user_message) else _LOCAL_SYS_EN
     return {
         'model': model,
         'messages': [
-            {'role': 'system', 'content': f'{base_system_prompt}\n\n{spread_system_prompt}'},
+            {'role': 'system', 'content': system},
             {'role': 'user', 'content': user_message},
         ],
         'stream': stream,
-        'options': {'num_predict': max_tokens, 'temperature': temperature},
+        'options': {
+            'num_predict': min(max_tokens, 900),  # 3B is slow; 200–350 words fits
+            'temperature': 0.7,                    # lower = steadier for small models
+            'top_p': 0.9,
+            'repeat_penalty': 1.12,                # curb the small-model repetition
+        },
     }
 
 

@@ -1,4 +1,5 @@
 """Natal chart API views."""
+from django.conf import settings
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -123,7 +124,11 @@ class NatalChartViewSet(
             )
 
         tier = billing.tier_for(user).tier
+        # Natal interpretation always uses the Claude API (never the local model) —
+        # it needs the depth/quality a small local model can't deliver here.
         model = ai_client.model_for_tier(tier)
+        if model.startswith('local:'):
+            model = settings.ANTHROPIC_MODEL_PREMIUM
 
         charged, balance = billing.charge_credits(
             user=user,

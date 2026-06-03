@@ -13,6 +13,7 @@
  */
 
 import type { CSSProperties } from 'react';
+import ZodiacImage from './ZodiacImage';
 
 type Pt = [number, number];
 interface Pattern {
@@ -154,16 +155,7 @@ export default function ZodiacConstellation({
             animation: 'glyph-halo 5s ease-in-out infinite',
           }}
         />
-        <span
-          style={{
-            fontSize: '3.4rem',
-            color: accent,
-            lineHeight: 1,
-            textShadow: `0 0 18px ${accent}cc, 0 0 36px ${accent}66`,
-          }}
-        >
-          {symbol}
-        </span>
+        <ZodiacImage sign={sign} symbol={symbol} size={80} accent={accent} glow />
       </div>
     </div>
   );
