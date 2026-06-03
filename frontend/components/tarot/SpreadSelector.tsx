@@ -59,7 +59,7 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
         {t('choose_spread')}
       </p>
 
-      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="w-full max-w-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5">
         {SPREADS.map((spread, i) => {
           const unlocked =
             !spread.premium ||
