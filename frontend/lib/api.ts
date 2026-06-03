@@ -80,6 +80,52 @@ export async function interpretReading(id: number | string, question?: string): 
   });
 }
 
+/**
+ * Live (SSE) interpretation — streams the AI text token-by-token.
+ * Calls onDelta for each chunk, onDone with the final Interpretation.
+ * Throws ApiError on non-2xx (402/429/400) before the stream starts.
+ */
+export async function interpretReadingStream(
+  id: number | string,
+  question: string,
+  handlers: {
+    onDelta: (text: string) => void;
+    onDone: (interp: Interpretation) => void;
+    onError: (detail: string) => void;
+  },
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/readings/${id}/interpret-stream/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+    body: JSON.stringify({ question }),
+  });
+  if (!res.ok || !res.body) {
+    let payload: unknown = null;
+    try { payload = await res.json(); } catch { /* not JSON */ }
+    throw new ApiError(res.status, payload);
+  }
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let sep: number;
+    while ((sep = buffer.indexOf('\n\n')) !== -1) {
+      const rawEvent = buffer.slice(0, sep).trim();
+      buffer = buffer.slice(sep + 2);
+      if (!rawEvent.startsWith('data:')) continue;
+      try {
+        const evt = JSON.parse(rawEvent.slice(5).trim());
+        if (evt.type === 'delta') handlers.onDelta(evt.text);
+        else if (evt.type === 'done') handlers.onDone(evt.interpretation);
+        else if (evt.type === 'error') handlers.onError(evt.detail ?? 'error');
+      } catch { /* ignore partial */ }
+    }
+  }
+}
+
 // ---- Runes ----
 
 export async function listRunes(): Promise<{ runes: Rune[] }> {

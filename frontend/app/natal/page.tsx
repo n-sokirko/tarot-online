@@ -16,7 +16,7 @@ import type { NatalChart, NatalInterpretation } from '@/lib/types';
 const COPY = {
   ru: {
     title: 'Натальная карта',
-    subtitle: 'Карта звёздного неба в момент вашего рождения',
+    subtitle: 'Узнай свой характер, дары и жизненные темы по дате, времени и месту рождения',
     name_label: 'Имя (необязательно)',
     date_label: 'Дата рождения',
     time_label: 'Время рождения',
@@ -42,7 +42,7 @@ const COPY = {
   },
   en: {
     title: 'Natal Chart',
-    subtitle: 'A map of the sky at the moment of your birth',
+    subtitle: 'Discover your character, gifts and life themes from your date, time and place of birth',
     name_label: 'Name (optional)',
     date_label: 'Birth date',
     time_label: 'Birth time',
@@ -172,7 +172,7 @@ function NatalInterpretationBlock({
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
         </div>
         <div className="flex justify-center mb-6">
-          <SpeakButton text={interp.body_md} lang={locale} />
+          <SpeakButton text={interp.body_md} lang={locale} autoPlay={initial === null} />
         </div>
         <MarkdownProse
           body={interp.body_md}

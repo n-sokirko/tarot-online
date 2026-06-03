@@ -43,6 +43,7 @@ services:
     environment:
       - POSTGRES_HOST=db
       - REDIS_URL=redis://redis:6379/0
+      - TTS_URL=http://tts:5000
     depends_on:
       db:
         condition: service_healthy
@@ -99,6 +100,12 @@ services:
       - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
     depends_on:
       - backend
+
+  tts:
+    build: ./tts
+    restart: unless-stopped
+    expose:
+      - "5000"
 
   nginx:
     image: nginx:alpine

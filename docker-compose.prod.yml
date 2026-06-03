@@ -60,6 +60,20 @@ services:
       - backend
       - redis
 
+  # ── Telegram bot (long-polling) ──────────────────────────────────────────────
+  # Required in prod: handles Stars payments (pre_checkout / successful_payment)
+  # and is the token source for Mini App auto-login. Must stay running.
+  telegram_bot:
+    build: ./backend
+    restart: unless-stopped
+    command: python manage.py run_bot
+    env_file: .env.prod
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   # ── Next.js frontend ─────────────────────────────────────────────────────────
   frontend:
     build:
@@ -70,6 +84,13 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+
+  # ── Self-hosted Piper TTS (neural voice, CPU) ────────────────────────────────
+  tts:
+    build: ./tts
+    restart: unless-stopped
+    expose:
+      - "5000"
 
   # ── Nginx reverse proxy ──────────────────────────────────────────────────────
   nginx:

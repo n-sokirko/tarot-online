@@ -127,30 +127,17 @@ export default function CelticCrossSpread({
     return (
       <div key={slot.idx} className="flex flex-col items-center gap-1">
         {pos && (
-          <p
-            className="font-serif text-center leading-tight"
+          <span
+            className="flex items-center justify-center font-serif"
             style={{
-              color: 'rgba(212,175,55,0.65)',
-              fontSize: '0.55rem',
-              letterSpacing: '0.08em',
-              maxWidth: slot.crossing ? '4rem' : undefined,
+              width: 22, height: 22, borderRadius: 999,
+              background: 'rgba(212,175,55,0.12)',
+              border: '1px solid rgba(212,175,55,0.3)',
+              color: '#d4af37', fontSize: '0.7rem',
             }}
           >
-            <span
-              style={{
-                display: 'inline-block',
-                background: 'rgba(212,175,55,0.1)',
-                borderRadius: '999px',
-                padding: '0.1rem 0.4rem',
-                border: '1px solid rgba(212,175,55,0.2)',
-                fontSize: '0.5rem',
-                letterSpacing: '0.05em',
-              }}
-            >
-              {slot.idx + 1}
-            </span>{' '}
-            {positionLabel(pos)}
-          </p>
+            {slot.idx + 1}
+          </span>
         )}
         <motion.div
           className={`cursor-pointer ${slot.crossing ? 'rotate-90' : ''}`}
@@ -306,6 +293,59 @@ export default function CelticCrossSpread({
             {renderCardSlot(slot)}
           </div>
         ))}
+      </div>
+
+      {/* ── Readable legend: all 10 positions with card name + keywords ── */}
+      <div className="w-full max-w-2xl mx-auto mt-10 flex flex-col gap-2 px-2">
+        <p
+          className="font-serif text-xs tracking-widest uppercase text-center mb-2"
+          style={{ color: 'rgba(212,175,55,0.5)', letterSpacing: '0.18em' }}
+        >
+          {locale === 'ru' ? 'Карты расклада — нажми для разбора' : 'Cards — tap for details'}
+        </p>
+        {spreadPositions.map((pos, i) => {
+          const dc = cardByIndex(i);
+          if (!dc) return null;
+          const name = locale === 'ru' ? dc.card.name_ru : dc.card.name_en;
+          const kws = (locale === 'ru' ? dc.card.keywords_ru : dc.card.keywords_en) ?? [];
+          return (
+            <button
+              key={i}
+              onClick={() => setSelectedCardIndex(i)}
+              className="w-full text-left flex items-start gap-3 p-3 rounded-xl transition-colors hover:bg-[rgba(212,175,55,0.08)]"
+              style={{ background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.15)' }}
+            >
+              <span
+                className="flex items-center justify-center font-serif shrink-0"
+                style={{
+                  width: 26, height: 26, borderRadius: 999,
+                  background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.3)',
+                  color: '#d4af37', fontSize: '0.8rem',
+                }}
+              >
+                {i + 1}
+              </span>
+              <span className="flex flex-col gap-0.5 min-w-0">
+                <span className="font-sans text-[0.62rem] uppercase tracking-wider" style={{ color: 'rgba(201,194,224,0.5)', letterSpacing: '0.1em' }}>
+                  {positionLabel(pos)}
+                </span>
+                <span className="font-serif text-sm" style={{ color: '#d4af37' }}>
+                  {name}
+                  {dc.is_reversed && (
+                    <span style={{ color: 'rgba(201,194,224,0.5)', fontSize: '0.75rem' }}>
+                      {' '}· {locale === 'ru' ? 'перевёрнута' : 'reversed'}
+                    </span>
+                  )}
+                </span>
+                {kws.length > 0 && (
+                  <span className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.7)' }}>
+                    {kws.slice(0, 3).join(' · ')}
+                  </span>
+                )}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Detail modal */}

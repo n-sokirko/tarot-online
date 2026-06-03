@@ -46,28 +46,40 @@ const COPY = {
   en: { listen: 'Listen', stop: 'Stop' },
 } as const;
 
+// Voice name hints — prefer a deep male voice, avoid obviously female ones.
+const MALE_HINTS = [
+  'male', 'dmitr', 'yuri', 'pavel', 'maxim', 'artyom', 'aleksandr',
+  'david', 'daniel', 'alex', 'george', 'arthur', 'fred', 'guy', 'aaron', 'mark', 'james',
+];
+const FEMALE_HINTS = [
+  'female', 'milena', 'katya', 'irina', 'svetlana', 'tatyana', 'elena', 'alyona',
+  'samantha', 'victoria', 'zira', 'aria', 'jenny', 'susan', 'hazel', 'karen',
+];
+
 export default function SpeakButton({
   text,
   lang,
+  autoPlay = false,
 }: {
   text: string;
   lang: 'ru' | 'en';
+  /** Start narrating automatically once (e.g. right after AI generation). */
+  autoPlay?: boolean;
 }) {
-  const [supported, setSupported] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const cancelledRef = useRef(false);
+  const autoRan = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? '';
   const t = COPY[lang];
 
   useEffect(() => {
-    const ok = typeof window !== 'undefined' && 'speechSynthesis' in window;
-    setSupported(ok);
-    if (ok) {
-      // Warm the voice list (some browsers populate it lazily).
+    // Warm the browser voice list (used only as a fallback).
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.getVoices();
-      const noop = () => {};
-      window.speechSynthesis.onvoiceschanged = noop;
     }
     return () => {
+      if (audioRef.current) audioRef.current.pause();
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
@@ -77,47 +89,92 @@ export default function SpeakButton({
   const pickVoice = useCallback((code: 'ru' | 'en') => {
     const voices = window.speechSynthesis.getVoices();
     const prefix = code === 'ru' ? 'ru' : 'en';
-    return voices.find((v) => v.lang.toLowerCase().startsWith(prefix)) ?? null;
+    const langVoices = voices.filter((v) => v.lang.toLowerCase().startsWith(prefix));
+    if (langVoices.length === 0) return null;
+    // Score voices: prefer high-quality network voices (Google/Neural/Online),
+    // then male timbre, penalise obviously female ones. Highest score wins.
+    const QUALITY = ['google', 'natural', 'neural', 'online', 'premium', 'enhanced'];
+    const score = (raw: string) => {
+      const n = raw.toLowerCase();
+      let s = 0;
+      if (QUALITY.some((h) => n.includes(h))) s += 3;
+      if (MALE_HINTS.some((h) => n.includes(h))) s += 2;
+      if (FEMALE_HINTS.some((h) => n.includes(h))) s -= 3;
+      return s;
+    };
+    return [...langVoices].sort((a, b) => score(b.name) - score(a.name))[0];
   }, []);
 
   const stop = useCallback(() => {
     cancelledRef.current = true;
-    window.speechSynthesis.cancel();
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
     setSpeaking(false);
   }, []);
 
-  const speak = useCallback(() => {
-    if (!supported) return;
+  // Fallback only — the browser's Web Speech voice, if the server voice is down.
+  const speakBrowser = useCallback(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) { setSpeaking(false); return; }
     window.speechSynthesis.cancel();
-    cancelledRef.current = false;
-
     const chunks = chunkText(stripMarkdown(text));
-    if (chunks.length === 0) return;
-
+    if (chunks.length === 0) { setSpeaking(false); return; }
     const langCode = lang === 'ru' ? 'ru-RU' : 'en-US';
     const voice = pickVoice(lang);
-    setSpeaking(true);
-
     chunks.forEach((chunk, idx) => {
       const u = new SpeechSynthesisUtterance(chunk);
       u.lang = langCode;
       if (voice) u.voice = voice;
-      u.rate = 0.96;
-      u.pitch = 1;
+      u.rate = 0.92;
+      u.pitch = 0.9;
       if (idx === chunks.length - 1) {
         u.onend = () => { if (!cancelledRef.current) setSpeaking(false); };
         u.onerror = () => setSpeaking(false);
       }
       window.speechSynthesis.speak(u);
     });
-  }, [supported, text, lang, pickVoice]);
+  }, [text, lang, pickVoice]);
 
-  if (!supported) return null;
+  // Primary: self-hosted neural voice (Piper) via our backend. Falls back to
+  // the browser voice if the TTS service is unreachable.
+  const speak = useCallback(async () => {
+    cancelledRef.current = false;
+    const clean = stripMarkdown(text).slice(0, 5000);
+    if (!clean) return;
+    setSpeaking(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/tts/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: clean, lang }),
+      });
+      if (!res.ok) throw new Error('tts');
+      const blob = await res.blob();
+      if (cancelledRef.current) return;
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onended = () => { setSpeaking(false); URL.revokeObjectURL(url); };
+      audio.onerror = () => { setSpeaking(false); URL.revokeObjectURL(url); };
+      await audio.play();
+    } catch {
+      if (!cancelledRef.current) speakBrowser();
+    }
+  }, [text, lang, API_BASE, speakBrowser]);
+
+  // Auto-narrate once when requested (e.g. right after AI generation).
+  useEffect(() => {
+    if (!autoPlay || autoRan.current || !text.trim()) return;
+    autoRan.current = true;
+    const id = setTimeout(() => { void speak(); }, 300);
+    return () => clearTimeout(id);
+  }, [autoPlay, text, speak]);
 
   return (
     <button
       type="button"
-      onClick={speaking ? stop : speak}
+      onClick={() => (speaking ? stop() : void speak())}
       aria-label={speaking ? t.stop : t.listen}
       aria-pressed={speaking}
       className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-sans text-xs uppercase tracking-widest transition-colors"

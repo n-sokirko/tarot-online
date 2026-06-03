@@ -311,7 +311,7 @@ export default function HoroscopePage() {
                         ✦ {t.deep}
                       </p>
                       <div className="flex justify-center mb-4">
-                        <SpeakButton text={aiReading.body_md} lang={locale} />
+                        <SpeakButton text={aiReading.body_md} lang={locale} autoPlay />
                       </div>
                       <div
                         className="font-serif text-sm leading-relaxed whitespace-pre-wrap"

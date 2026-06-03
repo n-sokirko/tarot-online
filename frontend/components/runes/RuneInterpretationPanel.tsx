@@ -92,7 +92,7 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
           <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
         </div>
         <div className="flex justify-center mb-6">
-          <SpeakButton text={interpretation.body_md} lang={locale} />
+          <SpeakButton text={interpretation.body_md} lang={locale} autoPlay={initial === null} />
         </div>
         <MarkdownProse
           body={interpretation.body_md}

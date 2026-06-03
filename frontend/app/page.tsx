@@ -107,6 +107,29 @@ export default function HomePage() {
               exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.35 }}
             >
+              {/* How it works — orient first-time visitors */}
+              <div className="flex items-center justify-center gap-2 md:gap-4 mb-8 flex-wrap">
+                {[
+                  { n: '1', ru: 'Задай вопрос', en: 'Ask a question' },
+                  { n: '2', ru: 'Перемешай колоду', en: 'Shuffle the deck' },
+                  { n: '3', ru: 'Получи AI-разбор', en: 'Get an AI reading' },
+                ].map((s, i) => (
+                  <div key={s.n} className="flex items-center gap-2 md:gap-4">
+                    <div className="flex flex-col items-center gap-1.5" style={{ maxWidth: 96 }}>
+                      <span
+                        className="flex items-center justify-center font-serif"
+                        style={{ width: 30, height: 30, borderRadius: 999, border: '1px solid rgba(212,175,55,0.4)', color: '#d4af37', fontSize: '0.85rem' }}
+                      >
+                        {s.n}
+                      </span>
+                      <span className="font-sans text-[0.7rem] text-center leading-tight" style={{ color: 'rgba(201,194,224,0.75)' }}>
+                        {locale === 'ru' ? s.ru : s.en}
+                      </span>
+                    </div>
+                    {i < 2 && <span style={{ color: 'rgba(212,175,55,0.4)' }}>→</span>}
+                  </div>
+                ))}
+              </div>
               <SpreadSelector key={sessionKey} onSelect={handleSpreadSelect} entitlements={entitlements} />
             </motion.div>
           )}

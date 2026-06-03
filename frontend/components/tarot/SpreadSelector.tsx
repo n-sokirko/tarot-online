@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
-export type SpreadSlug = 'three-card' | 'nine-card' | 'celtic-cross';
+export type SpreadSlug = 'three-card' | 'nine-card';
 
 interface SpreadOption {
   slug: SpreadSlug;
@@ -32,15 +32,6 @@ const SPREADS: SpreadOption[] = [
     cardsKey: 'spread_9_cards',
     premium: false,
     symbol: '✦ ✦ ✦\n✦ ✦ ✦\n✦ ✦ ✦',
-  },
-  {
-    slug: 'celtic-cross',
-    nameKey: 'spread_celtic_name',
-    descKey: 'spread_celtic_desc',
-    cardsKey: 'spread_celtic_cards',
-    premium: true,
-    entitlement: 'celtic_cross',
-    symbol: '  ✦\n✦✦✦  ✦\n  ✦    ✦\n       ✦',
   },
 ];
 
@@ -127,9 +118,9 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
                   className="font-serif text-center leading-relaxed whitespace-pre-line"
                   style={{
                     color: isLocked ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
-                    fontSize: spread.slug === 'nine-card' || spread.slug === 'celtic-cross' ? '0.6rem' : '1rem',
+                    fontSize: spread.slug === 'nine-card' ? '0.6rem' : '1rem',
                     letterSpacing: '0.3em',
-                    lineHeight: spread.slug === 'nine-card' || spread.slug === 'celtic-cross' ? '1.8' : '1',
+                    lineHeight: spread.slug === 'nine-card' ? '1.8' : '1',
                   }}
                 >
                   {spread.symbol}

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import LocaleSwitcher from './LocaleSwitcher';
+import AmbientPlayer from '@/components/audio/AmbientPlayer';
 import type { Locale } from '@/i18n';
 
 interface NavbarProps {
@@ -50,11 +51,11 @@ export default function Navbar({ locale }: NavbarProps) {
           {locale === 'ru' ? 'Карта дня' : 'Daily'}
         </Link>
         <Link
-          href="/runes"
+          href="/horoscope"
           className="text-xs font-sans tracking-widest uppercase"
           style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
         >
-          {locale === 'ru' ? 'Руны' : 'Runes'}
+          {locale === 'ru' ? 'Гороскоп' : 'Horoscope'}
         </Link>
         <Link
           href="/natal"
@@ -71,13 +72,6 @@ export default function Navbar({ locale }: NavbarProps) {
           {locale === 'ru' ? 'Числа' : 'Numbers'}
         </Link>
         <Link
-          href="/horoscope"
-          className="text-xs font-sans tracking-widest uppercase"
-          style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
-        >
-          {locale === 'ru' ? 'Гороскоп' : 'Horoscope'}
-        </Link>
-        <Link
           href="/pricing"
           className="text-xs font-sans tracking-widest uppercase"
           style={{ color: '#d4af37', letterSpacing: '0.18em' }}
@@ -88,6 +82,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
       {/* Right side */}
       <div className="flex items-center gap-4 md:gap-6">
+        <AmbientPlayer />
         <LocaleSwitcher currentLocale={locale} />
 
         {!isLoading && (

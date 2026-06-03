@@ -356,7 +356,7 @@ export default function NumerologyPage() {
                     ✦ {t.interpret}
                   </p>
                   <div className="flex justify-center mb-4">
-                    <SpeakButton text={interpretation.body_md} lang={locale} />
+                    <SpeakButton text={interpretation.body_md} lang={locale} autoPlay />
                   </div>
                   <div
                     className="font-serif text-sm leading-relaxed whitespace-pre-wrap"

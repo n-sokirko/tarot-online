@@ -162,3 +162,6 @@ WEBAPP_URL = config('WEBAPP_URL', default='https://sokirdon.com')
 # Celery
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+
+# Self-hosted Piper TTS service (internal Docker network).
+TTS_URL = config('TTS_URL', default='http://tts:5000')
