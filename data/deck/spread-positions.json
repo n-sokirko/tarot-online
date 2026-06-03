@@ -50,6 +50,21 @@
       ]
     },
     {
+      "slug": "horseshoe",
+      "name_ru": "Подкова",
+      "name_en": "Horseshoe",
+      "description_ru": "Расклад из 5 карт: прошлое, настоящее, скрытое, препятствие и исход",
+      "description_en": "A 5-card spread: past, present, hidden, obstacle and outcome",
+      "positions_count": 5,
+      "positions": [
+        {"index": 0, "label_ru": "Прошлое", "label_en": "Past", "meaning_ru": "То, что привело к нынешней ситуации.", "meaning_en": "What led to the present situation."},
+        {"index": 1, "label_ru": "Настоящее", "label_en": "Present", "meaning_ru": "Где ты сейчас: главная тема момента.", "meaning_en": "Where you are now: the main theme of the moment."},
+        {"index": 2, "label_ru": "Скрытое", "label_en": "Hidden", "meaning_ru": "То, что влияет из тени и пока не видно.", "meaning_en": "What influences from the shadows and isn't yet visible."},
+        {"index": 3, "label_ru": "Препятствие", "label_en": "Obstacle", "meaning_ru": "Что мешает или над чем стоит поработать.", "meaning_en": "What stands in the way or asks for your work."},
+        {"index": 4, "label_ru": "Исход", "label_en": "Outcome", "meaning_ru": "К чему всё ведёт — направление, не приговор.", "meaning_en": "Where it all leads — a direction, not a verdict."}
+      ]
+    },
+    {
       "slug": "celtic-cross",
       "name_ru": "Кельтский крест",
       "name_en": "Celtic Cross",

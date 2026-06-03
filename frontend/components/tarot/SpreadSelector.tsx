@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
-export type SpreadSlug = 'three-card' | 'nine-card';
+export type SpreadSlug = 'three-card' | 'horseshoe' | 'nine-card';
 
 interface SpreadOption {
   slug: SpreadSlug;
@@ -24,6 +24,14 @@ const SPREADS: SpreadOption[] = [
     cardsKey: 'spread_3_cards',
     premium: false,
     symbol: '✦ ✦ ✦',
+  },
+  {
+    slug: 'horseshoe',
+    nameKey: 'spread_horseshoe_name',
+    descKey: 'spread_horseshoe_desc',
+    cardsKey: 'spread_horseshoe_cards',
+    premium: false,
+    symbol: '✦         ✦\n  ✦     ✦\n      ✦',
   },
   {
     slug: 'nine-card',
@@ -59,7 +67,7 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
         {t('choose_spread')}
       </p>
 
-      <div className="w-full max-w-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
         {SPREADS.map((spread, i) => {
           const unlocked =
             !spread.premium ||
@@ -118,9 +126,9 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
                   className="font-serif text-center leading-relaxed whitespace-pre-line"
                   style={{
                     color: isLocked ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
-                    fontSize: spread.slug === 'nine-card' ? '0.6rem' : '1rem',
+                    fontSize: spread.slug === 'nine-card' ? '0.6rem' : spread.slug === 'horseshoe' ? '0.7rem' : '1rem',
                     letterSpacing: '0.3em',
-                    lineHeight: spread.slug === 'nine-card' ? '1.8' : '1',
+                    lineHeight: spread.slug === 'nine-card' ? '1.8' : spread.slug === 'horseshoe' ? '1.6' : '1',
                   }}
                 >
                   {spread.symbol}

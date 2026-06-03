@@ -163,6 +163,12 @@ export default function SpeakButton({
     }
   }, [text, lang, API_BASE, speakBrowser]);
 
+  // Let the ambient player duck its volume while the voice is speaking.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(new CustomEvent('tarot:voice', { detail: { active: speaking } }));
+  }, [speaking]);
+
   // Auto-narrate once when requested (e.g. right after AI generation).
   useEffect(() => {
     if (!autoPlay || autoRan.current || !text.trim()) return;

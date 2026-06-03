@@ -26,7 +26,8 @@ export default function ThreeCardSpread({
   const prefersReducedMotion = useReducedMotion();
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  const [flippedCards, setFlippedCards] = useState<[boolean, boolean, boolean]>([false, false, false]);
+  const cardCount = spreadPositions.length || (cards?.length ?? 3);
+  const [flippedCards, setFlippedCards] = useState<boolean[]>(() => Array(cardCount).fill(false));
   const [activeSlide, setActiveSlide] = useState(0);
   const hasTriggeredRef = useRef(false);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -38,20 +39,20 @@ export default function ThreeCardSpread({
     if (!hasCards || hasTriggeredRef.current) return;
     hasTriggeredRef.current = true;
     if (prefersReducedMotion) {
-      setFlippedCards([true, true, true]);
+      setFlippedCards(Array(cardCount).fill(true));
       return;
     }
-    const timers = ([0, 1, 2] as const).map((i) =>
+    const timers = Array.from({ length: cardCount }, (_, i) =>
       setTimeout(() => {
         setFlippedCards((prev) => {
-          const next: [boolean, boolean, boolean] = [...prev] as [boolean, boolean, boolean];
+          const next = [...prev];
           next[i] = true;
           return next;
         });
       }, i * FLIP_STAGGER_MS + 400)
     );
     return () => timers.forEach(clearTimeout);
-  }, [hasCards, prefersReducedMotion]);
+  }, [hasCards, prefersReducedMotion, cardCount]);
 
   // Track active slide via IntersectionObserver
   const slideRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
@@ -129,7 +130,7 @@ export default function ThreeCardSpread({
             if (!drawnCard) return;
             if (!isFaceUp) {
               setFlippedCards((prev) => {
-                const next = [...prev] as [boolean, boolean, boolean];
+                const next = [...prev];
                 next[i] = true;
                 return next;
               });

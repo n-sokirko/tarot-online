@@ -111,6 +111,20 @@ export default function AmbientPlayer() {
 
   useEffect(() => () => { stop(); }, [stop]);
 
+  // Duck the ambient while a voice narration is playing, then restore it.
+  useEffect(() => {
+    const onVoice = (e: Event) => {
+      const ctx = ctxRef.current;
+      const master = masterRef.current;
+      if (!ctx || !master) return;
+      const active = (e as CustomEvent<{ active: boolean }>).detail?.active;
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.linearRampToValueAtTime(active ? 0.015 : 0.06, ctx.currentTime + 0.6);
+    };
+    window.addEventListener('tarot:voice', onVoice as EventListener);
+    return () => window.removeEventListener('tarot:voice', onVoice as EventListener);
+  }, []);
+
   return (
     <button
       type="button"
