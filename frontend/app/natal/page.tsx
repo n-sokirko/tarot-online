@@ -9,6 +9,7 @@ import { MarkdownProse } from '@/lib/markdown';
 import { ApiError, createNatalChart, interpretNatalChart, getBillingMe } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import SpeakButton from '@/components/a11y/SpeakButton';
+import RotatingWheel from '@/components/natal/RotatingWheel';
 import type { NatalChart, NatalInterpretation } from '@/lib/types';
 
 // ---- Copy ----
@@ -404,10 +405,11 @@ export default function NatalPage() {
 
   return (
     <main
-      className="min-h-screen px-4 py-12 md:py-16 pb-24"
+      className="relative overflow-hidden min-h-screen px-4 py-12 md:py-16 pb-24"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
     >
-      <div className="max-w-3xl mx-auto">
+      <RotatingWheel />
+      <div className="relative z-10 max-w-3xl mx-auto">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 12 }}
