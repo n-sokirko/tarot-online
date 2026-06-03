@@ -61,7 +61,35 @@ def _get_status(tg_id: int) -> str:
     return f'tier:{info.tier},credits:{credits}'
 
 
+@sync_to_async
+def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = '') -> None:
+    from apps.telegram_bot.models import TelegramUser
+    obj, _ = TelegramUser.objects.get_or_create(
+        tg_id=tg_id,
+        defaults={'tg_username': username, 'tg_first_name': first_name},
+    )
+    obj.daily_push = on
+    obj.save(update_fields=['daily_push'])
+
+
 # ── Handlers ───────────────────────────────────────────────────────────────────
+
+
+async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    tg = update.effective_user
+    await _set_daily_push(tg.id, True, tg.username or '', tg.first_name or '')
+    await update.message.reply_text(
+        "🌙 Готово! Каждое утро буду присылать твою карту дня.\n"
+        "Чтобы отписаться — /unsubscribe",
+    )
+
+
+async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    tg = update.effective_user
+    await _set_daily_push(tg.id, False)
+    await update.message.reply_text(
+        "Отписал от ежедневных карт 🌙 Вернуться — /subscribe",
+    )
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args or []

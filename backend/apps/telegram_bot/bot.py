@@ -74,11 +74,15 @@ def create_application() -> Application:
         pre_checkout_query,
         start,
         status_command,
+        subscribe,
         successful_payment,
+        unsubscribe,
     )
 
     app.add_handler(CommandHandler('start', start))
     app.add_handler(CommandHandler('status', status_command))
+    app.add_handler(CommandHandler('subscribe', subscribe))
+    app.add_handler(CommandHandler('unsubscribe', unsubscribe))
     app.add_handler(PreCheckoutQueryHandler(pre_checkout_query))
     app.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, successful_payment))
 

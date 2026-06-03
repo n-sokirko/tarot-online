@@ -163,5 +163,21 @@ WEBAPP_URL = config('WEBAPP_URL', default='https://sokirdon.com')
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
+# Scheduled tasks (run by `celery ... --beat`).
+from celery.schedules import crontab  # noqa: E402
+
+CELERY_BEAT_SCHEDULE = {
+    'daily-card-push': {
+        'task': 'apps.telegram_bot.tasks.send_daily_push',
+        'schedule': crontab(hour=8, minute=0),
+    },
+}
+
 # Self-hosted Piper TTS service (internal Docker network).
 TTS_URL = config('TTS_URL', default='http://tts:5000')
+
+# Local LLM (Ollama) for the free/budget tier — premium still uses the Claude API.
+# Disabled by default (prod VPS has no room); enabled in dev via docker-compose.
+LOCAL_LLM_ENABLED = config('LOCAL_LLM_ENABLED', default=False, cast=bool)
+OLLAMA_URL = config('OLLAMA_URL', default='http://ollama:11434')
+LOCAL_LLM_MODEL = config('LOCAL_LLM_MODEL', default='qwen2.5:3b')
