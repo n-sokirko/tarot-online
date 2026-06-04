@@ -3,12 +3,15 @@ from django.http import JsonResponse
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from apps.users.admin_dashboard import dashboard as admin_dashboard
+
 
 def healthz(_request):
     return JsonResponse({'status': 'ok'})
 
 
 urlpatterns = [
+    path('dashboard/', admin_dashboard, name='admin-dashboard'),
     path('admin/', admin.site.urls),
     path('api/healthz/', healthz),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
