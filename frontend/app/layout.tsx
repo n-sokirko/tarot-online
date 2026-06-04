@@ -7,6 +7,7 @@ import { AuthProvider } from '@/lib/auth-context';
 import Navbar from '@/components/layout/Navbar';
 import BottomBar from '@/components/layout/BottomBar';
 import TelegramInit from '@/components/telegram/TelegramInit';
+import RotatingWheel from '@/components/natal/RotatingWheel';
 import type { Locale } from '@/i18n';
 import './globals.css';
 
@@ -56,6 +57,8 @@ export default async function RootLayout({
           <AuthProvider>
             {/* Initialises Telegram WebApp and auto-logs-in Mini App users */}
             <TelegramInit />
+            {/* Site-wide rotating zodiac wheel, fixed behind all content */}
+            <RotatingWheel />
             <Navbar locale={locale} />
             <div style={{ paddingTop: '56px', paddingBottom: '60px' }} className="md:pb-0">
               {children}

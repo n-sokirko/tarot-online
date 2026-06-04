@@ -149,7 +149,7 @@ export default function PricingPage() {
   return (
     <main
       className="relative overflow-hidden min-h-screen px-4 py-12 md:py-20"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       <Starfield seed="pricing" count={50} />
       <div className="relative z-10 max-w-5xl mx-auto">

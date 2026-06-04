@@ -50,7 +50,7 @@ export default function LoginPage() {
   return (
     <main
       className="min-h-screen flex flex-col items-center justify-center px-4"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       <motion.div
         className="w-full max-w-sm flex flex-col gap-6"

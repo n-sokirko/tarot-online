@@ -51,7 +51,7 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
   if (error) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center px-4"
-        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}>
+        style={{ background: 'transparent' }}>
         <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>
           {tReading('error')}
         </p>
@@ -69,7 +69,7 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
   if (!reading) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center px-4"
-        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}>
+        style={{ background: 'transparent' }}>
         <motion.p
           className="font-serif italic"
           style={{ color: 'rgba(212,175,55,0.7)' }}
@@ -87,7 +87,7 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
   return (
     <main
       className="min-h-screen flex flex-col items-center px-4 py-12 md:py-20 relative overflow-x-hidden"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       {/* Decorative stars */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">

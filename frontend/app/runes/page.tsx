@@ -65,7 +65,7 @@ export default function RunesPage() {
   return (
     <main
       className="min-h-screen px-4 py-12 md:py-16"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       <div className="max-w-3xl mx-auto">
         <motion.header

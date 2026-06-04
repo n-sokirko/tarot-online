@@ -92,7 +92,7 @@ export default function DailyCardPage() {
   return (
     <main
       className="min-h-screen flex flex-col items-center px-4 py-12"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.85) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       <motion.div
         className="w-full max-w-md flex flex-col items-center gap-8"
