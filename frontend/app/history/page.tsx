@@ -54,7 +54,7 @@ export default function HistoryPage() {
   return (
     <main
       className="relative overflow-hidden min-h-screen flex flex-col items-center px-4 py-12"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.85) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       <motion.div
         className="relative z-10 w-full max-w-2xl flex flex-col gap-8"

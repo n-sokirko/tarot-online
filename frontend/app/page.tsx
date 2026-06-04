@@ -61,7 +61,7 @@ export default function HomePage() {
       className="min-h-screen flex flex-col items-center px-4 py-12 md:py-20 relative overflow-x-hidden"
       style={{
         background:
-          'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.8) 0%, #0b0b1f 60%)',
+          'transparent',
       }}
     >
       {/* Decorative animated starfield */}

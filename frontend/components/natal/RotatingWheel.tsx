@@ -3,17 +3,18 @@
 import { useState } from 'react';
 
 /**
- * A faint, very slowly rotating zodiac wheel used as a decorative background.
- * Reads /public/zodiac-wheel.png; renders nothing if the image is missing.
+ * A faint, very slowly rotating zodiac wheel fixed to the centre of the viewport
+ * (stays centred while scrolling) and sitting behind all page content (z-index
+ * below the transparent page mains). Renders nothing if the image is missing.
  */
-export default function RotatingWheel({ opacity = 0.14 }: { opacity?: number }) {
+export default function RotatingWheel({ opacity = 0.16 }: { opacity?: number }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
 
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
-      style={{ zIndex: 0 }}
+      className="fixed inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
+      style={{ zIndex: -1 }}
       aria-hidden
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -22,12 +23,13 @@ export default function RotatingWheel({ opacity = 0.14 }: { opacity?: number }) 
         alt=""
         onError={() => setFailed(true)}
         style={{
-          width: 'min(130vw, 920px)',
+          width: 'min(140vmin, 1100px)',
+          height: 'auto',
           maxWidth: 'none',
           opacity,
-          animation: 'slow-spin 160s linear infinite',
-          maskImage: 'radial-gradient(circle, #000 55%, transparent 78%)',
-          WebkitMaskImage: 'radial-gradient(circle, #000 55%, transparent 78%)',
+          animation: 'slow-spin 200s linear infinite',
+          maskImage: 'radial-gradient(circle, #000 58%, transparent 80%)',
+          WebkitMaskImage: 'radial-gradient(circle, #000 58%, transparent 80%)',
         }}
       />
     </div>

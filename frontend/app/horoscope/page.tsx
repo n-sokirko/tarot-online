@@ -149,7 +149,7 @@ export default function HoroscopePage() {
   return (
     <main
       className="relative overflow-hidden min-h-screen flex flex-col items-center px-4 py-12"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(28,24,64,0.85) 0%, #0b0b1f 60%)' }}
+      style={{ background: 'transparent' }}
     >
       <Starfield seed={selected ?? 'horoscope'} count={54} />
       <motion.div
