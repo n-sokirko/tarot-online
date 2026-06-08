@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import NatalWheel from '@/components/natal/NatalWheel';
 import BigThree from '@/components/natal/BigThree';
+import PlanetImage from '@/components/natal/PlanetImage';
 import { MarkdownProse } from '@/lib/markdown';
 import { ApiError, createNatalChart, interpretNatalChart, getBillingMe } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
@@ -66,20 +67,150 @@ const COPY = {
     retrograde: 'retrograde',
     house: 'house',
   },
+  de: {
+    title: 'Geburtshoroskop',
+    subtitle: 'Entdecke deinen Charakter, deine Gaben und Lebensthemen anhand von Datum, Zeit und Ort deiner Geburt',
+    name_label: 'Name (optional)',
+    date_label: 'Geburtsdatum',
+    time_label: 'Geburtszeit',
+    time_hint: 'optional — nötig für Häuser & Aszendent',
+    city_label: 'Geburtsort',
+    city_placeholder: 'Berlin, Wien, Zürich...',
+    calculate: 'Horoskop berechnen',
+    calculating: 'Berechne...',
+    new_chart: 'Neues Horoskop',
+    interpret_cta: 'Deutung enthüllen',
+    interpreting: 'Lese das Horoskop...',
+    interpret_footnote: 'Deutung von KI erstellt. Keine Vorhersage — eine Karte deines Potenzials.',
+    premium_cta: 'Premium schaltet alle Planeten, Häuser und die KI-Deutung frei',
+    planets_section: 'Planeten',
+    free_planets_hint: 'Alle Planeten mit Premium verfügbar',
+    error_city: 'Ort nicht gefunden. Prüfe die Schreibweise.',
+    error_generic: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+    interpret_error: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+    interpret_pay_required: 'Die KI-Deutung ist mit einem Premium-Abo verfügbar.',
+    interpret_pricing: 'Zu den Tarifen',
+    retrograde: 'rückläufig',
+    house: 'Haus',
+  },
+  fr: {
+    title: 'Thème natal',
+    subtitle: 'Découvre ton caractère, tes dons et tes thèmes de vie d’après ta date, heure et lieu de naissance',
+    name_label: 'Nom (facultatif)',
+    date_label: 'Date de naissance',
+    time_label: 'Heure de naissance',
+    time_hint: 'facultatif — nécessaire pour les maisons et l’ascendant',
+    city_label: 'Ville de naissance',
+    city_placeholder: 'Paris, Lyon, Marseille...',
+    calculate: 'Calculer le thème',
+    calculating: 'Calcul...',
+    new_chart: 'Nouveau thème',
+    interpret_cta: 'Révéler l’interprétation',
+    interpreting: 'Lecture du thème...',
+    interpret_footnote: 'Interprétation générée par IA. Pas une prédiction — une carte de ton potentiel.',
+    premium_cta: 'Premium débloque toutes les planètes, maisons et l’interprétation IA',
+    planets_section: 'Planètes',
+    free_planets_hint: 'Toutes les planètes disponibles avec Premium',
+    error_city: 'Ville introuvable. Vérifie l’orthographe.',
+    error_generic: 'Une erreur est survenue. Réessaie.',
+    interpret_error: 'Une erreur est survenue. Réessaie.',
+    interpret_pay_required: 'L’interprétation IA est disponible avec un abonnement Premium.',
+    interpret_pricing: 'Voir les forfaits',
+    retrograde: 'rétrograde',
+    house: 'maison',
+  },
+  es: {
+    title: 'Carta natal',
+    subtitle: 'Descubre tu carácter, dones y temas de vida según tu fecha, hora y lugar de nacimiento',
+    name_label: 'Nombre (opcional)',
+    date_label: 'Fecha de nacimiento',
+    time_label: 'Hora de nacimiento',
+    time_hint: 'opcional — necesaria para casas y ascendente',
+    city_label: 'Ciudad de nacimiento',
+    city_placeholder: 'Madrid, Buenos Aires, México...',
+    calculate: 'Calcular carta',
+    calculating: 'Calculando...',
+    new_chart: 'Nueva carta',
+    interpret_cta: 'Revelar interpretación',
+    interpreting: 'Leyendo la carta...',
+    interpret_footnote: 'Interpretación generada por IA. No es una predicción — es un mapa de tu potencial.',
+    premium_cta: 'Premium desbloquea todos los planetas, casas e interpretación IA',
+    planets_section: 'Planetas',
+    free_planets_hint: 'Todos los planetas disponibles con Premium',
+    error_city: 'Ciudad no encontrada. Revisa la ortografía.',
+    error_generic: 'Algo salió mal. Inténtalo de nuevo.',
+    interpret_error: 'Algo salió mal. Inténtalo de nuevo.',
+    interpret_pay_required: 'La interpretación IA está disponible con suscripción Premium.',
+    interpret_pricing: 'Ver planes',
+    retrograde: 'retrógrado',
+    house: 'casa',
+  },
+  pt: {
+    title: 'Mapa natal',
+    subtitle: 'Descobre o teu caráter, dons e temas de vida pela tua data, hora e local de nascimento',
+    name_label: 'Nome (opcional)',
+    date_label: 'Data de nascimento',
+    time_label: 'Hora de nascimento',
+    time_hint: 'opcional — necessária para casas e ascendente',
+    city_label: 'Cidade de nascimento',
+    city_placeholder: 'Lisboa, São Paulo, Porto...',
+    calculate: 'Calcular mapa',
+    calculating: 'A calcular...',
+    new_chart: 'Novo mapa',
+    interpret_cta: 'Revelar interpretação',
+    interpreting: 'A ler o mapa...',
+    interpret_footnote: 'Interpretação gerada por IA. Não é uma previsão — é um mapa do teu potencial.',
+    premium_cta: 'O Premium desbloqueia todos os planetas, casas e a interpretação IA',
+    planets_section: 'Planetas',
+    free_planets_hint: 'Todos os planetas disponíveis com Premium',
+    error_city: 'Cidade não encontrada. Verifica a ortografia.',
+    error_generic: 'Algo correu mal. Tenta novamente.',
+    interpret_error: 'Algo correu mal. Tenta novamente.',
+    interpret_pay_required: 'A interpretação IA está disponível com subscrição Premium.',
+    interpret_pricing: 'Ver planos',
+    retrograde: 'retrógrado',
+    house: 'casa',
+  },
+  uk: {
+    title: 'Натальна карта',
+    subtitle: 'Дізнайся свій характер, дари та життєві теми за датою, часом і місцем народження',
+    name_label: 'Ім’я (необов’язково)',
+    date_label: 'Дата народження',
+    time_label: 'Час народження',
+    time_hint: 'необов’язково — потрібно для домів та асцендента',
+    city_label: 'Місто народження',
+    city_placeholder: 'Київ, Львів, Одеса...',
+    calculate: 'Розрахувати карту',
+    calculating: 'Розраховую...',
+    new_chart: 'Нова карта',
+    interpret_cta: 'Розкрити інтерпретацію',
+    interpreting: 'Читаю карту...',
+    interpret_footnote: 'Інтерпретацію згенеровано AI. Це не передбачення — це карта твого потенціалу.',
+    premium_cta: 'Premium відкриває всі планети, доми та AI-інтерпретацію',
+    planets_section: 'Планети',
+    free_planets_hint: 'Усі планети доступні в Premium',
+    error_city: 'Місто не знайдено. Перевірте написання.',
+    error_generic: 'Помилка. Спробуйте ще раз.',
+    interpret_error: 'Щось пішло не так. Спробуйте ще раз.',
+    interpret_pay_required: 'AI-інтерпретація доступна за Premium-підпискою.',
+    interpret_pricing: 'Відкрити тарифи',
+    retrograde: 'ретроградний',
+    house: 'дім',
+  },
 } as const;
 
 // Planet display names
-const PLANET_NAMES: Record<string, { ru: string; en: string }> = {
-  Sun: { ru: 'Солнце', en: 'Sun' },
-  Moon: { ru: 'Луна', en: 'Moon' },
-  Mercury: { ru: 'Меркурий', en: 'Mercury' },
-  Venus: { ru: 'Венера', en: 'Venus' },
-  Mars: { ru: 'Марс', en: 'Mars' },
-  Jupiter: { ru: 'Юпитер', en: 'Jupiter' },
-  Saturn: { ru: 'Сатурн', en: 'Saturn' },
-  Uranus: { ru: 'Уран', en: 'Uranus' },
-  Neptune: { ru: 'Нептун', en: 'Neptune' },
-  'North Node': { ru: 'Северный узел', en: 'North Node' },
+const PLANET_NAMES: Record<string, Record<string, string>> = {
+  Sun: { ru: 'Солнце', en: 'Sun', de: 'Sonne', fr: 'Soleil', es: 'Sol', pt: 'Sol', uk: 'Сонце' },
+  Moon: { ru: 'Луна', en: 'Moon', de: 'Mond', fr: 'Lune', es: 'Luna', pt: 'Lua', uk: 'Місяць' },
+  Mercury: { ru: 'Меркурий', en: 'Mercury', de: 'Merkur', fr: 'Mercure', es: 'Mercurio', pt: 'Mercúrio', uk: 'Меркурій' },
+  Venus: { ru: 'Венера', en: 'Venus', de: 'Venus', fr: 'Vénus', es: 'Venus', pt: 'Vénus', uk: 'Венера' },
+  Mars: { ru: 'Марс', en: 'Mars', de: 'Mars', fr: 'Mars', es: 'Marte', pt: 'Marte', uk: 'Марс' },
+  Jupiter: { ru: 'Юпитер', en: 'Jupiter', de: 'Jupiter', fr: 'Jupiter', es: 'Júpiter', pt: 'Júpiter', uk: 'Юпітер' },
+  Saturn: { ru: 'Сатурн', en: 'Saturn', de: 'Saturn', fr: 'Saturne', es: 'Saturno', pt: 'Saturno', uk: 'Сатурн' },
+  Uranus: { ru: 'Уран', en: 'Uranus', de: 'Uranus', fr: 'Uranus', es: 'Urano', pt: 'Urano', uk: 'Уран' },
+  Neptune: { ru: 'Нептун', en: 'Neptune', de: 'Neptun', fr: 'Neptune', es: 'Neptuno', pt: 'Neptuno', uk: 'Нептун' },
+  'North Node': { ru: 'Северный узел', en: 'North Node', de: 'Nordknoten', fr: 'Nœud Nord', es: 'Nodo Norte', pt: 'Nó Norte', uk: 'Північний вузол' },
 };
 
 // ---- Input field helper ----
@@ -294,9 +425,7 @@ function PlanetList({
                 border: '1px solid rgba(212,175,55,0.1)',
               }}
             >
-              <span style={{ color: '#d4af37', fontSize: '16px', minWidth: '20px', textAlign: 'center' }}>
-                {planet.glyph}
-              </span>
+              <PlanetImage planet={planet.name} glyph={planet.glyph} size={36} />
               <div className="flex flex-col min-w-0">
                 <span className="text-xs" style={{ color: 'rgba(201,194,224,0.85)' }}>
                   {name}
@@ -407,7 +536,7 @@ export default function NatalPage() {
       className="min-h-screen px-4 py-12 md:py-16 pb-24"
       style={{ background: 'transparent' }}
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 12 }}
@@ -539,60 +668,90 @@ export default function NatalPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col items-center gap-8"
             >
-              {/* SVG Wheel */}
-              <NatalWheel
-                planets={chart.planets}
-                houses={chart.houses}
-                aspects={chart.aspects}
-                ascendant={chart.ascendant}
-                isPremium={isPremium}
-                birthName={chart.birth_name || undefined}
-                birthDate={chart.birth_date}
-              />
+              {/* Two-column grid: wheel left, info right */}
+              <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 items-start">
 
-              {/* Big 3 cards */}
-              <div className="w-full max-w-2xl">
-                <BigThree
-                  planets={chart.planets}
-                  ascendant={chart.ascendant}
-                  isPremium={isPremium}
-                  locale={locale}
-                />
-              </div>
+                {/* LEFT — natal wheel (fills column) */}
+                <div className="w-full">
+                  <NatalWheel
+                    planets={chart.planets}
+                    houses={chart.houses}
+                    aspects={chart.aspects}
+                    ascendant={chart.ascendant}
+                    isPremium={isPremium}
+                    birthName={chart.birth_name || undefined}
+                    birthDate={chart.birth_date}
+                  />
+                </div>
 
-              {/* Planet list */}
-              <PlanetList
-                planets={chart.planets}
-                isPremium={isPremium}
-                locale={locale}
-              />
+                {/* RIGHT — info panel */}
+                <div className="flex flex-col gap-6">
 
-              {/* Interpretation */}
-              <div className="w-full max-w-2xl">
-                <NatalInterpretationBlock
-                  chartId={chart.id}
-                  initial={chart.interpretation}
-                  isPremium={isPremium}
-                  locale={locale}
-                />
-              </div>
+                  {/* Name / date card */}
+                  <div
+                    className="rounded-2xl px-5 py-4 flex flex-col gap-1"
+                    style={{ background: 'rgba(28,24,64,0.6)', border: '1px solid rgba(212,175,55,0.15)' }}
+                  >
+                    {chart.birth_name && (
+                      <p className="font-serif text-lg" style={{ color: '#d4af37' }}>
+                        {chart.birth_name}
+                      </p>
+                    )}
+                    <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.55)' }}>
+                      {chart.birth_date}
+                      {chart.birth_time ? ` · ${chart.birth_time}` : ''}
+                    </p>
+                    <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.45)' }}>
+                      {chart.birth_city}
+                    </p>
+                    {chart.ascendant !== null && (
+                      <p className="font-sans text-[11px] mt-1" style={{ color: 'rgba(212,175,55,0.6)' }}>
+                        ASC {chart.ascendant.toFixed(1)}°
+                      </p>
+                    )}
+                  </div>
 
-              {/* New chart button */}
-              <motion.button
-                onClick={handleReset}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="mt-4 px-8 py-2.5 rounded-full text-xs tracking-widest uppercase"
-                style={{
-                  border: '1px solid rgba(212,175,55,0.3)',
-                  color: 'rgba(212,175,55,0.7)',
-                  letterSpacing: '0.18em',
-                }}
-              >
-                ↺ {t.new_chart}
-              </motion.button>
+                  {/* Big 3 */}
+                  <BigThree
+                    planets={chart.planets}
+                    ascendant={chart.ascendant}
+                    isPremium={isPremium}
+                    locale={locale}
+                  />
+
+                  {/* Planet list */}
+                  <PlanetList
+                    planets={chart.planets}
+                    isPremium={isPremium}
+                    locale={locale}
+                  />
+
+                  {/* Interpretation */}
+                  <NatalInterpretationBlock
+                    chartId={chart.id}
+                    initial={chart.interpretation}
+                    isPremium={isPremium}
+                    locale={locale}
+                  />
+
+                  {/* New chart button */}
+                  <motion.button
+                    onClick={handleReset}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="px-8 py-2.5 rounded-full text-xs tracking-widest uppercase self-start"
+                    style={{
+                      border: '1px solid rgba(212,175,55,0.3)',
+                      color: 'rgba(212,175,55,0.7)',
+                      letterSpacing: '0.18em',
+                    }}
+                  >
+                    ↺ {t.new_chart}
+                  </motion.button>
+
+                </div>{/* end right panel */}
+              </div>{/* end grid */}
             </motion.div>
           )}
         </AnimatePresence>

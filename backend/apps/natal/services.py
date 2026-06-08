@@ -186,30 +186,41 @@ def _compute_ascendant(lst_deg: float, lat_deg: float, obliquity_deg: float) -> 
     return asc % 360
 
 
-def _whole_sign_houses(ascendant_deg: float) -> list[dict]:
-    """Return 12 whole-sign house cusp dicts."""
-    asc_sign_num = int(ascendant_deg / 30)
+def _equal_houses(ascendant_deg: float) -> list[dict]:
+    """Return 12 equal houses (30° each) starting from the exact Ascendant degree.
+
+    More accurate than Whole Sign: each cusp is at a precise degree rather than
+    the start of a whole sign, so planet house placements feel personal and specific.
+    """
     houses = []
     for i in range(12):
-        sign_num = (asc_sign_num + i) % 12
+        cusp_deg = (ascendant_deg + i * 30) % 360
+        sign_num = int(cusp_deg / 30)
         houses.append({
             "number": i + 1,
             "sign": SIGNS[sign_num],
             "sign_num": sign_num,
-            "abs_pos": float(sign_num * 30),
+            "abs_pos": round(cusp_deg, 4),
             "emoji": SIGN_EMOJIS[sign_num],
         })
     return houses
 
 
 def _planet_house(planet_abs_pos: float, houses: list[dict]) -> int:
-    """Return 1-indexed house number for a planet ecliptic longitude."""
+    """Return 1-indexed house number — handles wrap-around for equal/placidus cusps."""
     if not houses:
         return 0
-    for i in range(len(houses) - 1, -1, -1):
-        if planet_abs_pos >= houses[i]["abs_pos"]:
-            return houses[i]["number"]
-    return houses[-1]["number"]
+    n = len(houses)
+    for i in range(n):
+        cusp = houses[i]["abs_pos"]
+        next_cusp = houses[(i + 1) % n]["abs_pos"]
+        if cusp <= next_cusp:
+            if cusp <= planet_abs_pos < next_cusp:
+                return houses[i]["number"]
+        else:  # wraps around 0°/360°
+            if planet_abs_pos >= cusp or planet_abs_pos < next_cusp:
+                return houses[i]["number"]
+    return 1
 
 
 def _compute_aspects(planets: list[dict]) -> list[dict]:
@@ -348,23 +359,27 @@ def calculate_chart(
         lst_deg = math.degrees(float(obs.sidereal_time())) % 360
         ascendant = round(_compute_ascendant(lst_deg, lat, obliquity), 4)
         if is_premium:
-            houses = _whole_sign_houses(ascendant)
+            houses = _equal_houses(ascendant)
             for p in all_planets:
                 p["house"] = _planet_house(p["abs_pos"], houses)
 
+    # True_Node is kept internally for aspect calculations but never shown in UI.
+    HIDDEN_PLANETS = {"True_Node"}
+
     # --- Filter planets by tier ---
     if is_premium:
-        planets = all_planets
+        planets = [p for p in all_planets if p["name"] not in HIDDEN_PLANETS]
     else:
         # Free tier: Sun, Moon + Ascendant sign (no planets filtered here,
         # caller passes is_premium=False to get only the Big 3)
         planets = [p for p in all_planets if p["name"] in FREE_PLANETS]
         # Ascendant is always included when available (it's just a float, not a planet)
 
-    # --- Aspects (premium only) ---
+    # --- Aspects (premium only, exclude hidden planets) ---
     aspects: list[dict] = []
     if is_premium:
-        aspects = _compute_aspects(all_planets)
+        visible_planets = [p for p in all_planets if p["name"] not in HIDDEN_PLANETS]
+        aspects = _compute_aspects(visible_planets)
 
     return {
         "planets": planets,

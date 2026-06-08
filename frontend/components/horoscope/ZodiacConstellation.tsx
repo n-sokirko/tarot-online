@@ -78,7 +78,7 @@ export default function ZodiacConstellation({
   return (
     <div
       className="relative w-full mx-auto"
-      style={{ maxWidth: 320, height: 180 }}
+      style={{ maxWidth: 320, height: 240 }}
       aria-hidden
     >
       {/* Drifting starfield + constellation */}
@@ -144,18 +144,9 @@ export default function ZodiacConstellation({
         ))}
       </svg>
 
-      {/* Glyph + halo */}
+      {/* Zodiac image — centered, no halo background so screen blend stays clean */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 110,
-            height: 110,
-            background: `radial-gradient(circle, ${accent}33 0%, transparent 68%)`,
-            animation: 'glyph-halo 5s ease-in-out infinite',
-          }}
-        />
-        <ZodiacImage sign={sign} symbol={symbol} size={80} accent={accent} glow />
+        <ZodiacImage sign={sign} symbol={symbol} size={160} accent={accent} glow />
       </div>
     </div>
   );

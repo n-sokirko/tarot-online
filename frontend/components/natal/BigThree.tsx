@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import type { NatalPlanet } from '@/lib/types';
+import PlanetImage from './PlanetImage';
 
 interface BigThreeProps {
   planets: NatalPlanet[];
@@ -10,20 +11,35 @@ interface BigThreeProps {
   locale: 'ru' | 'en';
 }
 
-const PLANET_MEANINGS: Record<string, { ru: string; en: string }> = {
+const PLANET_MEANINGS: Record<string, Record<string, string>> = {
   Sun: {
     ru: 'Ваша суть, воля и жизненная сила',
     en: 'Your core identity and life force',
+    de: 'Dein Wesenskern, Wille und deine Lebenskraft',
+    fr: 'Ton identité profonde et ta force vitale',
+    es: 'Tu esencia, voluntad y fuerza vital',
+    pt: 'A tua essência, vontade e força vital',
+    uk: 'Твоя суть, воля та життєва сила',
   },
   Moon: {
     ru: 'Ваши эмоции, инстинкты и внутренний мир',
     en: 'Your emotions, instincts, and inner world',
+    de: 'Deine Emotionen, Instinkte und innere Welt',
+    fr: 'Tes émotions, instincts et ton monde intérieur',
+    es: 'Tus emociones, instintos y mundo interior',
+    pt: 'As tuas emoções, instintos e mundo interior',
+    uk: 'Твої емоції, інстинкти та внутрішній світ',
   },
 };
 
-const ASC_MEANING = {
+const ASC_MEANING: Record<string, string> = {
   ru: 'Ваша маска для мира и первое впечатление',
   en: 'Your outward mask and first impression',
+  de: 'Deine Maske für die Welt und der erste Eindruck',
+  fr: 'Ton masque face au monde et ta première impression',
+  es: 'Tu máscara ante el mundo y la primera impresión',
+  pt: 'A tua máscara para o mundo e a primeira impressão',
+  uk: 'Твоя маска для світу та перше враження',
 };
 
 const LABELS = {
@@ -45,9 +61,55 @@ const LABELS = {
     upgrade: 'Premium unlocks all 10 planets and houses',
     upgrade_cta: 'Unlock Premium',
   },
+  de: {
+    asc: 'Aszendent',
+    degree: 'Grad',
+    house: 'Haus',
+    retrograde: 'rückläufig',
+    unknown_time: 'Gib die Geburtszeit an, um deinen Aszendenten zu entdecken',
+    upgrade: 'Premium schaltet alle 10 Planeten und Häuser frei',
+    upgrade_cta: 'Premium freischalten',
+  },
+  fr: {
+    asc: 'Ascendant',
+    degree: 'degré',
+    house: 'maison',
+    retrograde: 'rétrograde',
+    unknown_time: 'Ajoute l’heure de naissance pour découvrir ton Ascendant',
+    upgrade: 'Premium débloque les 10 planètes et les maisons',
+    upgrade_cta: 'Débloquer Premium',
+  },
+  es: {
+    asc: 'Ascendente',
+    degree: 'grado',
+    house: 'casa',
+    retrograde: 'retrógrado',
+    unknown_time: 'Añade la hora de nacimiento para descubrir tu Ascendente',
+    upgrade: 'Premium desbloquea los 10 planetas y las casas',
+    upgrade_cta: 'Desbloquear Premium',
+  },
+  pt: {
+    asc: 'Ascendente',
+    degree: 'grau',
+    house: 'casa',
+    retrograde: 'retrógrado',
+    unknown_time: 'Adiciona a hora de nascimento para descobrir o teu Ascendente',
+    upgrade: 'O Premium desbloqueia os 10 planetas e as casas',
+    upgrade_cta: 'Desbloquear Premium',
+  },
+  uk: {
+    asc: 'Асцендент',
+    degree: 'градус',
+    house: 'дім',
+    retrograde: 'ретроградний',
+    unknown_time: 'Додайте час народження, щоб дізнатися Асцендент',
+    upgrade: 'Premium відкриває всі 10 планет і доми',
+    upgrade_cta: 'Відкрити Premium',
+  },
 } as const;
 
 interface CardData {
+  planetKey: string;   // key for PlanetImage ("Sun", "Moon", "Ascendant")
   glyph: string;
   name: string;
   sign: string;
@@ -74,12 +136,9 @@ function PlanetCard({ card, locale, delay }: { card: CardData; locale: 'ru' | 'e
         flex: '1 1 140px',
       }}
     >
-      {/* Planet glyph */}
-      <div
-        className="text-4xl mb-2"
-        style={{ color: '#d4af37', textShadow: '0 0 20px rgba(212,175,55,0.3)' }}
-      >
-        {card.glyph}
+      {/* Planet image */}
+      <div className="mb-2">
+        <PlanetImage planet={card.planetKey} glyph={card.glyph} size={80} glow />
       </div>
 
       {/* Planet name */}
@@ -119,6 +178,7 @@ export default function BigThree({ planets, ascendant, isPremium, locale }: BigT
 
   if (sun) {
     cards.push({
+      planetKey: 'Sun',
       glyph: sun.glyph,
       name: locale === 'ru' ? 'Солнце' : 'Sun',
       sign: sun.sign,
@@ -132,6 +192,7 @@ export default function BigThree({ planets, ascendant, isPremium, locale }: BigT
 
   if (moon) {
     cards.push({
+      planetKey: 'Moon',
       glyph: moon.glyph,
       name: locale === 'ru' ? 'Луна' : 'Moon',
       sign: moon.sign,
@@ -156,6 +217,7 @@ export default function BigThree({ planets, ascendant, isPremium, locale }: BigT
     const ascDegree = (ascendant % 30).toFixed(1);
 
     cards.push({
+      planetKey: 'Ascendant',
       glyph: '↑',
       name: t.asc,
       sign: ascSign,

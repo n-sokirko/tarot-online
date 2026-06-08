@@ -413,7 +413,7 @@ export default function NatalWheel({
   const ascPos = ascendant ?? 0;
 
   return (
-    <div className="relative w-full" style={{ maxWidth: '560px', margin: '0 auto' }}>
+    <div className="relative w-full">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -460,8 +460,8 @@ export default function NatalWheel({
           {/* Ascendant marker */}
           {ascendant !== null && <AscendantMarker ascPos={ascPos} />}
 
-          {/* Center info */}
-          <CenterInfo name={birthName} date={birthDate} />
+          {/* Center — subtle empty circle, no text (shown in side panel) */}
+          <circle cx={CX} cy={CY} r={R_CENTER} fill="rgba(11,11,31,0.85)" stroke="rgba(212,175,55,0.12)" strokeWidth="0.5" />
         </svg>
       </motion.div>
 

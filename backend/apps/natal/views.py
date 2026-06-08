@@ -23,10 +23,12 @@ from services.ai import prompts as ai_prompts
 class NatalChartViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
     """
     POST /api/v1/natal/charts/           — create chart (geocode + calculate)
+    GET  /api/v1/natal/charts/           — list user's saved charts
     GET  /api/v1/natal/charts/{id}/      — retrieve saved chart
     POST /api/v1/natal/charts/{id}/interpret/ — AI interpretation
     """
@@ -35,7 +37,13 @@ class NatalChartViewSet(
     # (used for premium tier gating), but don't require it (AllowAny above).
 
     def get_queryset(self):
-        return NatalChart.objects.select_related("interpretation")
+        qs = NatalChart.objects.select_related("interpretation")
+        if self.action == "list":
+            user = getattr(self.request, "user", None)
+            if user and user.is_authenticated:
+                return qs.filter(user=user).order_by("-created_at")
+            return qs.none()
+        return qs
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -45,7 +53,7 @@ class NatalChartViewSet(
     def get_object(self):
         pk = self.kwargs["pk"]
         try:
-            return self.get_queryset().get(pk=pk)
+            return NatalChart.objects.select_related("interpretation").get(pk=pk)
         except NatalChart.DoesNotExist:
             raise NotFound(detail=f"NatalChart {pk} not found.")
 

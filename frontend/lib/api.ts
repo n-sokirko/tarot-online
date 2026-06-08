@@ -177,6 +177,10 @@ export async function getNatalChart(id: number | string): Promise<NatalChart> {
   return request<NatalChart>(`/api/v1/natal/charts/${id}/`);
 }
 
+export async function listNatalCharts(): Promise<NatalChart[]> {
+  return request<NatalChart[]>(`/api/v1/natal/charts/`);
+}
+
 export async function interpretNatalChart(id: number | string): Promise<NatalInterpretation> {
   return request<NatalInterpretation>(`/api/v1/natal/charts/${id}/interpret/`, {
     method: 'POST',
