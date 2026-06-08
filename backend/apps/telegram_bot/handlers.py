@@ -24,6 +24,21 @@ def _norm_locale(language_code: str | None) -> str:
 
 
 @sync_to_async
+def _store_user_locale(tg_id: int, username: str, first_name: str, locale: str) -> None:
+    """Upsert a TelegramUser with their language so daily pushes match it.
+
+    Called from /start — the main funnel for marketing traffic — so even before a
+    user opens the Mini App we know which language to send their card-of-the-day in.
+    Preserves the daily_push opt-in if the row already exists.
+    """
+    from apps.telegram_bot.models import TelegramUser
+    TelegramUser.objects.update_or_create(
+        tg_id=tg_id,
+        defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
+    )
+
+
+@sync_to_async
 def _link_tg_user(tg_id: int, tg_username: str, tg_first_name: str, user_id: int | None,
                   locale: str = 'ru'):
     from apps.telegram_bot.models import TelegramUser
@@ -85,21 +100,24 @@ def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = 
 
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
-    await _set_daily_push(tg.id, True, tg.username or '', tg.first_name or '',
-                          _norm_locale(tg.language_code))
-    await update.message.reply_text(
-        "🌙 Готово! Каждое утро буду присылать твою карту дня.\n"
-        "Чтобы отписаться — /unsubscribe",
-    )
+    locale = _norm_locale(tg.language_code)
+    await _set_daily_push(tg.id, True, tg.username or '', tg.first_name or '', locale)
+    if locale == 'ru':
+        msg = ("🌙 Готово! Каждое утро буду присылать твою карту дня.\n"
+               "Чтобы отписаться — /unsubscribe")
+    else:
+        msg = ("🌙 Done! I'll send your card of the day every morning.\n"
+               "To stop — /unsubscribe")
+    await update.message.reply_text(msg)
 
 
 async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
-    await _set_daily_push(tg.id, False, tg.username or '', tg.first_name or '',
-                          _norm_locale(tg.language_code))
-    await update.message.reply_text(
-        "Отписал от ежедневных карт 🌙 Вернуться — /subscribe",
-    )
+    locale = _norm_locale(tg.language_code)
+    await _set_daily_push(tg.id, False, tg.username or '', tg.first_name or '', locale)
+    msg = ("Отписал от ежедневных карт 🌙 Вернуться — /subscribe" if locale == 'ru'
+           else "Unsubscribed from daily cards 🌙 Come back — /subscribe")
+    await update.message.reply_text(msg)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args or []
@@ -110,20 +128,38 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await _handle_donate(update, context, args[0][7:])
         return
 
+    tg = update.effective_user
+    locale = _norm_locale(tg.language_code if tg else None)
+    if tg:
+        await _store_user_locale(tg.id, tg.username or '', tg.first_name or '', locale)
+
     webapp_url = getattr(settings, 'WEBAPP_URL', 'https://sokirdon.com')
+
+    if locale == 'ru':
+        btn = "🌙 Открыть расклады"
+        text = (
+            "🌙 *Tarot Online Bot*\n\n"
+            "Нажми кнопку ниже, чтобы открыть расклады прямо в Telegram — "
+            "без регистрации, всё сохраняется в аккаунт автоматически.\n\n"
+            "Здесь также можно оплатить Premium-подписку через Telegram Stars ⭐\n\n"
+            "/status — проверить подписку"
+        )
+    else:
+        btn = "🌙 Open readings"
+        text = (
+            "🌙 *Tarot Online Bot*\n\n"
+            "Tap the button below to open readings right inside Telegram — "
+            "no signup, everything saves to your account automatically.\n\n"
+            "You can also get Premium via Telegram Stars ⭐\n\n"
+            "/status — check your subscription"
+        )
+
     keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton(
-            "🌙 Открыть расклады",
-            web_app=WebAppInfo(url=webapp_url),
-        ),
+        InlineKeyboardButton(btn, web_app=WebAppInfo(url=webapp_url)),
     ]])
 
     await update.message.reply_text(
-        "🌙 *Tarot Online Bot*\n\n"
-        "Нажми кнопку ниже, чтобы открыть расклады прямо в Telegram — "
-        "без регистрации, всё сохраняется в аккаунт автоматически.\n\n"
-        "Здесь также можно оплатить Premium-подписку через Telegram Stars ⭐\n\n"
-        "/status — проверить подписку",
+        text,
         parse_mode='Markdown',
         reply_markup=keyboard,
     )
