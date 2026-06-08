@@ -55,6 +55,15 @@ Thumbs.db
 *.pid
 .docker/
 
+# ---- Celery (runtime beat schedule DB — never commit) ----
+celerybeat-schedule
+celerybeat-schedule.*
+celerybeat.pid
+
+# ---- Marketing autoposter (runtime rotation state) ----
+marketing/.post_index
+marketing/.autopost_state.json
+
 # ---- Cloudflare Tunnel (local credentials — never commit) ----
 cloudflared/credentials.json
 
@@ -65,6 +74,9 @@ cloudflared/credentials.json
 
 # ---- Misc ----
 *.log
+
+# ---- Temp image-processing source files (root) ----
+/[0-9]*.png
 coverage/
 .cypress/
 playwright-report/
