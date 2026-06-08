@@ -38,6 +38,66 @@ const labels = {
     retry: 'Try again',
     hint: 'The more specific the question, the sharper the answer',
   },
+  de: {
+    placeholder:
+      'Was möchtest du die Runen fragen? Beschreibe die Situation, stell eine Frage — die Steine antworten durch die Linse deiner Worte…',
+    cta: 'Runen lesen',
+    loading: 'Die Runen sprechen…',
+    error: 'Etwas ist schiefgelaufen. Versuche es erneut.',
+    payRequired: 'Für die Fortsetzung sind ein Premium-Abo oder Guthaben nötig.',
+    pricing: 'Zu den Tarifen',
+    footnote: 'Deutung von KI erstellt. Ein Rat, kein Urteil.',
+    retry: 'Erneut versuchen',
+    hint: 'Je konkreter die Frage, desto schärfer die Antwort',
+  },
+  fr: {
+    placeholder:
+      'Que veux-tu demander aux runes ? Décris la situation, pose une question — les pierres répondront à travers tes mots…',
+    cta: 'Lire les runes',
+    loading: 'Les runes parlent…',
+    error: 'Une erreur est survenue. Réessaie.',
+    payRequired: 'Un abonnement Premium ou des crédits sont nécessaires pour continuer.',
+    pricing: 'Voir les forfaits',
+    footnote: 'Interprétation générée par IA. Un conseil, pas un verdict.',
+    retry: 'Réessayer',
+    hint: 'Plus la question est précise, plus la réponse est nette',
+  },
+  es: {
+    placeholder:
+      '¿Qué quieres preguntar a las runas? Describe la situación, haz una pregunta — las piedras responderán a través de tus palabras…',
+    cta: 'Leer las runas',
+    loading: 'Las runas hablan…',
+    error: 'Algo salió mal. Inténtalo de nuevo.',
+    payRequired: 'Se necesita una suscripción Premium o créditos para continuar.',
+    pricing: 'Ver planes',
+    footnote: 'Interpretación generada por IA. Un consejo, no un veredicto.',
+    retry: 'Reintentar',
+    hint: 'Cuanto más concreta la pregunta, más nítida la respuesta',
+  },
+  pt: {
+    placeholder:
+      'O que queres perguntar às runas? Descreve a situação, faz uma pergunta — as pedras respondem através das tuas palavras…',
+    cta: 'Ler as runas',
+    loading: 'As runas falam…',
+    error: 'Algo correu mal. Tenta novamente.',
+    payRequired: 'É necessária uma subscrição Premium ou créditos para continuar.',
+    pricing: 'Ver planos',
+    footnote: 'Interpretação gerada por IA. Um conselho, não um veredito.',
+    retry: 'Tentar de novo',
+    hint: 'Quanto mais concreta a pergunta, mais nítida a resposta',
+  },
+  uk: {
+    placeholder:
+      'Що ти хочеш запитати в рун? Опиши ситуацію, постав запитання — камені відповідять крізь призму твоїх слів…',
+    cta: 'Прочитати руни',
+    loading: 'Руни говорять…',
+    error: 'Щось пішло не так. Спробуй ще раз.',
+    payRequired: 'Потрібна Premium-підписка або кредити, щоб продовжити.',
+    pricing: 'Відкрити тарифи',
+    footnote: 'Інтерпретацію згенеровано AI. Це порада, а не вирок.',
+    retry: 'Спробувати знову',
+    hint: 'Чим конкретніше запитання, тим точніша відповідь',
+  },
 } as const;
 
 export default function RuneInterpretationPanel({ castId, locale, initial }: Props) {

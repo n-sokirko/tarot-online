@@ -1,0 +1,109 @@
+{
+  "home": {
+    "title": "Lectura de Tarot en Línea",
+    "subtitle": "Haz tu pregunta y deja que las cartas respondan",
+    "cta": "Comenzar lectura",
+    "description": "Concéntrate en tu pregunta. Baraja el mazo. Deja que las cartas hablen."
+  },
+  "reading": {
+    "question_placeholder": "¿Qué quieres saber?",
+    "shuffle": "Barajar el mazo",
+    "draw": "Sacar cartas",
+    "interpret": "Leer la tirada",
+    "loading": "Las cartas se voltean...",
+    "save": "Guardar esta lectura",
+    "draw_prompt": "El mazo está barajado. Saca tus cartas.",
+    "error": "Algo salió mal. Por favor intenta de nuevo.",
+    "reversed": "Invertida",
+    "choose_spread": "Elige tu tirada",
+    "spread_3_name": "Tres Cartas",
+    "spread_3_desc": "Pasado · Presente · Futuro",
+    "spread_3_cards": "3 cartas",
+    "spread_horseshoe_name": "Herradura",
+    "spread_horseshoe_desc": "Pasado · Presente · Oculto · Obstáculo · Resultado",
+    "spread_horseshoe_cards": "5 cartas",
+    "spread_9_name": "Nueve Cartas",
+    "spread_9_desc": "Análisis completo de la situación",
+    "spread_9_cards": "9 cartas",
+    "spread_celtic_name": "Cruz Celta",
+    "spread_celtic_desc": "Lectura profunda avanzada",
+    "spread_celtic_cards": "10 cartas",
+    "premium_badge": "Premium",
+    "premium_locked": "Solo Premium"
+  },
+  "positions": {
+    "three_card": {
+      "past": "Pasado",
+      "present": "Presente",
+      "future": "Futuro"
+    }
+  },
+  "card": {
+    "reversed": "Invertida",
+    "close": "Cerrar",
+    "position_context": "Posición",
+    "interpret_cta": "Revelar significado en el contexto de tu pregunta",
+    "interpret_soon": "Próximamente"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Por favor intenta de nuevo.",
+    "network": "Sin conexión. Verifica tu red."
+  },
+  "natal": {
+    "title": "Carta Natal",
+    "subtitle": "Un mapa del cielo en el momento de tu nacimiento",
+    "name_label": "Nombre (opcional)",
+    "date_label": "Fecha de nacimiento",
+    "time_label": "Hora de nacimiento (opcional — necesaria para casas y ascendente)",
+    "city_label": "Ciudad de nacimiento",
+    "city_placeholder": "Madrid, Barcelona, México...",
+    "calculate": "Calcular carta",
+    "calculating": "Calculando...",
+    "new_chart": "Nueva carta",
+    "interpret": "Leer la carta",
+    "interpreting": "Leyendo la carta...",
+    "premium_cta": "Premium desbloquea todos los planetas, casas e interpretación IA",
+    "error_city": "Ciudad no encontrada. Verifica la ortografía.",
+    "error_generic": "Algo salió mal. Por favor intenta de nuevo.",
+    "planet_sun": "Sol",
+    "planet_moon": "Luna",
+    "planet_mercury": "Mercurio",
+    "planet_venus": "Venus",
+    "planet_mars": "Marte",
+    "planet_jupiter": "Júpiter",
+    "planet_saturn": "Saturno",
+    "planet_uranus": "Urano",
+    "planet_neptune": "Neptuno",
+    "planet_north_node": "Nodo Norte",
+    "ascendant": "Ascendente",
+    "house": "casa",
+    "retrograde": "retrógrado",
+    "planets_section": "Planetas",
+    "aspects_section": "Aspectos",
+    "free_planets_hint": "Todos los planetas disponibles con Premium",
+    "interpret_footnote": "Interpretación generada por IA. No es una predicción — es un mapa de tu potencial.",
+    "interpret_cta": "Revelar interpretación",
+    "interpret_loading": "La carta se despliega...",
+    "interpret_error": "Algo salió mal. Por favor intenta de nuevo.",
+    "interpret_pay_required": "La interpretación IA está disponible con suscripción Premium.",
+    "interpret_pricing": "Ver precios"
+  },
+  "nav": {
+    "natal": "Natal"
+  },
+  "auth": {
+    "login_title": "Iniciar sesión",
+    "register_title": "Crear cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "display_name": "Tu nombre (opcional)",
+    "login_btn": "Iniciar sesión",
+    "register_btn": "Crear cuenta",
+    "login_link": "¿Ya tienes cuenta? Inicia sesión",
+    "register_link": "¿Sin cuenta? Regístrate",
+    "error_invalid": "Correo o contraseña inválidos.",
+    "error_exists": "Este correo ya está registrado.",
+    "error_generic": "Algo salió mal. Por favor intenta de nuevo.",
+    "or": "o"
+  }
+}

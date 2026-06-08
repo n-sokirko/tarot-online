@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Locale = 'ru' | 'en';
 
@@ -9,10 +10,13 @@ interface LocaleSwitcherProps {
 }
 
 export default function LocaleSwitcher({ currentLocale }: LocaleSwitcherProps) {
+  const router = useRouter();
   const switchTo = useCallback((locale: Locale) => {
     document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;
-    window.location.reload();
-  }, []);
+    // Soft refresh, not window.location.reload(): a hard reload inside the Telegram
+    // Mini App WebView drops the launch hash and wipes WebApp.initData (breaks auto-login).
+    router.refresh();
+  }, [router]);
 
   return (
     <div

@@ -25,6 +25,36 @@ const labels = {
     cta: 'Open pricing',
     login: 'Sign in to continue',
   },
+  de: {
+    title: 'Premium-Funktion',
+    body: 'Verfügbar mit einem Abo oder mit Guthaben.',
+    cta: 'Zu den Tarifen',
+    login: 'Anmelden, um fortzufahren',
+  },
+  fr: {
+    title: 'Fonction Premium',
+    body: 'Disponible avec un abonnement ou des crédits.',
+    cta: 'Voir les forfaits',
+    login: 'Connecte-toi pour continuer',
+  },
+  es: {
+    title: 'Función Premium',
+    body: 'Disponible con suscripción o créditos.',
+    cta: 'Ver planes',
+    login: 'Inicia sesión para continuar',
+  },
+  pt: {
+    title: 'Função Premium',
+    body: 'Disponível com subscrição ou créditos.',
+    cta: 'Ver planos',
+    login: 'Inicia sessão para continuar',
+  },
+  uk: {
+    title: 'Premium-функція',
+    body: 'Доступно за підпискою або з кредитами.',
+    cta: 'Відкрити тарифи',
+    login: 'Увійти, щоб продовжити',
+  },
 } as const;
 
 /**

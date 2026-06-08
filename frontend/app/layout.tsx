@@ -4,11 +4,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
 import { AuthProvider } from '@/lib/auth-context';
+import { SettingsProvider } from '@/lib/settings-context';
 import Navbar from '@/components/layout/Navbar';
 import BottomBar from '@/components/layout/BottomBar';
 import TelegramInit from '@/components/telegram/TelegramInit';
 import RotatingWheel from '@/components/natal/RotatingWheel';
-import type { Locale } from '@/i18n';
+import type { Locale } from '@/lib/i18n-config';
 import './globals.css';
 
 const cormorant = Cormorant_Garamond({
@@ -55,6 +56,7 @@ export default async function RootLayout({
       <body className="min-h-screen bg-midnight text-mist font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
+            <SettingsProvider>
             {/* Initialises Telegram WebApp and auto-logs-in Mini App users */}
             <TelegramInit />
             {/* Site-wide rotating zodiac wheel, fixed behind all content */}
@@ -64,6 +66,7 @@ export default async function RootLayout({
               {children}
             </div>
             <BottomBar />
+            </SettingsProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

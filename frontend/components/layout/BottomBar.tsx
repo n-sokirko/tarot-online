@@ -12,15 +12,50 @@ const LABELS = {
     tarot: 'Таро', runes: 'Руны', natal: 'Карта',
     daily: 'Карта дня', numerology: 'Числа', horoscope: 'Гороскоп',
     journal: 'Дневник',
-    more: 'Ещё', premium: 'Premium',
+    more: 'Ещё', premium: 'Premium', settings: 'Настройки',
     profile: 'Профиль', login: 'Войти',
   },
   en: {
     tarot: 'Tarot', runes: 'Runes', natal: 'Natal',
     daily: 'Card of the day', numerology: 'Numbers', horoscope: 'Horoscope',
     journal: 'Journal',
-    more: 'More', premium: 'Premium',
+    more: 'More', premium: 'Premium', settings: 'Settings',
     profile: 'Profile', login: 'Log in',
+  },
+  de: {
+    tarot: 'Tarot', runes: 'Runen', natal: 'Natal',
+    daily: 'Tageskarte', numerology: 'Zahlen', horoscope: 'Horoskop',
+    journal: 'Tagebuch',
+    more: 'Mehr', premium: 'Premium', settings: 'Einstellungen',
+    profile: 'Profil', login: 'Anmelden',
+  },
+  fr: {
+    tarot: 'Tarot', runes: 'Runes', natal: 'Natal',
+    daily: 'Carte du jour', numerology: 'Nombres', horoscope: 'Horoscope',
+    journal: 'Journal',
+    more: 'Plus', premium: 'Premium', settings: 'Réglages',
+    profile: 'Profil', login: 'Connexion',
+  },
+  es: {
+    tarot: 'Tarot', runes: 'Runas', natal: 'Natal',
+    daily: 'Carta del día', numerology: 'Números', horoscope: 'Horóscopo',
+    journal: 'Diario',
+    more: 'Más', premium: 'Premium', settings: 'Ajustes',
+    profile: 'Perfil', login: 'Entrar',
+  },
+  pt: {
+    tarot: 'Tarô', runes: 'Runas', natal: 'Natal',
+    daily: 'Carta do dia', numerology: 'Números', horoscope: 'Horóscopo',
+    journal: 'Diário',
+    more: 'Mais', premium: 'Premium', settings: 'Definições',
+    profile: 'Perfil', login: 'Entrar',
+  },
+  uk: {
+    tarot: 'Таро', runes: 'Руни', natal: 'Карта',
+    daily: 'Карта дня', numerology: 'Числа', horoscope: 'Гороскоп',
+    journal: 'Щоденник',
+    more: 'Ще', premium: 'Premium', settings: 'Налаштування',
+    profile: 'Профіль', login: 'Увійти',
   },
 } as const;
 
@@ -71,6 +106,12 @@ const JournalIcon = () => (
     <path d="M8 2v20M12 7h4M12 11h4"/>
   </svg>
 );
+const SettingsIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+  </svg>
+);
 const PersonIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
@@ -81,8 +122,8 @@ const PersonIcon = () => (
 export default function BottomBar() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const locale = useLocale() as 'ru' | 'en';
-  const l = LABELS[locale];
+  const locale = useLocale();
+  const l = LABELS[locale as keyof typeof LABELS] ?? LABELS.en;
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement | null>(null);
 
@@ -114,7 +155,8 @@ export default function BottomBar() {
   const isPricing = pathname === '/pricing';
   const isProfile = pathname === '/login' || pathname === '/register' || pathname === '/account';
   const isHistory = pathname?.startsWith('/history') ?? false;
-  const isMoreActive = isDaily || isNumerology || isHistory || isPricing;
+  const isSettings = pathname === '/settings';
+  const isMoreActive = isDaily || isNumerology || isHistory || isPricing || isSettings;
 
   return (
     <nav
@@ -190,6 +232,14 @@ export default function BottomBar() {
               >
                 <JournalIcon />
                 <span className="font-sans text-sm">{l.journal}</span>
+              </Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-3 px-4 py-2.5"
+                style={{ color: isSettings ? activeColor : 'rgba(201,194,224,0.85)' }}
+              >
+                <SettingsIcon />
+                <span className="font-sans text-sm">{l.settings}</span>
               </Link>
               <div style={{ height: 1, background: 'rgba(212,175,55,0.12)', margin: '4px 12px' }} />
               <Link

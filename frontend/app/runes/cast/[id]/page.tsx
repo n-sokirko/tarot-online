@@ -12,6 +12,11 @@ import type { RuneCastResponse } from '@/lib/types';
 const COPY = {
   ru: { loading: 'Руны раскрываются...', back: 'Бросить снова', error: 'Не получилось загрузить бросок.' },
   en: { loading: 'The runes are revealing...', back: 'Cast again', error: 'Failed to load the cast.' },
+  de: { loading: 'Die Runen enthüllen sich...', back: 'Erneut werfen', error: 'Legung konnte nicht geladen werden.' },
+  fr: { loading: 'Les runes se révèlent...', back: 'Tirer à nouveau', error: 'Échec du chargement du tirage.' },
+  es: { loading: 'Las runas se revelan...', back: 'Lanzar de nuevo', error: 'No se pudo cargar la tirada.' },
+  pt: { loading: 'As runas revelam-se...', back: 'Lançar de novo', error: 'Falha ao carregar a tiragem.' },
+  uk: { loading: 'Руни розкриваються...', back: 'Кинути знову', error: 'Не вдалося завантажити кидок.' },
 } as const;
 
 export default function RuneCastPage({ params }: { params: { id: string } }) {

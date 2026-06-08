@@ -42,14 +42,94 @@ const COPY = {
     tier_free: 'Free',
     tier_premium: 'Premium',
   },
+  de: {
+    title: 'Profil',
+    plan: 'Tarif',
+    credits: 'Guthaben',
+    entitlements: 'Verfügbare Funktionen',
+    next_charge: 'Nächste Abbuchung',
+    no_subscription: 'Kein aktives Abo',
+    upgrade: 'Zu den Tarifen',
+    journal: '📓 Lesetagebuch',
+    logout: 'Abmelden',
+    loading: 'Lädt...',
+    none: 'keine',
+    upgrade_success: 'Danke! Das Abo wird innerhalb einer Minute aktiviert.',
+    tier_free: 'Kostenlos',
+    tier_premium: 'Premium',
+  },
+  fr: {
+    title: 'Profil',
+    plan: 'Forfait',
+    credits: 'Crédits',
+    entitlements: 'Fonctions disponibles',
+    next_charge: 'Prochain prélèvement',
+    no_subscription: 'Aucun abonnement actif',
+    upgrade: 'Voir les forfaits',
+    journal: '📓 Journal de tirages',
+    logout: 'Déconnexion',
+    loading: 'Chargement...',
+    none: 'aucune',
+    upgrade_success: 'Merci ! L’abonnement s’active en moins d’une minute.',
+    tier_free: 'Gratuit',
+    tier_premium: 'Premium',
+  },
+  es: {
+    title: 'Perfil',
+    plan: 'Plan',
+    credits: 'Créditos',
+    entitlements: 'Funciones disponibles',
+    next_charge: 'Próximo cobro',
+    no_subscription: 'Sin suscripción activa',
+    upgrade: 'Ver planes',
+    journal: '📓 Diario de tiradas',
+    logout: 'Salir',
+    loading: 'Cargando...',
+    none: 'ninguna',
+    upgrade_success: '¡Gracias! La suscripción se activa en un minuto.',
+    tier_free: 'Gratis',
+    tier_premium: 'Premium',
+  },
+  pt: {
+    title: 'Perfil',
+    plan: 'Plano',
+    credits: 'Créditos',
+    entitlements: 'Funções disponíveis',
+    next_charge: 'Próxima cobrança',
+    no_subscription: 'Sem subscrição ativa',
+    upgrade: 'Ver planos',
+    journal: '📓 Diário de tiragens',
+    logout: 'Sair',
+    loading: 'A carregar...',
+    none: 'nenhuma',
+    upgrade_success: 'Obrigado! A subscrição ativa-se dentro de um minuto.',
+    tier_free: 'Grátis',
+    tier_premium: 'Premium',
+  },
+  uk: {
+    title: 'Профіль',
+    plan: 'Тариф',
+    credits: 'Кредити',
+    entitlements: 'Доступні функції',
+    next_charge: 'Наступне списання',
+    no_subscription: 'Немає активної підписки',
+    upgrade: 'Перейти до тарифів',
+    journal: '📓 Щоденник розкладів',
+    logout: 'Вийти',
+    loading: 'Завантаження...',
+    none: 'немає',
+    upgrade_success: 'Дякуємо! Підписка активується протягом хвилини.',
+    tier_free: 'Безкоштовний',
+    tier_premium: 'Premium',
+  },
 } as const;
 
 export default function AccountPage() {
   const router = useRouter();
   const params = useSearchParams();
   const { user, isLoading, logout } = useAuth();
-  const locale = useLocale() as 'ru' | 'en';
-  const t = COPY[locale];
+  const locale = useLocale();
+  const t = COPY[locale as keyof typeof COPY] ?? COPY.en;
   const [me, setMe] = useState<BillingMe | null>(null);
   const upgradeJustHappened = params.get('upgrade') === 'success';
 

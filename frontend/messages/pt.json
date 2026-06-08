@@ -1,0 +1,109 @@
+{
+  "home": {
+    "title": "Leitura de Tarot Online",
+    "subtitle": "Faça sua pergunta e deixe as cartas responderem",
+    "cta": "Iniciar leitura",
+    "description": "Concentre-se na sua pergunta. Embaralhe o baralho. Deixe as cartas falar."
+  },
+  "reading": {
+    "question_placeholder": "O que você quer saber?",
+    "shuffle": "Embaralhar o baralho",
+    "draw": "Tirar cartas",
+    "interpret": "Ler a tiragem",
+    "loading": "As cartas estão virando...",
+    "save": "Salvar esta leitura",
+    "draw_prompt": "O baralho está embaralhado. Tire suas cartas.",
+    "error": "Algo deu errado. Por favor tente novamente.",
+    "reversed": "Invertida",
+    "choose_spread": "Escolha sua tiragem",
+    "spread_3_name": "Três Cartas",
+    "spread_3_desc": "Passado · Presente · Futuro",
+    "spread_3_cards": "3 cartas",
+    "spread_horseshoe_name": "Ferradura",
+    "spread_horseshoe_desc": "Passado · Presente · Oculto · Obstáculo · Resultado",
+    "spread_horseshoe_cards": "5 cartas",
+    "spread_9_name": "Nove Cartas",
+    "spread_9_desc": "Análise completa da situação",
+    "spread_9_cards": "9 cartas",
+    "spread_celtic_name": "Cruz Celta",
+    "spread_celtic_desc": "Leitura aprofundada avançada",
+    "spread_celtic_cards": "10 cartas",
+    "premium_badge": "Premium",
+    "premium_locked": "Apenas Premium"
+  },
+  "positions": {
+    "three_card": {
+      "past": "Passado",
+      "present": "Presente",
+      "future": "Futuro"
+    }
+  },
+  "card": {
+    "reversed": "Invertida",
+    "close": "Fechar",
+    "position_context": "Posição",
+    "interpret_cta": "Revelar significado no contexto da sua pergunta",
+    "interpret_soon": "Em breve"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Por favor tente novamente.",
+    "network": "Sem conexão. Verifique sua rede."
+  },
+  "natal": {
+    "title": "Mapa Natal",
+    "subtitle": "Um mapa do céu no momento do seu nascimento",
+    "name_label": "Nome (opcional)",
+    "date_label": "Data de nascimento",
+    "time_label": "Hora de nascimento (opcional — necessária para casas e ascendente)",
+    "city_label": "Cidade de nascimento",
+    "city_placeholder": "São Paulo, Rio de Janeiro, Lisboa...",
+    "calculate": "Calcular mapa",
+    "calculating": "Calculando...",
+    "new_chart": "Novo mapa",
+    "interpret": "Ler o mapa",
+    "interpreting": "Lendo o mapa...",
+    "premium_cta": "Premium desbloqueia todos os planetas, casas e interpretação IA",
+    "error_city": "Cidade não encontrada. Verifique a ortografia.",
+    "error_generic": "Algo deu errado. Por favor tente novamente.",
+    "planet_sun": "Sol",
+    "planet_moon": "Lua",
+    "planet_mercury": "Mercúrio",
+    "planet_venus": "Vênus",
+    "planet_mars": "Marte",
+    "planet_jupiter": "Júpiter",
+    "planet_saturn": "Saturno",
+    "planet_uranus": "Urano",
+    "planet_neptune": "Netuno",
+    "planet_north_node": "Nodo Norte",
+    "ascendant": "Ascendente",
+    "house": "casa",
+    "retrograde": "retrógrado",
+    "planets_section": "Planetas",
+    "aspects_section": "Aspectos",
+    "free_planets_hint": "Todos os planetas disponíveis com Premium",
+    "interpret_footnote": "Interpretação gerada por IA. Não é uma previsão — é um mapa do seu potencial.",
+    "interpret_cta": "Revelar interpretação",
+    "interpret_loading": "O mapa se desdobra...",
+    "interpret_error": "Algo deu errado. Por favor tente novamente.",
+    "interpret_pay_required": "A interpretação IA está disponível com assinatura Premium.",
+    "interpret_pricing": "Ver preços"
+  },
+  "nav": {
+    "natal": "Natal"
+  },
+  "auth": {
+    "login_title": "Entrar",
+    "register_title": "Criar conta",
+    "email": "E-mail",
+    "password": "Senha",
+    "display_name": "Seu nome (opcional)",
+    "login_btn": "Entrar",
+    "register_btn": "Criar conta",
+    "login_link": "Já tem conta? Entre",
+    "register_link": "Sem conta? Cadastre-se",
+    "error_invalid": "E-mail ou senha inválidos.",
+    "error_exists": "Este e-mail já está cadastrado.",
+    "error_generic": "Algo deu errado. Por favor tente novamente.",
+    "or": "ou"
+  }
+}

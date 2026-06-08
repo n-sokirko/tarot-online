@@ -1,0 +1,109 @@
+{
+  "home": {
+    "title": "Tirage de Tarot en Ligne",
+    "subtitle": "Posez votre question et laissez les cartes répondre",
+    "cta": "Commencer le tirage",
+    "description": "Concentrez-vous sur votre question. Mélangez le jeu. Laissez les cartes parler."
+  },
+  "reading": {
+    "question_placeholder": "Que voulez-vous savoir ?",
+    "shuffle": "Mélanger le jeu",
+    "draw": "Tirer les cartes",
+    "interpret": "Lire le tirage",
+    "loading": "Les cartes se retournent...",
+    "save": "Sauvegarder ce tirage",
+    "draw_prompt": "Le jeu est mélangé. Tirez vos cartes.",
+    "error": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "reversed": "Renversée",
+    "choose_spread": "Choisissez votre tirage",
+    "spread_3_name": "Trois Cartes",
+    "spread_3_desc": "Passé · Présent · Futur",
+    "spread_3_cards": "3 cartes",
+    "spread_horseshoe_name": "Fer à Cheval",
+    "spread_horseshoe_desc": "Passé · Présent · Caché · Obstacle · Résultat",
+    "spread_horseshoe_cards": "5 cartes",
+    "spread_9_name": "Neuf Cartes",
+    "spread_9_desc": "Analyse complète de la situation",
+    "spread_9_cards": "9 cartes",
+    "spread_celtic_name": "Croix Celtique",
+    "spread_celtic_desc": "Lecture approfondie avancée",
+    "spread_celtic_cards": "10 cartes",
+    "premium_badge": "Premium",
+    "premium_locked": "Premium uniquement"
+  },
+  "positions": {
+    "three_card": {
+      "past": "Passé",
+      "present": "Présent",
+      "future": "Futur"
+    }
+  },
+  "card": {
+    "reversed": "Renversée",
+    "close": "Fermer",
+    "position_context": "Position",
+    "interpret_cta": "Révéler la signification dans le contexte de votre question",
+    "interpret_soon": "Bientôt disponible"
+  },
+  "errors": {
+    "generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "network": "Pas de connexion. Vérifiez votre réseau."
+  },
+  "natal": {
+    "title": "Thème Natal",
+    "subtitle": "Une carte du ciel au moment de votre naissance",
+    "name_label": "Nom (optionnel)",
+    "date_label": "Date de naissance",
+    "time_label": "Heure de naissance (optionnel — nécessaire pour les maisons)",
+    "city_label": "Ville de naissance",
+    "city_placeholder": "Paris, Lyon, Marseille...",
+    "calculate": "Calculer le thème",
+    "calculating": "Calcul en cours...",
+    "new_chart": "Nouveau thème",
+    "interpret": "Lire le thème",
+    "interpreting": "Lecture du thème...",
+    "premium_cta": "Premium débloque toutes les planètes, maisons et interprétation IA",
+    "error_city": "Ville introuvable. Vérifiez l'orthographe.",
+    "error_generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "planet_sun": "Soleil",
+    "planet_moon": "Lune",
+    "planet_mercury": "Mercure",
+    "planet_venus": "Vénus",
+    "planet_mars": "Mars",
+    "planet_jupiter": "Jupiter",
+    "planet_saturn": "Saturne",
+    "planet_uranus": "Uranus",
+    "planet_neptune": "Neptune",
+    "planet_north_node": "Nœud Nord",
+    "ascendant": "Ascendant",
+    "house": "maison",
+    "retrograde": "rétrograde",
+    "planets_section": "Planètes",
+    "aspects_section": "Aspects",
+    "free_planets_hint": "Toutes les planètes disponibles avec Premium",
+    "interpret_footnote": "Interprétation générée par IA. Pas une prédiction — une carte de votre potentiel.",
+    "interpret_cta": "Révéler l'interprétation",
+    "interpret_loading": "Le thème se dévoile...",
+    "interpret_error": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "interpret_pay_required": "L'interprétation IA est disponible avec un abonnement Premium.",
+    "interpret_pricing": "Voir les tarifs"
+  },
+  "nav": {
+    "natal": "Natal"
+  },
+  "auth": {
+    "login_title": "Se connecter",
+    "register_title": "Créer un compte",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "display_name": "Votre nom (optionnel)",
+    "login_btn": "Se connecter",
+    "register_btn": "Créer un compte",
+    "login_link": "Déjà un compte ? Se connecter",
+    "register_link": "Pas de compte ? S'inscrire",
+    "error_invalid": "E-mail ou mot de passe invalide.",
+    "error_exists": "Cet e-mail est déjà enregistré.",
+    "error_generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "or": "ou"
+  }
+}

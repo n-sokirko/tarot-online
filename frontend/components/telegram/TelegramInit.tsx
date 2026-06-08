@@ -50,6 +50,15 @@ export default function TelegramInit() {
       if (ran.current) return;
       ran.current = true;
 
+      // Auto-detect language from Telegram user profile (only on first visit).
+      const hasCookie = document.cookie.includes('NEXT_LOCALE=');
+      if (!hasCookie) {
+        const unsafe = tg.initDataUnsafe as { user?: { language_code?: string } };
+        const tgLang = unsafe?.user?.language_code ?? '';
+        const locale = tgLang.startsWith('ru') ? 'ru' : 'en';
+        document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+      }
+
       // Tell Telegram the app is ready (hides the native loading spinner)
       tg.ready();
       // Expand to full available height

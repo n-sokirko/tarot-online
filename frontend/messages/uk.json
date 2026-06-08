@@ -1,0 +1,109 @@
+{
+  "home": {
+    "title": "Онлайн Розклад Таро",
+    "subtitle": "Постав своє запитання і дай картам відповісти",
+    "cta": "Почати розклад",
+    "description": "Зосередься на своєму запитанні. Перемішай колоду. Дай картам говорити."
+  },
+  "reading": {
+    "question_placeholder": "Що ти хочеш дізнатися?",
+    "shuffle": "Перемішати колоду",
+    "draw": "Витягнути карти",
+    "interpret": "Прочитати розклад",
+    "loading": "Карти перевертаються...",
+    "save": "Зберегти цей розклад",
+    "draw_prompt": "Колода перемішана. Витягни свої карти.",
+    "error": "Щось пішло не так. Спробуй ще раз.",
+    "reversed": "Перевернута",
+    "choose_spread": "Вибери свій розклад",
+    "spread_3_name": "Три Карти",
+    "spread_3_desc": "Минуле · Теперішнє · Майбутнє",
+    "spread_3_cards": "3 карти",
+    "spread_horseshoe_name": "Підкова",
+    "spread_horseshoe_desc": "Минуле · Теперішнє · Приховане · Перешкода · Результат",
+    "spread_horseshoe_cards": "5 карт",
+    "spread_9_name": "Дев'ять Карт",
+    "spread_9_desc": "Повний аналіз ситуації",
+    "spread_9_cards": "9 карт",
+    "spread_celtic_name": "Кельтський Хрест",
+    "spread_celtic_desc": "Поглиблений розклад",
+    "spread_celtic_cards": "10 карт",
+    "premium_badge": "Преміум",
+    "premium_locked": "Тільки Преміум"
+  },
+  "positions": {
+    "three_card": {
+      "past": "Минуле",
+      "present": "Теперішнє",
+      "future": "Майбутнє"
+    }
+  },
+  "card": {
+    "reversed": "Перевернута",
+    "close": "Закрити",
+    "position_context": "Позиція",
+    "interpret_cta": "Розкрити значення в контексті твого запитання",
+    "interpret_soon": "Незабаром"
+  },
+  "errors": {
+    "generic": "Щось пішло не так. Спробуй ще раз.",
+    "network": "Немає з'єднання. Перевір мережу."
+  },
+  "natal": {
+    "title": "Натальна Карта",
+    "subtitle": "Карта неба в момент твого народження",
+    "name_label": "Ім'я (необов'язково)",
+    "date_label": "Дата народження",
+    "time_label": "Час народження (необов'язково — потрібен для будинків і асцендента)",
+    "city_label": "Місто народження",
+    "city_placeholder": "Київ, Харків, Львів...",
+    "calculate": "Розрахувати карту",
+    "calculating": "Розраховую...",
+    "new_chart": "Нова карта",
+    "interpret": "Прочитати карту",
+    "interpreting": "Читаю карту...",
+    "premium_cta": "Преміум відкриває всі планети, будинки та AI-інтерпретацію",
+    "error_city": "Місто не знайдено. Перевір написання.",
+    "error_generic": "Щось пішло не так. Спробуй ще раз.",
+    "planet_sun": "Сонце",
+    "planet_moon": "Місяць",
+    "planet_mercury": "Меркурій",
+    "planet_venus": "Венера",
+    "planet_mars": "Марс",
+    "planet_jupiter": "Юпітер",
+    "planet_saturn": "Сатурн",
+    "planet_uranus": "Уран",
+    "planet_neptune": "Нептун",
+    "planet_north_node": "Північний вузол",
+    "ascendant": "Асцендент",
+    "house": "будинок",
+    "retrograde": "ретроградний",
+    "planets_section": "Планети",
+    "aspects_section": "Аспекти",
+    "free_planets_hint": "Всі планети доступні в Преміум",
+    "interpret_footnote": "Інтерпретація згенерована AI. Це не передбачення — це карта твого потенціалу.",
+    "interpret_cta": "Розкрити інтерпретацію",
+    "interpret_loading": "Карта розгортається...",
+    "interpret_error": "Щось пішло не так. Спробуй ще раз.",
+    "interpret_pay_required": "AI-інтерпретація доступна за Преміум-підпискою.",
+    "interpret_pricing": "Відкрити тарифи"
+  },
+  "nav": {
+    "natal": "Натальна"
+  },
+  "auth": {
+    "login_title": "Увійти",
+    "register_title": "Створити акаунт",
+    "email": "Email",
+    "password": "Пароль",
+    "display_name": "Твоє ім'я (необов'язково)",
+    "login_btn": "Увійти",
+    "register_btn": "Створити акаунт",
+    "login_link": "Вже є акаунт? Увійти",
+    "register_link": "Немає акаунту? Зареєструватись",
+    "error_invalid": "Невірний email або пароль.",
+    "error_exists": "Цей email вже зареєстрований.",
+    "error_generic": "Щось пішло не так. Спробуй ще раз.",
+    "or": "або"
+  }
+}

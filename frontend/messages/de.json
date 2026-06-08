@@ -1,0 +1,109 @@
+{
+  "home": {
+    "title": "Online Tarot-Legung",
+    "subtitle": "Stelle deine Frage und lass die Karten antworten",
+    "cta": "Legung beginnen",
+    "description": "Konzentriere dich auf deine Frage. Mische das Deck. Lass die Karten sprechen."
+  },
+  "reading": {
+    "question_placeholder": "Was möchtest du wissen?",
+    "shuffle": "Deck mischen",
+    "draw": "Karten ziehen",
+    "interpret": "Legung lesen",
+    "loading": "Die Karten wenden sich...",
+    "save": "Legung speichern",
+    "draw_prompt": "Das Deck ist gemischt. Ziehe deine Karten.",
+    "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "reversed": "Umgekehrt",
+    "choose_spread": "Wähle deine Legung",
+    "spread_3_name": "Drei Karten",
+    "spread_3_desc": "Vergangenheit · Gegenwart · Zukunft",
+    "spread_3_cards": "3 Karten",
+    "spread_horseshoe_name": "Hufeisen",
+    "spread_horseshoe_desc": "Vergangenheit · Gegenwart · Verborgen · Hindernis · Ergebnis",
+    "spread_horseshoe_cards": "5 Karten",
+    "spread_9_name": "Neun Karten",
+    "spread_9_desc": "Vollständige Situationsanalyse",
+    "spread_9_cards": "9 Karten",
+    "spread_celtic_name": "Keltisches Kreuz",
+    "spread_celtic_desc": "Fortgeschrittene Tiefenlegung",
+    "spread_celtic_cards": "10 Karten",
+    "premium_badge": "Premium",
+    "premium_locked": "Nur Premium"
+  },
+  "positions": {
+    "three_card": {
+      "past": "Vergangenheit",
+      "present": "Gegenwart",
+      "future": "Zukunft"
+    }
+  },
+  "card": {
+    "reversed": "Umgekehrt",
+    "close": "Schließen",
+    "position_context": "Position",
+    "interpret_cta": "Bedeutung im Kontext deiner Frage enthüllen",
+    "interpret_soon": "Demnächst"
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "network": "Keine Verbindung. Überprüfe dein Netzwerk."
+  },
+  "natal": {
+    "title": "Geburtshoroskop",
+    "subtitle": "Eine Himmelskarte zum Zeitpunkt deiner Geburt",
+    "name_label": "Name (optional)",
+    "date_label": "Geburtsdatum",
+    "time_label": "Geburtszeit (optional — benötigt für Häuser & Aszendent)",
+    "city_label": "Geburtsort",
+    "city_placeholder": "Berlin, München, Wien...",
+    "calculate": "Horoskop berechnen",
+    "calculating": "Berechne...",
+    "new_chart": "Neues Horoskop",
+    "interpret": "Horoskop lesen",
+    "interpreting": "Lese das Horoskop...",
+    "premium_cta": "Premium schaltet alle Planeten, Häuser und KI-Interpretation frei",
+    "error_city": "Stadt nicht gefunden. Überprüfe die Schreibweise.",
+    "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "planet_sun": "Sonne",
+    "planet_moon": "Mond",
+    "planet_mercury": "Merkur",
+    "planet_venus": "Venus",
+    "planet_mars": "Mars",
+    "planet_jupiter": "Jupiter",
+    "planet_saturn": "Saturn",
+    "planet_uranus": "Uranus",
+    "planet_neptune": "Neptun",
+    "planet_north_node": "Nordknoten",
+    "ascendant": "Aszendent",
+    "house": "Haus",
+    "retrograde": "rückläufig",
+    "planets_section": "Planeten",
+    "aspects_section": "Aspekte",
+    "free_planets_hint": "Alle Planeten mit Premium verfügbar",
+    "interpret_footnote": "Interpretation von KI erstellt. Keine Vorhersage — eine Karte deines Potenzials.",
+    "interpret_cta": "Interpretation enthüllen",
+    "interpret_loading": "Das Horoskop entfaltet sich...",
+    "interpret_error": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "interpret_pay_required": "KI-Interpretation ist mit Premium-Abonnement verfügbar.",
+    "interpret_pricing": "Preise öffnen"
+  },
+  "nav": {
+    "natal": "Geburt"
+  },
+  "auth": {
+    "login_title": "Anmelden",
+    "register_title": "Konto erstellen",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "display_name": "Dein Name (optional)",
+    "login_btn": "Anmelden",
+    "register_btn": "Konto erstellen",
+    "login_link": "Bereits ein Konto? Anmelden",
+    "register_link": "Kein Konto? Registrieren",
+    "error_invalid": "Ungültige E-Mail oder Passwort.",
+    "error_exists": "Diese E-Mail ist bereits registriert.",
+    "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "or": "oder"
+  }
+}
