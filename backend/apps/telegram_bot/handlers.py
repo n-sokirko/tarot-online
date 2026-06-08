@@ -18,10 +18,16 @@ def _get_plan(slug: str):
     return Plan.objects.get(slug=slug, is_active=True, tg_stars_price__gt=0)
 
 
+def _norm_locale(language_code: str | None) -> str:
+    """Card content exists in ru/en only — normalise a Telegram language code."""
+    return 'ru' if str(language_code or '').startswith('ru') else 'en'
+
+
 @sync_to_async
-def _link_tg_user(tg_id: int, tg_username: str, tg_first_name: str, user_id: int | None):
+def _link_tg_user(tg_id: int, tg_username: str, tg_first_name: str, user_id: int | None,
+                  locale: str = 'ru'):
     from apps.telegram_bot.models import TelegramUser
-    defaults = {'tg_username': tg_username, 'tg_first_name': tg_first_name}
+    defaults = {'tg_username': tg_username, 'tg_first_name': tg_first_name, 'locale': locale}
     if user_id is not None:
         from django.contrib.auth import get_user_model
         try:
@@ -62,14 +68,16 @@ def _get_status(tg_id: int) -> str:
 
 
 @sync_to_async
-def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = '') -> None:
+def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = '',
+                    locale: str = 'ru') -> None:
     from apps.telegram_bot.models import TelegramUser
     obj, _ = TelegramUser.objects.get_or_create(
         tg_id=tg_id,
-        defaults={'tg_username': username, 'tg_first_name': first_name},
+        defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
     )
     obj.daily_push = on
-    obj.save(update_fields=['daily_push'])
+    obj.locale = locale
+    obj.save(update_fields=['daily_push', 'locale'])
 
 
 # ── Handlers ───────────────────────────────────────────────────────────────────
@@ -77,7 +85,8 @@ def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = 
 
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
-    await _set_daily_push(tg.id, True, tg.username or '', tg.first_name or '')
+    await _set_daily_push(tg.id, True, tg.username or '', tg.first_name or '',
+                          _norm_locale(tg.language_code))
     await update.message.reply_text(
         "🌙 Готово! Каждое утро буду присылать твою карту дня.\n"
         "Чтобы отписаться — /unsubscribe",
@@ -86,7 +95,8 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
-    await _set_daily_push(tg.id, False)
+    await _set_daily_push(tg.id, False, tg.username or '', tg.first_name or '',
+                          _norm_locale(tg.language_code))
     await update.message.reply_text(
         "Отписал от ежедневных карт 🌙 Вернуться — /subscribe",
     )
@@ -157,7 +167,8 @@ async def _handle_buy(update: Update, context: ContextTypes.DEFAULT_TYPE, token:
         return
 
     tg = update.effective_user
-    await _link_tg_user(tg.id, tg.username or '', tg.first_name or '', user_id)
+    await _link_tg_user(tg.id, tg.username or '', tg.first_name or '', user_id,
+                        _norm_locale(tg.language_code))
 
     # Store for pre_checkout / successful_payment
     context.chat_data['pending'] = {'user_id': user_id, 'plan_slug': plan_slug}
@@ -187,7 +198,8 @@ async def _handle_donate(update: Update, context: ContextTypes.DEFAULT_TYPE, raw
         return
 
     tg = update.effective_user
-    await _link_tg_user(tg.id, tg.username or '', tg.first_name or '', None)
+    await _link_tg_user(tg.id, tg.username or '', tg.first_name or '', None,
+                        _norm_locale(tg.language_code))
 
     await update.message.reply_invoice(
         title='✨ Поддержать Tarot Online',

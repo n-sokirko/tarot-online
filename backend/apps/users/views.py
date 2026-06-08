@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+import time
 import urllib.parse
 
 from django.conf import settings
@@ -12,6 +13,10 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from apps.users.models import User
 from apps.users.serializers import RegisterSerializer, UserSerializer
+
+# How long a Telegram initData string stays valid after auth_date. Telegram
+# recommends rejecting stale data to prevent replay of a captured initData.
+TELEGRAM_INIT_DATA_TTL = 24 * 60 * 60  # 24 hours
 
 
 def _verify_telegram_init_data(init_data: str) -> dict | None:
@@ -47,6 +52,15 @@ def _verify_telegram_init_data(init_data: str) -> dict | None:
     ).hexdigest()
 
     if not hmac.compare_digest(expected_hash, received_hash):
+        return None
+
+    # Reject stale initData (replay protection). A valid HMAC only proves the
+    # data was once issued by Telegram — not that it is recent.
+    try:
+        auth_date = int(params.get('auth_date', '0'))
+    except (TypeError, ValueError):
+        return None
+    if auth_date <= 0 or (time.time() - auth_date) > TELEGRAM_INIT_DATA_TTL:
         return None
 
     user_str = params.get('user')
@@ -178,12 +192,14 @@ class TelegramWebAppAuthView(APIView):
 
         first_name = tg_user.get('first_name', '')
         username = tg_user.get('username', '')
+        # Card content exists in ru/en only — normalise the Telegram language code.
+        locale = 'ru' if str(tg_user.get('language_code', '')).startswith('ru') else 'en'
 
         from apps.telegram_bot.models import TelegramUser
 
         tg_profile, _ = TelegramUser.objects.get_or_create(
             tg_id=tg_id,
-            defaults={'tg_username': username, 'tg_first_name': first_name},
+            defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
         )
 
         # Keep profile fields fresh
@@ -194,6 +210,9 @@ class TelegramWebAppAuthView(APIView):
         if tg_profile.tg_first_name != first_name:
             tg_profile.tg_first_name = first_name
             update_fields.append('tg_first_name')
+        if tg_profile.locale != locale:
+            tg_profile.locale = locale
+            update_fields.append('locale')
         if update_fields:
             tg_profile.save(update_fields=update_fields)
 

@@ -23,10 +23,11 @@ User = get_user_model()
 BOT_TOKEN = 'test_bot_token_1234567890:AAABBBCCC'
 
 
-def _make_init_data(tg_user_dict: dict, bot_token: str = BOT_TOKEN) -> str:
+def _make_init_data(tg_user_dict: dict, bot_token: str = BOT_TOKEN, auth_date: int | None = None) -> str:
     """Build a valid Telegram initData string (signs with the given token)."""
     user_json = json.dumps(tg_user_dict, separators=(',', ':'))
-    auth_date = int(time.time())
+    if auth_date is None:
+        auth_date = int(time.time())
 
     params = {
         'auth_date': str(auth_date),
@@ -98,6 +99,15 @@ class TestTelegramWebAppAuth:
         # Should not create duplicate users or profiles
         assert TelegramUser.objects.filter(tg_id=99).count() == 1
         assert User.objects.filter(email='tg_99@telegram.local').count() == 1
+
+    def test_stale_initdata_returns_400(self, api, settings_with_bot_token):
+        """initData older than the TTL must be rejected (replay protection)."""
+        tg_user = {'id': 55, 'first_name': 'Stale'}
+        # auth_date 25h in the past — beyond the 24h TTL
+        init_data = _make_init_data(tg_user, auth_date=int(time.time()) - 25 * 60 * 60)
+        resp = api.post(self.URL, {'init_data': init_data}, format='json')
+        assert resp.status_code == 400
+        assert TelegramUser.objects.filter(tg_id=55).count() == 0
 
     def test_telegram_not_configured_returns_503(self, api, settings):
         settings.TELEGRAM_BOT_TOKEN = ''

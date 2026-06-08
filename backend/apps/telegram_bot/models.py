@@ -14,6 +14,8 @@ class TelegramUser(models.Model):
     tg_id = models.BigIntegerField(unique=True)
     tg_username = models.CharField(max_length=64, blank=True)
     tg_first_name = models.CharField(max_length=64, blank=True)
+    # Telegram client language (from user.language_code), used to localise pushes.
+    locale = models.CharField(max_length=8, default='ru')
     # Opt-in to the daily "card of the day" push (toggled via /subscribe).
     daily_push = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
