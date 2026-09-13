@@ -8,8 +8,11 @@ from telegram import (
     MenuButtonWebApp,
     WebAppInfo,
 )
+from telegram import Update
 from telegram.ext import (
     Application,
+    CallbackQueryHandler,
+    ChatMemberHandler,
     CommandHandler,
     MessageHandler,
     PreCheckoutQueryHandler,
@@ -34,6 +37,8 @@ async def _post_init(app: Application) -> None:
         await app.bot.set_my_commands(
             commands=[
                 BotCommand('start', '🌙 Открыть меню'),
+                BotCommand('birthday', '🎂 Дата рождения · гороскоп'),
+                BotCommand('contest', '🎁 Конкурс — выиграй Premium'),
                 BotCommand('status', '⭐ Моя подписка'),
             ],
             scope=BotCommandScopeAllPrivateChats(),
@@ -71,6 +76,8 @@ def create_application() -> Application:
     app = builder.build()
 
     from apps.telegram_bot.handlers import (
+        birthday_command,
+        handle_text,
         pre_checkout_query,
         start,
         status_command,
@@ -79,11 +86,34 @@ def create_application() -> Application:
         unsubscribe,
     )
 
+    from apps.telegram_bot.gate import gate_recheck_callback
+    from apps.contest.handlers import (
+        contest_command, contest_top_command, contest_top_callback, on_chat_member,
+    )
+
     app.add_handler(CommandHandler('start', start))
     app.add_handler(CommandHandler('status', status_command))
     app.add_handler(CommandHandler('subscribe', subscribe))
     app.add_handler(CommandHandler('unsubscribe', unsubscribe))
+    app.add_handler(CommandHandler('birthday', birthday_command))
+    app.add_handler(CommandHandler('contest', contest_command))
+    app.add_handler(CommandHandler('contest_top', contest_top_command))
     app.add_handler(PreCheckoutQueryHandler(pre_checkout_query))
     app.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, successful_payment))
+    # "I subscribed" recheck button on the channel-subscription gate.
+    app.add_handler(CallbackQueryHandler(gate_recheck_callback, pattern=r'^gate:check$'))
+    app.add_handler(CallbackQueryHandler(contest_top_callback, pattern=r'^contest:top$'))
+    # Channel member updates — tally contest invites.
+    app.add_handler(ChatMemberHandler(on_chat_member, ChatMemberHandler.CHAT_MEMBER))
+    # Plain text — only reacts while awaiting a birth date (see handle_text).
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 
     return app
+
+
+# The polling loop needs to subscribe to chat_member updates explicitly — they're
+# off by default. Used by run_bot.py.
+BOT_ALLOWED_UPDATES = [
+    Update.MESSAGE, Update.CALLBACK_QUERY, Update.PRE_CHECKOUT_QUERY,
+    Update.CHAT_MEMBER, Update.MY_CHAT_MEMBER,
+]

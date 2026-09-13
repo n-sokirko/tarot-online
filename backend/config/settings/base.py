@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.natal',
     'apps.numerology',
     'apps.horoscope',
+    'apps.contest',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +131,10 @@ GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
 
 # Anthropic
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+# Optional relay (e.g. Cloudflare AI Gateway) for regions where api.anthropic.com is geo-blocked.
+ANTHROPIC_BASE_URL = config('ANTHROPIC_BASE_URL', default='')
+# If the relay enforces its own auth (e.g. CF "Authenticated Gateway"), supply the bearer token here.
+ANTHROPIC_GATEWAY_AUTH = config('ANTHROPIC_GATEWAY_AUTH', default='')
 ANTHROPIC_MODEL_FREE = config('ANTHROPIC_MODEL_FREE', default='claude-haiku-4-5-20251001')
 ANTHROPIC_MODEL_PREMIUM = config('ANTHROPIC_MODEL_PREMIUM', default='claude-sonnet-4-6')
 ANTHROPIC_MODEL_DEEP = config('ANTHROPIC_MODEL_DEEP', default='claude-opus-4-7')
@@ -155,6 +160,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', default='')
 TELEGRAM_BOT_USERNAME = config('TELEGRAM_BOT_USERNAME', default='tarott_online_bot')
 TELEGRAM_PAYMENT_SECRET = config('TELEGRAM_PAYMENT_SECRET', default='change-me-in-production')
+# Channel users must be subscribed to in order to use the bot. Bot must be an
+# admin in this channel for getChatMember to work. Set to empty to disable gate.
+TELEGRAM_REQUIRED_CHANNEL = config('TELEGRAM_REQUIRED_CHANNEL', default='@tarro_bot_group')
+TELEGRAM_REQUIRED_CHANNEL_URL = config(
+    'TELEGRAM_REQUIRED_CHANNEL_URL', default='https://t.me/tarro_bot_group')
 
 # Telegram Mini App (Web App)
 WEBAPP_URL = config('WEBAPP_URL', default='https://sokirdon.com')
@@ -170,6 +180,10 @@ CELERY_BEAT_SCHEDULE = {
     'daily-card-push': {
         'task': 'apps.telegram_bot.tasks.send_daily_push',
         'schedule': crontab(hour=8, minute=0),
+    },
+    'daily-horoscope-push': {
+        'task': 'apps.telegram_bot.tasks.send_daily_horoscope',
+        'schedule': crontab(hour=9, minute=0),
     },
 }
 

@@ -1,4 +1,5 @@
-"""Telegram bot handlers: /start, /status, invoice flow, successful_payment."""
+"""Telegram bot handlers: /start, /status, /birthday, invoice flow, successful_payment."""
+import datetime
 import logging
 
 from asgiref.sync import sync_to_async
@@ -6,6 +7,9 @@ from django.conf import settings
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, LabeledPrice, Update, WebAppInfo
 from telegram.ext import ContextTypes
 
+from apps.telegram_bot.birth import natal_birth_date as _natal_birth_date
+from apps.telegram_bot.dates import parse_birth_date as _parse_birth_date
+from apps.telegram_bot.gate import requires_channel_sub
 from apps.telegram_bot.tokens import validate_payment_token
 
 log = logging.getLogger(__name__)
@@ -24,18 +28,54 @@ def _norm_locale(language_code: str | None) -> str:
 
 
 @sync_to_async
-def _store_user_locale(tg_id: int, username: str, first_name: str, locale: str) -> None:
+def _store_user_locale(tg_id: int, username: str, first_name: str, locale: str) -> bool:
     """Upsert a TelegramUser with their language so daily pushes match it.
 
     Called from /start — the main funnel for marketing traffic — so even before a
     user opens the Mini App we know which language to send their card-of-the-day in.
     Preserves the daily_push opt-in if the row already exists.
+    Returns True if the user's birth date is already known (for the /start hint).
     """
     from apps.telegram_bot.models import TelegramUser
-    TelegramUser.objects.update_or_create(
+    obj, _ = TelegramUser.objects.update_or_create(
         tg_id=tg_id,
         defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
     )
+    return obj.birth_date is not None
+
+
+@sync_to_async
+def _get_birth_date(tg_id: int) -> datetime.date | None:
+    """Known birth date — from the stored field, else the user's natal chart
+    (cached back onto the row), else None."""
+    from apps.telegram_bot.models import TelegramUser
+    try:
+        u = TelegramUser.objects.select_related('user').get(tg_id=tg_id)
+    except TelegramUser.DoesNotExist:
+        return None
+    if u.birth_date:
+        return u.birth_date
+    bd = _natal_birth_date(u)
+    if bd:
+        u.birth_date = bd
+        u.save(update_fields=['birth_date'])
+    return bd
+
+
+@sync_to_async
+def _save_birth_date(tg_id: int, birth_date: datetime.date, username: str = '',
+                     first_name: str = '', locale: str = 'ru') -> None:
+    """Store the birth date and opt the user into the morning push (setting a
+    birthday is strong intent for the personal horoscope; disclosed in the reply)."""
+    from apps.telegram_bot.models import TelegramUser
+    obj, _ = TelegramUser.objects.get_or_create(
+        tg_id=tg_id,
+        defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
+    )
+    obj.birth_date = birth_date
+    obj.daily_push = True
+    obj.locale = locale
+    obj.save(update_fields=['birth_date', 'daily_push', 'locale'])
 
 
 @sync_to_async
@@ -98,6 +138,7 @@ def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = 
 # ── Handlers ───────────────────────────────────────────────────────────────────
 
 
+@requires_channel_sub
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
     locale = _norm_locale(tg.language_code)
@@ -111,6 +152,7 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(msg)
 
 
+@requires_channel_sub
 async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
     locale = _norm_locale(tg.language_code)
@@ -119,6 +161,7 @@ async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
            else "Unsubscribed from daily cards 🌙 Come back — /subscribe")
     await update.message.reply_text(msg)
 
+@requires_channel_sub
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args or []
     if args and args[0].startswith('buy_'):
@@ -127,11 +170,17 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if args and args[0].startswith('donate_'):
         await _handle_donate(update, context, args[0][7:])
         return
+    if args and args[0] == 'contest':
+        # Deep-link from the channel post's «Участвовать» button.
+        from apps.contest.handlers import contest_join
+        await contest_join(update, context)
+        return
 
     tg = update.effective_user
     locale = _norm_locale(tg.language_code if tg else None)
+    has_birth = False
     if tg:
-        await _store_user_locale(tg.id, tg.username or '', tg.first_name or '', locale)
+        has_birth = await _store_user_locale(tg.id, tg.username or '', tg.first_name or '', locale)
 
     webapp_url = getattr(settings, 'WEBAPP_URL', 'https://sokirdon.com')
 
@@ -154,6 +203,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "/status — check your subscription"
         )
 
+    if not has_birth:
+        text += (
+            "\n\n🎂 /birthday — добавь дату рождения, и я буду присылать твой "
+            "персональный гороскоп каждое утро."
+            if locale == 'ru' else
+            "\n\n🎂 /birthday — add your birth date for a personal daily horoscope."
+        )
+
     keyboard = InlineKeyboardMarkup([[
         InlineKeyboardButton(btn, web_app=WebAppInfo(url=webapp_url)),
     ]])
@@ -165,6 +222,76 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 
+def _sign_label(birth_date: datetime.date, locale: str) -> str:
+    """Human label like '♋ Рак' / '♋ Cancer' for a birth date."""
+    from apps.horoscope.services import sign_for_date
+    s = sign_for_date(birth_date.month, birth_date.day)
+    if not s:
+        return ''
+    return f"{s['symbol']} {s['name_ru'] if locale == 'ru' else s['name_en']}"
+
+
+@requires_channel_sub
+async def birthday_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Ask for (or offer to change) the user's birth date for the daily horoscope."""
+    tg = update.effective_user
+    locale = _norm_locale(tg.language_code)
+    bd = await _get_birth_date(tg.id)
+    if context.user_data is not None:
+        context.user_data['awaiting_birthday'] = True
+    if bd:
+        label = _sign_label(bd, locale)
+        if locale == 'ru':
+            msg = (f"Сейчас записана дата: *{bd.strftime('%d.%m.%Y')}* ({label}).\n"
+                   "Хочешь изменить — просто пришли новую дату в формате ДД.ММ.ГГГГ.")
+        else:
+            msg = (f"Saved birth date: *{bd.strftime('%d.%m.%Y')}* ({label}).\n"
+                   "To change it, just send a new date as DD.MM.YYYY.")
+    else:
+        if locale == 'ru':
+            msg = ("🎂 Пришли свою дату рождения в формате *ДД.ММ.ГГГГ* (например, 14.03.1995) — "
+                   "и каждое утро я буду присылать тебе персональный гороскоп по твоему знаку.")
+        else:
+            msg = ("🎂 Send your birth date as *DD.MM.YYYY* (e.g. 14.03.1995) — "
+                   "and every morning I'll send you a personal horoscope for your sign.")
+    await update.message.reply_text(msg, parse_mode='Markdown')
+
+
+@requires_channel_sub
+async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Plain-text handler — only acts while we're waiting for a birth date."""
+    if not (context.user_data or {}).get('awaiting_birthday'):
+        return
+    tg = update.effective_user
+    locale = _norm_locale(tg.language_code)
+    bd = _parse_birth_date(update.message.text)
+    if not bd:
+        msg = ("Не понял дату 🙈 Пришли в формате ДД.ММ.ГГГГ, например 14.03.1995."
+               if locale == 'ru' else
+               "I couldn't read that date 🙈 Please use DD.MM.YYYY, e.g. 14.03.1995.")
+        await update.message.reply_text(msg)
+        return
+
+    if context.user_data is not None:
+        context.user_data['awaiting_birthday'] = False
+    await _save_birth_date(tg.id, bd, tg.username or '', tg.first_name or '', locale)
+    label = _sign_label(bd, locale)
+    webapp = getattr(settings, 'WEBAPP_URL', 'https://sokirdon.com')
+    if locale == 'ru':
+        text = (f"Готово! Твой знак — *{label}* ✨\n\n"
+                "Каждое утро буду присылать персональный гороскоп. Выключить — /unsubscribe.")
+        btn = "🔮 Открыть гороскоп"
+    else:
+        text = (f"Done! Your sign is *{label}* ✨\n\n"
+                "I'll send you a personal horoscope every morning. To stop — /unsubscribe.")
+        btn = "🔮 Open horoscope"
+    keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(btn, web_app=WebAppInfo(url=f"{webapp}/horoscope")),
+    ]])
+    await update.message.reply_text(text, parse_mode='Markdown', reply_markup=keyboard)
+
+
+@requires_channel_sub
 async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     tg = update.effective_user
     raw = await _get_status(tg.id)

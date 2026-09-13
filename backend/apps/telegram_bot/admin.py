@@ -8,10 +8,21 @@ from apps.telegram_bot.models import Broadcast, TelegramUser
 
 @admin.register(TelegramUser)
 class TelegramUserAdmin(admin.ModelAdmin):
-    list_display = ('tg_id', 'tg_username', 'tg_first_name', 'user', 'daily_push', 'created_at')
+    list_display = ('tg_id', 'tg_username', 'tg_first_name', 'user', 'daily_push',
+                    'birth_date', 'zodiac', 'created_at')
     list_filter = ('daily_push', 'created_at')
     search_fields = ('tg_username', 'tg_first_name', 'tg_id')
-    actions = ['enable_push', 'disable_push']
+    actions = ['enable_push', 'disable_push', 'send_card_now', 'send_horoscope_now']
+
+    @admin.display(description='Знак')
+    def zodiac(self, obj):
+        """Zodiac label from the stored birth date (not the natal chart, to keep
+        the changelist query-free)."""
+        if not obj.birth_date:
+            return '—'
+        from apps.horoscope.services import sign_for_date
+        s = sign_for_date(obj.birth_date.month, obj.birth_date.day)
+        return f"{s['symbol']} {s['name_ru']}" if s else '—'
 
     @admin.action(description='🔔 Включить ежедневный пуш')
     def enable_push(self, request, queryset):
@@ -22,6 +33,33 @@ class TelegramUserAdmin(admin.ModelAdmin):
     def disable_push(self, request, queryset):
         n = queryset.update(daily_push=False)
         self.message_user(request, f'Выключено для {n} пользователей.')
+
+    @admin.action(description='🌙 Отправить карту дня (выбранным)')
+    def send_card_now(self, request, queryset):
+        from apps.telegram_bot.push import send_card_push
+        result = send_card_push(queryset)
+        if result.get('error'):
+            self.message_user(request, result['error'], level=messages.ERROR)
+            return
+        self.message_user(
+            request,
+            f"Карта дня: отправлено {result['sent']}, ошибок {result['failed']}.",
+            level=messages.SUCCESS if result['sent'] else messages.WARNING,
+        )
+
+    @admin.action(description='🔮 Отправить гороскоп (выбранным)')
+    def send_horoscope_now(self, request, queryset):
+        from apps.telegram_bot.push import send_horoscope_push
+        result = send_horoscope_push(queryset.select_related('user'))
+        if result.get('error'):
+            self.message_user(request, result['error'], level=messages.ERROR)
+            return
+        self.message_user(
+            request,
+            f"Гороскоп: отправлено {result['sent']}, "
+            f"пропущено {result['skipped']} (нет даты рождения), ошибок {result['failed']}.",
+            level=messages.SUCCESS if result['sent'] else messages.WARNING,
+        )
 
 
 @admin.register(Broadcast)

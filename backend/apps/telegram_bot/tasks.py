@@ -8,3 +8,10 @@ def send_daily_push() -> str:
     """Daily card-of-the-day push to subscribed users (scheduled via Celery beat)."""
     call_command("send_daily_push")
     return "ok"
+
+
+@shared_task
+def send_daily_horoscope() -> str:
+    """Daily personal horoscope push to subscribed users with a birth date."""
+    call_command("send_daily_horoscope")
+    return "ok"

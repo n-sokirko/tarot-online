@@ -29,7 +29,14 @@ def get_client() -> Anthropic:
         raise RuntimeError('ANTHROPIC_API_KEY not set')
     # Extra resilience against transient network blips (esp. on a home uplink):
     # the SDK retries APIConnectionError / 429 / 5xx with exponential backoff.
-    return Anthropic(api_key=key, max_retries=5, timeout=60.0)
+    kwargs = {'api_key': key, 'max_retries': 5, 'timeout': 60.0}
+    base_url = getattr(settings, 'ANTHROPIC_BASE_URL', '') or ''
+    if base_url:
+        kwargs['base_url'] = base_url
+    gateway_auth = getattr(settings, 'ANTHROPIC_GATEWAY_AUTH', '') or ''
+    if gateway_auth:
+        kwargs['default_headers'] = {'cf-aig-authorization': f'Bearer {gateway_auth}'}
+    return Anthropic(**kwargs)
 
 
 def model_for_tier(tier: str) -> str:

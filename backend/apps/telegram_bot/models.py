@@ -18,6 +18,9 @@ class TelegramUser(models.Model):
     locale = models.CharField(max_length=8, default='ru')
     # Opt-in to the daily "card of the day" push (toggled via /subscribe).
     daily_push = models.BooleanField(default=False)
+    # Birth date for the personal daily horoscope. Collected via /birthday or
+    # auto-imported from the user's natal chart. Null until known.
+    birth_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
