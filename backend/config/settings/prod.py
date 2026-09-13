@@ -7,12 +7,27 @@ CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-# Cloudflare Tunnel terminates TLS at the edge and forwards plain HTTP to
-# nginx.  We must NOT redirect HTTP→HTTPS internally (Django would loop).
-# Instead, trust the X-Forwarded-Proto header that nginx injects.
+# TLS terminates before Django: at the Cloudflare edge (docker-compose, then
+# plain HTTP to nginx) or at Railway's edge. We must NOT redirect HTTP→HTTPS
+# internally (Django would loop). Instead, trust X-Forwarded-Proto, which both
+# nginx and Railway set.
 SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
+
+# Railway has no nginx in front of Django, so WhiteNoise serves /static/ (admin,
+# DRF). Behind nginx in docker-compose it is a no-op: nginx answers /static/
+# from the shared volume before the request ever reaches Django.
+_security = MIDDLEWARE.index('django.middleware.security.SecurityMiddleware')  # noqa: F405
+MIDDLEWARE = [  # noqa: F405
+    *MIDDLEWARE[:_security + 1],  # noqa: F405
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    *MIDDLEWARE[_security + 1:],  # noqa: F405
+]
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'},
+}
 
 CSRF_TRUSTED_ORIGINS = config(
     'CSRF_TRUSTED_ORIGINS', default='', cast=lambda s: [o for o in s.split(',') if o]

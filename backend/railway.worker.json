@@ -1,0 +1,12 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "backend/Dockerfile.railway",
+    "watchPatterns": ["backend/**"]
+  },
+  "deploy": {
+    "startCommand": "celery -A config worker --beat -l info --concurrency 1",
+    "restartPolicyType": "ALWAYS"
+  }
+}

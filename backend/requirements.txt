@@ -12,6 +12,7 @@ python-decouple==3.8
 anthropic==0.104.1
 python-telegram-bot==21.6
 gunicorn==22.0.0
+whitenoise==6.7.0
 pytest==8.2.2
 pytest-django==4.8.0
 ruff==0.5.5
