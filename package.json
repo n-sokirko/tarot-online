@@ -1,0 +1,8 @@
+{
+  "name": "tarot-online-infra",
+  "private": true,
+  "description": "Root package exists only for the Railway IaC SDK that .railway/railway.ts imports. The app itself lives in backend/ (Python) and frontend/ (its own package.json).",
+  "dependencies": {
+    "railway": "^3.11.0"
+  }
+}

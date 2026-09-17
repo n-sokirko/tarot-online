@@ -23,9 +23,13 @@ if [ -z "$SERVICE" ]; then
 fi
 
 ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
-ENV_FILE="$ROOT/.env.prod"
-[ -f "$ENV_FILE" ] || ENV_FILE="$ROOT/.env"
-[ -f "$ENV_FILE" ] || { echo "no .env.prod or .env in $ROOT" >&2; exit 1; }
+# Both files are read, in this order, and a later one wins: the Telegram token
+# and WEBAPP_URL live in .env, the Paddle and Anthropic model settings only in
+# .env.prod. Both are gitignored.
+ENV_FILES="$ROOT/.env $ROOT/.env.prod"
+found=0
+for f in $ENV_FILES; do [ -f "$f" ] && found=1; done
+[ "$found" = 1 ] || { echo "no .env or .env.prod in $ROOT" >&2; exit 1; }
 
 # Copied verbatim from $ENV_FILE when present. Everything else in that file
 # (REDIS_URL, POSTGRES_*, TTS_*, nginx/tunnel settings) is deliberately left
@@ -38,7 +42,8 @@ GOOGLE_CLIENT_ID
 PADDLE_ENV PADDLE_API_KEY PADDLE_WEBHOOK_SECRET PADDLE_CLIENT_TOKEN
 PADDLE_PRODUCT_PREMIUM_MONTHLY PADDLE_PRICE_PREMIUM_MONTHLY
 PADDLE_PRODUCT_CREDITS_SMALL PADDLE_PRICE_CREDITS_SMALL
-PADDLE_PRODUCT_CREDITS_LARGE PADDLE_PRICE_CREDITS_LARGE"
+PADDLE_PRODUCT_CREDITS_LARGE PADDLE_PRICE_CREDITS_LARGE
+WEBAPP_URL"
 
 set -- --service "$SERVICE"
 applied=""
@@ -46,7 +51,12 @@ skipped=""
 
 for key in $KEYS; do
     # Last assignment wins, matching python-decouple reading the same file.
-    line="$(grep "^${key}=" "$ENV_FILE" | tail -n 1 || true)"
+    line=""
+    for f in $ENV_FILES; do
+        [ -f "$f" ] || continue
+        hit="$(grep "^${key}=" "$f" | tail -n 1 || true)"
+        [ -n "$hit" ] && line="$hit"
+    done
     if [ -z "$line" ]; then
         skipped="$skipped $key"
         continue
@@ -62,10 +72,10 @@ for key in $KEYS; do
     applied="$applied $key"
 done
 
-[ -n "$applied" ] || { echo "nothing to set from $ENV_FILE" >&2; exit 1; }
+[ -n "$applied" ] || { echo "nothing to set from $ENV_FILES" >&2; exit 1; }
 
 echo "service:  $SERVICE"
-echo "source:   $ENV_FILE"
+echo "source:   $ENV_FILES"
 echo "setting: $applied"
 [ -n "$skipped" ] && echo "missing/empty (set by hand if needed):$skipped"
 
