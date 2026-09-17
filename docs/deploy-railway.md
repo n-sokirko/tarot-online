@@ -268,16 +268,65 @@ python manage.py showmigrations --plan
 
 ## 7. Фронт на Vercel
 
-1. Vercel → **Add New Project** → `n-sokirko/tarot-online` → **Root Directory: `frontend`**.
-2. Environment Variables:
-   - `NEXT_PUBLIC_API_URL` = `https://web-production-af39f.up.railway.app`
-   - `NEXT_PUBLIC_GOOGLE_CLIENT_ID` = из `.env.prod`
-3. Deploy → проверь на `https://<проект>.vercel.app`.
-4. Settings → Domains → `sokirdon.com` (+ `www`). В Cloudflare DNS удалить запись
-   туннеля для `sokirdon.com` и создать те записи, что покажет Vercel,
-   **Proxy status: DNS only** (серое облако).
-5. После переключения: `WEBAPP_URL=https://sokirdon.com` в Railway и добавить
-   `CORS_ALLOWED_ORIGINS` с адресом Vercel, пока DNS не переехал.
+Развёрнут 17.09.2026: проект `tarot-online`, прод на
+`https://tarot-online-fawn.vercel.app`, GitHub-интеграция подключена —
+пуш в `master` деплоит сам.
+
+```bash
+vercel login
+```
+
+```bash
+cd frontend && vercel link --yes --project tarot-online
+```
+
+Переменные (обе с `NEXT_PUBLIC_`, то есть попадают в клиентский бандл —
+секретов туда класть нельзя):
+
+```bash
+printf '%s' "https://web-production-af39f.up.railway.app" | vercel env add NEXT_PUBLIC_API_URL production
+```
+
+`NEXT_PUBLIC_GOOGLE_CLIENT_ID` — так же, значение из `.env.prod`.
+В коде используется именно `NEXT_PUBLIC_API_URL` (`lib/api.ts`), без `/api/v1` на
+конце; `NEXT_PUBLIC_API_BASE_URL` из `.env.example` — устаревшее имя, нигде не
+читается.
+
+```bash
+vercel deploy --prod --yes
+```
+
+```bash
+vercel git connect "https://github.com/n-sokirko/tarot-online.git"
+```
+
+> ⚠️ `vercel git connect` без URL падает с «No local Git repository found»: он
+> ищет `.git` в текущей папке (`frontend/`) и не поднимается к корню репо.
+>
+> ⚠️ После `vercel link` из `frontend/` **Root Directory проекта остаётся `.`**.
+> CLI-деплою это не мешает (он грузит текущую папку), а вот сборка по
+> пушу полезет в корень репо и наткнётся на тамошний `package.json`
+> (там только SDK Railway). Починить через API проекта:
+> `PATCH /v9/projects/<id>?teamId=<team>` с `{"rootDirectory":"frontend"}`
+> (токен — в `%APPDATA%/xdg.data/com.vercel.cli/auth.json`).
+
+Бэкенду нужно разрешить этот origin, иначе все запросы упрутся в CORS
+(в `prod.py` регуляркой разрешён только `sokirdon.com`):
+
+```bash
+railway variables --service web --skip-deploys --set "CORS_ALLOWED_ORIGINS=https://tarot-online-fawn.vercel.app" --set "WEBAPP_URL=https://tarot-online-fawn.vercel.app"
+```
+
+`WEBAPP_URL` так же надо поставить обоим кронам — на него смотрят кнопка
+WebApp в меню бота и ссылки в ежедневных пушах. После — Redeploy `web`.
+
+### Перевод домена (ещё не сделано)
+
+1. Vercel → Settings → Domains → `sokirdon.com` (+ `www`).
+2. В Cloudflare DNS удалить запись туннеля для `sokirdon.com` и создать те,
+   что покажет Vercel, **Proxy status: DNS only** (серое облако).
+3. После переключения вернуть `WEBAPP_URL=https://sokirdon.com` и добавить
+   его в `CORS_ALLOWED_ORIGINS` (адрес `*.vercel.app` можно оставить для проверок).
 
 Paddle: webhook-URL в кабинете Paddle поменять с `https://sokirdon.com/api/v1/billing/webhooks/paddle/`
 на `https://web-production-af39f.up.railway.app/api/v1/billing/webhooks/paddle/`.
