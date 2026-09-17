@@ -6,7 +6,8 @@
     "watchPatterns": ["backend/**"]
   },
   "deploy": {
-    "startCommand": "python manage.py run_bot",
-    "restartPolicyType": "ALWAYS"
+    "startCommand": "python manage.py send_daily_horoscope",
+    "cronSchedule": "0 9 * * *",
+    "restartPolicyType": "NEVER"
   }
 }

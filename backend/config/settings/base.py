@@ -166,6 +166,14 @@ TELEGRAM_REQUIRED_CHANNEL = config('TELEGRAM_REQUIRED_CHANNEL', default='@tarro_
 TELEGRAM_REQUIRED_CHANNEL_URL = config(
     'TELEGRAM_REQUIRED_CHANNEL_URL', default='https://t.me/tarro_bot_group')
 
+# Webhook mode (production). The bot runs inside the web process — see
+# apps/telegram_bot/bot_runtime.py — instead of a separate polling service.
+# BASE_URL is this deployment's public origin (no trailing slash); SECRET is
+# echoed back by Telegram in X-Telegram-Bot-Api-Secret-Token and must be set,
+# otherwise the webhook view refuses every update (fail closed).
+TELEGRAM_WEBHOOK_BASE_URL = config('TELEGRAM_WEBHOOK_BASE_URL', default='')
+TELEGRAM_WEBHOOK_SECRET = config('TELEGRAM_WEBHOOK_SECRET', default='')
+
 # Telegram Mini App (Web App)
 WEBAPP_URL = config('WEBAPP_URL', default='https://sokirdon.com')
 

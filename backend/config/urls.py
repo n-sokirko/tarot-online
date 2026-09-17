@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/v1/', include('apps.natal.urls')),
     path('api/v1/', include('apps.numerology.urls')),
     path('api/v1/', include('apps.horoscope.urls')),
+    path('api/v1/', include('apps.telegram_bot.urls')),
 ]

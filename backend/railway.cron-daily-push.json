@@ -6,7 +6,8 @@
     "watchPatterns": ["backend/**"]
   },
   "deploy": {
-    "startCommand": "celery -A config worker --beat -l info --concurrency 1",
-    "restartPolicyType": "ALWAYS"
+    "startCommand": "python manage.py send_daily_push",
+    "cronSchedule": "0 8 * * *",
+    "restartPolicyType": "NEVER"
   }
 }

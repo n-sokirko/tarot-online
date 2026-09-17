@@ -1,4 +1,12 @@
-"""Management command: run the Telegram bot in polling mode (development only)."""
+"""Management command: run the Telegram bot in polling mode (development only).
+
+Production runs the bot as a webhook inside the web process (see
+apps/telegram_bot/views.py + bot_runtime.py). Telegram refuses getUpdates while
+a webhook is registered, so this command will fail with 409 Conflict unless the
+webhook is deleted first:
+
+    curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/deleteWebhook"
+"""
 from django.core.management.base import BaseCommand
 
 

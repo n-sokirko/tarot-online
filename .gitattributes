@@ -1,0 +1,4 @@
+# Shell scripts are copied into Linux images (backend/Dockerfile.railway) and
+# run by /bin/sh — CRLF there fails with a bare "not found". Keep them LF even
+# though core.autocrlf is on for this Windows checkout.
+*.sh text eol=lf
