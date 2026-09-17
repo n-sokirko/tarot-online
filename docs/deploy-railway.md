@@ -213,17 +213,58 @@ docker compose -f docker-compose.prod.yml exec -T db pg_dump -U tarot -d tarot -
 docker compose -f docker-compose.prod.yml stop db
 ```
 
-Залить в Railway (Postgres → Variables → `DATABASE_PUBLIC_URL`):
+У Railway-Postgres **нет публичного адреса** — ни `DATABASE_PUBLIC_URL`, ни
+TCP-прокси по умолчанию. Дотянуться можно двумя способами; предпочтительнее
+первый, он вообще ничего не выставляет наружу:
 
 ```bash
-psql "<DATABASE_PUBLIC_URL>" -v ON_ERROR_STOP=1 -f tarot.sql
+railway ssh keys add
 ```
 
-`tarot.sql` содержит персональные данные — не коммить, удалить после переноса.
+Без аргументов — сам подхватит `~/.ssh/*.pub`. С `--key <путь>` под Git Bash
+падает с «Key not found». Затем, в отдельном окне (держит туннель, пока не
+Ctrl+C):
+
+```bash
+railway connect Postgres --tunnel-only --port 55432
+```
+
+Второй способ — `railway tcp-proxy create --service Postgres --port 5432`, но
+тогда база на время заливки видна из интернета; после переноса прокси надо
+удалить.
+
+Дамп из postgres:16-alpine начинается и заканчивается директивами
+`\restrict` / `\unrestrict` — их понимает только psql 17.6+/16.10+. Если
+локальный клиент старее (здесь psql 17.0), эти две строки надо выкинуть, иначе
+`invalid command \restrict`:
+
+```bash
+grep -v -e '^.restrict ' -e '^.unrestrict ' tarot.sql > tarot.clean.sql
+```
+
+Заливка (пароль — `railway variables --service Postgres --kv`, но выводить его
+в терминал не стоит, читай сразу в переменную):
+
+```bash
+PGPASSWORD="$PW" psql -h 127.0.0.1 -p 55432 -U postgres -d railway -v ON_ERROR_STOP=1 -f tarot.clean.sql
+```
+
+`tarot.sql` содержит персональные данные — не коммить, удалить после переноса
+вместе с `tarot.clean.sql`.
 
 `--clean --if-exists` перезапишет уже созданные таблицы, так что порядок
-«сначала деплой, потом дамп» допустим. После заливки — **Redeploy** сервиса
-`web`, чтобы `migrate` докатил миграции, которых не было в старой базе.
+«сначала деплой, потом дамп» допустим. Но учти: дамп несёт с собой и таблицу
+`django_migrations`. Если он снят со старой базы, а в коде с тех пор появились
+новые миграции, Django после заливки будет считать их неприменёнными, хотя
+таблицы от первого деплоя уже существуют. Проверить перед редеплоем:
+
+```bash
+python manage.py showmigrations --plan
+```
+
+(с `POSTGRES_*`, указывающими на туннель) — ни одной строки `[ ]` быть не
+должно. После заливки — **Redeploy** сервиса `web`: он докатит миграции и
+заново зарегистрирует webhook.
 
 ## 7. Фронт на Vercel
 
