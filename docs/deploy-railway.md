@@ -320,13 +320,38 @@ railway variables --service web --skip-deploys --set "CORS_ALLOWED_ORIGINS=https
 `WEBAPP_URL` так же надо поставить обоим кронам — на него смотрят кнопка
 WebApp в меню бота и ссылки в ежедневных пушах. После — Redeploy `web`.
 
-### Перевод домена (ещё не сделано)
+### Перевод домена — осталась часть в Cloudflare
 
-1. Vercel → Settings → Domains → `sokirdon.com` (+ `www`).
-2. В Cloudflare DNS удалить запись туннеля для `sokirdon.com` и создать те,
-   что покажет Vercel, **Proxy status: DNS only** (серое облако).
-3. После переключения вернуть `WEBAPP_URL=https://sokirdon.com` и добавить
-   его в `CORS_ALLOWED_ORIGINS` (адрес `*.vercel.app` можно оставить для проверок).
+`sokirdon.com` и `www.sokirdon.com` уже привязаны к проекту Vercel
+(`verified: true`). Осталось переставить DNS — это только вручную: в репо
+лежит лишь tunnel-credential (`cloudflared/credentials.json`,
+`CLOUDFLARE_TUNNEL_TOKEN`), а этой учёткой зону не правят.
+
+Сейчас апекс смотрит на прокси Cloudflare (`104.21.48.6`, `172.67.175.40`)
+перед мёртвым туннелем. Надо удалить записи туннеля и создать:
+
+| Имя | Тип | Значение | Proxy |
+|---|---|---|---|
+| `sokirdon.com` | A | `216.198.79.1` | DNS only |
+| `sokirdon.com` | A | `64.29.17.1` | DNS only |
+| `www` | CNAME | `5d8c0496c7026cc1.vercel-dns-017.com` | DNS only |
+
+Запасной вариант, если эти не зайдут: A → `76.76.21.21`,
+CNAME → `cname.vercel-dns.com`.
+
+> ⚠️ **Серое облако обязательно.** При включённом прокси Vercel видит
+> адреса Cloudflare вместо своих и не выпускает сертификат.
+
+Проверить, что Vercel увидел переезд (должно стать `misconfigured: false`):
+
+```bash
+curl -s "https://api.vercel.com/v6/domains/sokirdon.com/config?teamId=<team>" -H "Authorization: Bearer <token>"
+```
+
+После переключения вернуть на Railway `WEBAPP_URL=https://sokirdon.com`
+(и `web`, и обоим кронам) и добавить его в `CORS_ALLOWED_ORIGINS`
+(адрес `*.vercel.app` можно оставить для проверок), затем Redeploy `web`.
+И поменять webhook-URL в кабинете Paddle.
 
 Paddle: webhook-URL в кабинете Paddle поменять с `https://sokirdon.com/api/v1/billing/webhooks/paddle/`
 на `https://web-production-af39f.up.railway.app/api/v1/billing/webhooks/paddle/`.
