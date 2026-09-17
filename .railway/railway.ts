@@ -9,7 +9,7 @@
 // Secrets are deliberately absent from this file: it is committed to git.
 // Anything marked preserve() keeps whatever is already set on the service and
 // is uploaded out of band by deploy/railway-set-vars.sh, which reads the
-// gitignored .env.prod.
+// gitignored .env and .env.prod.
 //
 //   railway config plan     # preview, changes nothing
 //   railway config apply    # apply
@@ -85,7 +85,9 @@ export default defineRailway(() => {
       startCommand: "sh start-railway-web.sh",
       healthcheckPath: "/api/healthz/",
       healthcheckTimeout: 300,
-      restartPolicyType: "ON_FAILURE",
+      // restartPolicyType is deliberately absent: ON_FAILURE is Railway's
+      // default and the API reports defaults back as null, so declaring it
+      // makes `config plan` show a diff that can never converge.
       restartPolicyMaxRetries: 5,
     },
     replicas: { sfo: 1 },
