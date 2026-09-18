@@ -26,23 +26,23 @@ const SAVE_DEBOUNCE_MS = 700;
 const labels = {
   ru: {
     deck: 'Колода',
-    hint: 'Перетащи карту из колоды на стол — или просто коснись колоды.',
+    hint: 'Перетащи карту из колоды на поле — или просто коснись колоды.',
     hintPlaced: 'Перетаскивай карты или нажми на карту, а потом на место — она туда переедет.',
-    hintPicked: 'Теперь нажми на стол там, где ей место.',
+    hintPicked: 'Теперь нажми туда, где ей место.',
     flip: 'Перевернуть',
-    full: 'Больше карт на стол не помещается.',
+    full: 'Больше карт уже не помещается.',
     error: 'Не получилось вытянуть карту. Попробуй ещё раз.',
-    empty: 'Стол пока пуст.',
+    empty: 'Пока пусто — вытяни первую карту.',
   },
   en: {
     deck: 'Deck',
-    hint: 'Drag a card from the deck onto the table — or just tap the deck.',
+    hint: 'Drag a card from the deck — or just tap the deck.',
     hintPlaced: 'Drag the cards, or tap a card and then tap a spot to send it there.',
-    hintPicked: 'Now tap the table where it belongs.',
+    hintPicked: 'Now tap where it belongs.',
     flip: 'Turn over',
-    full: 'The table is full.',
+    full: 'No room for more cards.',
     error: "Couldn't draw a card. Try again.",
-    empty: 'The table is empty for now.',
+    empty: 'Empty for now — draw your first card.',
   },
 } as const;
 
@@ -97,6 +97,9 @@ export default function FreeTable({
   // nicer gesture, but it is also the one that fails quietly on a stubborn
   // touch device — this path needs nothing but two taps.
   const [picked, setPicked] = useState<number | null>(null);
+  // Set while a drag is in flight, so the click a drag leaves behind can be
+  // told apart from a real tap.
+  const draggedRef = useRef(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -230,11 +233,21 @@ export default function FreeTable({
               // has to go back to zero once the new spot is stored, or the two
               // offsets add up on every move.
               dragSnapToOrigin
+              onDragStart={() => { draggedRef.current = true; }}
               onDragEnd={(event, info) => {
                 const p = pointerPoint(event, info);
                 moveCard(c.position_index, p.x, p.y);
               }}
-              onClick={() => setPicked((p) => (p === c.position_index ? null : c.position_index))}
+              // A finished drag still fires a click. Without swallowing it, every
+              // drag would also pick the card up, and the next tap on the table
+              // would move it a second time.
+              onClick={() => {
+                if (draggedRef.current) {
+                  draggedRef.current = false;
+                  return;
+                }
+                setPicked((p) => (p === c.position_index ? null : c.position_index));
+              }}
               className="cursor-grab active:cursor-grabbing"
               style={{
                 touchAction: 'none',

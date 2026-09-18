@@ -230,8 +230,8 @@
     },
     {
       "slug": "free-table",
-      "name_ru": "Свободный стол",
-      "name_en": "Free table",
+      "name_ru": "Свободный расклад",
+      "name_en": "Free spread",
       "description_ru": "Без заданных позиций: карты вытягиваются из колоды и раскладываются так, как удобно самому человеку.",
       "description_en": "No fixed positions: cards are pulled from the deck and laid out however the person likes.",
       "positions_count": 0,

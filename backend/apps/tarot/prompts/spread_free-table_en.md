@@ -1,4 +1,4 @@
-# Free table — a reading with no fixed positions (EN)
+# Free spread — a reading with no fixed positions (EN)
 
 The person pulled the cards from the deck and laid them out however they wanted.
 The positions carry no preset meanings — there are none. The meaning has to be
