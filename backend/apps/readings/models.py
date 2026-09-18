@@ -29,6 +29,13 @@ class ReadingCard(models.Model):
     position_index = models.PositiveSmallIntegerField()
     is_reversed = models.BooleanField(default=False)
 
+    # Where the card sits on the free table, as a fraction of the surface
+    # (0..1 from the top-left), so the layout survives a reload and renders the
+    # same on any screen size. Fixed spreads ignore these and lay themselves out
+    # from position_index; 0.5/0.5 just means "not placed by hand".
+    x = models.FloatField(default=0.5)
+    y = models.FloatField(default=0.5)
+
     class Meta:
         unique_together = ('reading', 'position_index')
 

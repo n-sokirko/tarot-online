@@ -15,7 +15,9 @@ class ReadingCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReadingCard
-        fields = ['position_index', 'is_reversed', 'card']
+        # x/y matter only on the free table, where the person placed the card
+        # themselves; fixed spreads lay out from position_index and ignore them.
+        fields = ['position_index', 'is_reversed', 'card', 'x', 'y']
 
 
 class InterpretationSerializer(serializers.ModelSerializer):
