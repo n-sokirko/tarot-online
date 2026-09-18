@@ -102,6 +102,10 @@ export default defineRailway(() => {
       // /api/v1/telegram/webhook/ to this and registers it with Telegram.
       TELEGRAM_WEBHOOK_BASE_URL: "https://${{RAILWAY_PUBLIC_DOMAIN}}",
       CORS_ALLOWED_ORIGINS: preserve(),
+      // Guards /api/v1/channel/{brief,publish}/ — the manual publishing path,
+      // and what a Claude Code routine would use if the cloud sandbox's egress
+      // policy ever allowed it to reach this host.
+      CHANNEL_POST_TOKEN: preserve(),
     },
   });
 
@@ -132,7 +136,28 @@ export default defineRailway(() => {
     env: { ...common },
   });
 
+  // Channel autoposter. Writes one fresh post per run — see
+  // apps/telegram_bot/channel.py for the anti-repetition logic. Three slots a
+  // day, matching the Windows Task Scheduler jobs it replaces: 09:00 / 14:00 /
+  // 20:00 Europe/Minsk = 06:00 / 11:00 / 17:00 UTC.
+  //
+  // This was meant to be a scheduled Claude Code routine instead, so the posts
+  // would be written by an agent rather than a single API call. That is blocked:
+  // the cloud sandbox's egress proxy refuses CONNECT to anything outside its
+  // allowlist, so a routine cannot reach this API or Telegram at all.
+  const cronChannelPost = service("cron-channel-post", {
+    source: tarotOnline,
+    build,
+    deploy: {
+      startCommand: "python manage.py post_to_channel",
+      cronSchedule: "0 6,11,17 * * *",
+      restartPolicyType: "NEVER",
+    },
+    replicas: { sfo: 1 },
+    env: { ...common },
+  });
+
   return project("tarot-online", {
-    resources: [Postgres, postgresVolume, web, cronDailyPush, cronDailyHoroscope],
+    resources: [Postgres, postgresVolume, web, cronDailyPush, cronDailyHoroscope, cronChannelPost],
   });
 });
