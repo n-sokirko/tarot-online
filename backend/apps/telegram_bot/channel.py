@@ -72,7 +72,12 @@ _SYSTEM = """Ты пишешь короткие посты для Telegram-ка�
 — 3–6 коротких абзацев, всего 60–120 слов. Telegram — не лонгрид.
 — Первая строка — цепляющее утверждение, выделенное тегом <b>…</b>. Можно начать с одного уместного эмодзи.
 — Разметка только HTML и только теги <b>, <i>, <code>. Никакого Markdown.
-— Последняя строка — мягкий, ненавязчивый переход к боту @tarott_online_bot. Каждый раз формулируй его по-новому.
+— Последняя строка — мягкий, ненавязчивый переход к боту @tarott_online_bot. Каждый раз формулируй его по-новому."""
+
+# Only the direct-API path needs a machine-readable answer. The scheduled routine
+# sends topic and text as separate JSON fields itself, so it must not be told to
+# wrap its post in JSON.
+_JSON_TAIL = """
 
 Ответ отдавай строго одним JSON-объектом, без markdown-обёртки:
 {"topic": "<о чём пост, 3–7 слов, по-русски>", "text": "<текст поста>"}"""
@@ -88,6 +93,20 @@ _FACT_EXTRA = """Этот пост — интересный факт, а не р
 Угол подачи на сегодня: {angle}
 
 Оставайся внутри этого угла."""
+
+
+def guidelines(kind: str, angle: str | None = None) -> str:
+    """The full editorial brief, as one block of text.
+
+    Served to the scheduled routine over /channel/brief/ rather than baked into
+    the routine's prompt: the voice of the channel belongs in the repo, where it
+    is versioned and reviewable, not frozen inside a cloud config. It doubles as
+    the system prompt for the local `post_to_channel` fallback.
+    """
+    task = _PROMO_EXTRA if kind == 'promo' else _FACT_EXTRA.format(
+        angle=angle or random.choice(ANGLES)
+    )
+    return f'{_SYSTEM}\n\n---\n\n{task}'
 
 
 @dataclass(frozen=True)
@@ -224,7 +243,7 @@ def generate(kind: str | None = None, *, angle: str | None = None) -> GeneratedP
             'Возьми заметно другую тему.'
         )
         result = generate_interpretation(
-            base_system_prompt=_SYSTEM,
+            base_system_prompt=_SYSTEM + _JSON_TAIL,
             spread_system_prompt=task + nudge,
             user_message='Напиши следующий пост для канала.',
             model=model,

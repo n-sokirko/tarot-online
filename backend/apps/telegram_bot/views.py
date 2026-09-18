@@ -58,9 +58,13 @@ class ChannelBriefView(_ChannelTokenMixin, APIView):
         from apps.telegram_bot.models import ChannelPost
 
         kind = channel.next_kind()
+        angle = random.choice(channel.ANGLES) if kind == ChannelPost.KIND_FACT else None
         return Response({
             'kind': kind,
-            'angle': random.choice(channel.ANGLES) if kind == ChannelPost.KIND_FACT else None,
+            'angle': angle,
+            # The editorial brief travels with the response so the routine's own
+            # prompt can stay short and the voice stays editable in the repo.
+            'guidelines': channel.guidelines(kind, angle),
             'used_topics': channel._ban_list(),
             'published_total': ChannelPost.objects.filter(
                 status=ChannelPost.STATUS_PUBLISHED).count(),
