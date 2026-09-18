@@ -36,6 +36,8 @@ export const mockReading: ReadingResponse = {
     {
       position_index: 0,
       is_reversed: false,
+      x: 0.5,
+      y: 0.5,
       card: {
         slug: 'the-fool',
         suit: 'major',
@@ -58,6 +60,8 @@ export const mockReading: ReadingResponse = {
     {
       position_index: 1,
       is_reversed: false,
+      x: 0.5,
+      y: 0.5,
       card: {
         slug: 'the-high-priestess',
         suit: 'major',
@@ -80,6 +84,8 @@ export const mockReading: ReadingResponse = {
     {
       position_index: 2,
       is_reversed: false,
+      x: 0.5,
+      y: 0.5,
       card: {
         slug: 'the-star',
         suit: 'major',

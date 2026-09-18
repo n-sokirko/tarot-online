@@ -27,6 +27,10 @@ export interface DrawnCard {
   position_index: number;
   is_reversed: boolean;
   card: TarotCard;
+  // Where the card sits on the free table, 0..1 from the top-left. Fixed
+  // spreads lay themselves out and ignore these.
+  x: number;
+  y: number;
 }
 
 export interface Interpretation {

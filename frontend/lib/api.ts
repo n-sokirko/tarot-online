@@ -7,6 +7,7 @@ import type {
   NumerologyReading,
   NumerologyInterpretation,
   DailyHoroscope,
+  DrawnCard,
   HoroscopeAIReading,
   ZodiacSign,
   PlansResponse,
@@ -66,6 +67,42 @@ export async function createReading(
   return request<ReadingResponse>('/api/v1/readings/', {
     method: 'POST',
     body: JSON.stringify({ question, locale, spread_slug: spreadSlug }),
+  });
+}
+
+// ---- Free table ----
+// A reading with no fixed positions: the person pulls cards one at a time and
+// places them wherever they like. The server decides which card comes up, so
+// draws cannot be re-rolled from here.
+
+export async function openTable(
+  locale: string,
+  question: string = '',
+): Promise<ReadingResponse> {
+  return request<ReadingResponse>('/api/v1/readings/table/', {
+    method: 'POST',
+    body: JSON.stringify({ locale, question }),
+  });
+}
+
+export async function drawOntoTable(
+  id: number | string,
+  x: number,
+  y: number,
+): Promise<DrawnCard> {
+  return request<DrawnCard>(`/api/v1/readings/${id}/draw/`, {
+    method: 'POST',
+    body: JSON.stringify({ x, y }),
+  });
+}
+
+export async function saveTableLayout(
+  id: number | string,
+  cards: readonly { position_index: number; x: number; y: number; is_reversed: boolean }[],
+): Promise<ReadingResponse> {
+  return request<ReadingResponse>(`/api/v1/readings/${id}/layout/`, {
+    method: 'PATCH',
+    body: JSON.stringify({ cards }),
   });
 }
 
