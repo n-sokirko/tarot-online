@@ -55,3 +55,62 @@ class Broadcast(models.Model):
         status = 'отправлена' if self.sent_at else 'черновик'
         return f'{self.title or self.message[:40]} — {status}'
 
+
+class ChannelPost(models.Model):
+    """One post written for the public channel by `manage.py post_to_channel`.
+
+    This table is the whole anti-repetition mechanism. Every generated post is
+    stored with the topic it covered and a fingerprint of its wording; the next
+    generation gets the recent topics as an explicit "already covered, pick
+    something else" list, and the fingerprint catches the case where the model
+    invents a fresh-looking topic label but writes the same post again.
+    """
+    KIND_FACT = 'fact'
+    KIND_PROMO = 'promo'
+    KIND_CHOICES = [
+        (KIND_FACT, 'Интересный факт'),
+        (KIND_PROMO, 'Промо бота'),
+    ]
+
+    STATUS_DRAFT = 'draft'
+    STATUS_PUBLISHED = 'published'
+    STATUS_FAILED = 'failed'
+    STATUS_CHOICES = [
+        (STATUS_DRAFT, 'Черновик'),
+        (STATUS_PUBLISHED, 'Опубликован'),
+        (STATUS_FAILED, 'Ошибка отправки'),
+    ]
+
+    kind = models.CharField(max_length=16, choices=KIND_CHOICES, default=KIND_FACT)
+    # Short human-readable label of what the post is about ("Башня как
+    # освобождение", "происхождение слова футарк"). Fed back to the model as the
+    # do-not-repeat list, so it carries more weight than it looks.
+    topic = models.CharField(max_length=200)
+    text = models.TextField()
+    # Hash of the post's significant words — see channel.fingerprint(). Two posts
+    # with the same fingerprint say the same thing even if their topics differ.
+    fingerprint = models.CharField(max_length=64, db_index=True)
+
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_DRAFT)
+    published_at = models.DateTimeField(null=True, blank=True)
+    tg_message_id = models.BigIntegerField(null=True, blank=True)
+    error = models.TextField(blank=True)
+
+    # Cost visibility: these runs are the only scheduled spend on the API.
+    model_used = models.CharField(max_length=64, blank=True)
+    input_tokens = models.PositiveIntegerField(default=0)
+    output_tokens = models.PositiveIntegerField(default=0)
+    attempts = models.PositiveSmallIntegerField(default=1)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['kind', '-created_at']),
+        ]
+
+    def __str__(self) -> str:
+        return f'[{self.get_kind_display()}] {self.topic} — {self.get_status_display()}'
+

@@ -3,7 +3,26 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.utils import timezone
 
-from apps.telegram_bot.models import Broadcast, TelegramUser
+from apps.telegram_bot.models import Broadcast, ChannelPost, TelegramUser
+
+
+@admin.register(ChannelPost)
+class ChannelPostAdmin(admin.ModelAdmin):
+    """Read-only log of what the channel autoposter has published.
+
+    Editing makes no sense — the post is already in Telegram — but this list is
+    the fastest way to see whether the generator is drifting or repeating itself.
+    """
+    list_display = ('created_at', 'kind', 'topic', 'status', 'attempts')
+    list_filter = ('kind', 'status', 'created_at')
+    search_fields = ('topic', 'text')
+    readonly_fields = ('kind', 'topic', 'text', 'fingerprint', 'status', 'published_at',
+                       'tg_message_id', 'error', 'model_used', 'input_tokens',
+                       'output_tokens', 'attempts', 'created_at')
+    ordering = ('-created_at',)
+
+    def has_add_permission(self, request) -> bool:
+        return False
 
 
 @admin.register(TelegramUser)

@@ -166,6 +166,17 @@ TELEGRAM_REQUIRED_CHANNEL = config('TELEGRAM_REQUIRED_CHANNEL', default='@tarro_
 TELEGRAM_REQUIRED_CHANNEL_URL = config(
     'TELEGRAM_REQUIRED_CHANNEL_URL', default='https://t.me/tarro_bot_group')
 
+# Where the channel autoposter publishes. Normally the same channel as the
+# subscription gate above, so it falls back to it when unset; kept separate so
+# posting can be aimed at a test channel without touching the gate.
+TELEGRAM_CHANNEL_ID = config('TELEGRAM_CHANNEL_ID', default='')
+
+# Shared secret for /api/v1/channel/{brief,publish}/. The autoposter is a
+# scheduled Claude Code routine running in Anthropic's cloud — it has no access
+# to this repo or to the bot token, so this one narrow token is all it carries.
+# Unset means the endpoints refuse everything (fail closed).
+CHANNEL_POST_TOKEN = config('CHANNEL_POST_TOKEN', default='')
+
 # Webhook mode (production). The bot runs inside the web process — see
 # apps/telegram_bot/bot_runtime.py — instead of a separate polling service.
 # BASE_URL is this deployment's public origin (no trailing slash); SECRET is
