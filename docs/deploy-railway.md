@@ -320,15 +320,27 @@ railway variables --service web --skip-deploys --set "CORS_ALLOWED_ORIGINS=https
 `WEBAPP_URL` так же надо поставить обоим кронам — на него смотрят кнопка
 WebApp в меню бота и ссылки в ежедневных пушах. После — Redeploy `web`.
 
-### Перевод домена — осталась часть в Cloudflare
+### Перевод домена (сделано 18.09.2026)
 
-`sokirdon.com` и `www.sokirdon.com` уже привязаны к проекту Vercel
-(`verified: true`). Осталось переставить DNS — это только вручную: в репо
-лежит лишь tunnel-credential (`cloudflared/credentials.json`,
-`CLOUDFLARE_TUNNEL_TOKEN`), а этой учёткой зону не правят.
+`sokirdon.com` и `www.sokirdon.com` привязаны к проекту Vercel
+(`verified: true`), DNS переставлен с туннеля на Vercel.
 
-Сейчас апекс смотрит на прокси Cloudflare (`104.21.48.6`, `172.67.175.40`)
-перед мёртвым туннелем. Надо удалить записи туннеля и создать:
+Правку зоны делает `deploy/cf-dns-vercel.py`: он берёт зонный API-токен из
+`~/.cloudflared/cert.pem` (тот же, которым работает `cloudflared tunnel route
+dns`), так что отдельный секрет хранить не надо. По умолчанию сухой прогон:
+
+```bash
+python deploy/cf-dns-vercel.py
+```
+
+```bash
+python deploy/cf-dns-vercel.py --apply
+```
+
+Скрипт трогает только апекс и `www`; `api.sokirdon.com` оставляет как есть.
+Если делать руками — до переезда апекс смотрел на прокси Cloudflare
+(`104.21.48.6`, `172.67.175.40`) перед мёртвым туннелем; надо удалить записи
+туннеля и создать:
 
 | Имя | Тип | Значение | Proxy |
 |---|---|---|---|
@@ -348,13 +360,24 @@ CNAME → `cname.vercel-dns.com`.
 curl -s "https://api.vercel.com/v6/domains/sokirdon.com/config?teamId=<team>" -H "Authorization: Bearer <token>"
 ```
 
-После переключения вернуть на Railway `WEBAPP_URL=https://sokirdon.com`
-(и `web`, и обоим кронам) и добавить его в `CORS_ALLOWED_ORIGINS`
-(адрес `*.vercel.app` можно оставить для проверок), затем Redeploy `web`.
-И поменять webhook-URL в кабинете Paddle.
+Сертификат Vercel после переезда DNS может не выпуститься сам — апекс отдаёт
+`SSL_ERROR_SYSCALL`, хотя по HTTP уже 200, а `vercel certs ls` пуст. Тогда
+запросить явно:
 
-Paddle: webhook-URL в кабинете Paddle поменять с `https://sokirdon.com/api/v1/billing/webhooks/paddle/`
-на `https://web-production-af39f.up.railway.app/api/v1/billing/webhooks/paddle/`.
+```bash
+vercel certs issue sokirdon.com www.sokirdon.com
+```
+
+После переключения на Railway возвращены `WEBAPP_URL=https://sokirdon.com`
+(`web` и оба крона) и `CORS_ALLOWED_ORIGINS` с обоими хостами плюс адрес
+Vercel для проверок, затем сделан Redeploy `web`.
+
+> ⚠️ **Paddle остался на старом адресе.** Раньше `sokirdon.com` вёл на бэкенд,
+> теперь — на фронт во Vercel, поэтому webhook
+> `https://sokirdon.com/api/v1/billing/webhooks/paddle/` упирается в 404.
+> В кабинете Paddle его надо сменить на
+> `https://web-production-af39f.up.railway.app/api/v1/billing/webhooks/paddle/`,
+> иначе платежи через Paddle не долетают до бэкенда.
 
 ## 8. Стоимость
 
