@@ -27,8 +27,7 @@ const labels = {
   ru: {
     deck: 'Колода',
     hint: 'Перетащи карту из колоды на поле — или просто коснись колоды.',
-    hintPlaced: 'Перетаскивай карты или нажми на карту, а потом на место — она туда переедет.',
-    hintPicked: 'Теперь нажми туда, где ей место.',
+    hintPlaced: 'Перетаскивай карты куда угодно. Нажми на карту — покажу, что она значит.',
     flip: 'Перевернуть',
     full: 'Больше карт уже не помещается.',
     error: 'Не получилось вытянуть карту. Попробуй ещё раз.',
@@ -37,8 +36,7 @@ const labels = {
   en: {
     deck: 'Deck',
     hint: 'Drag a card from the deck — or just tap the deck.',
-    hintPlaced: 'Drag the cards, or tap a card and then tap a spot to send it there.',
-    hintPicked: 'Now tap where it belongs.',
+    hintPlaced: 'Drag the cards anywhere. Tap one to see what it means.',
     flip: 'Turn over',
     full: 'No room for more cards.',
     error: "Couldn't draw a card. Try again.",
@@ -93,10 +91,6 @@ export default function FreeTable({
   const [drawing, setDrawing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [openCard, setOpenCard] = useState<number | null>(null);
-  // Tap-to-move: pick a card up, then tap where it should go. Dragging is the
-  // nicer gesture, but it is also the one that fails quietly on a stubborn
-  // touch device — this path needs nothing but two taps.
-  const [picked, setPicked] = useState<number | null>(null);
   // Set while a drag is in flight, so the click a drag leaves behind can be
   // told apart from a real tap.
   const draggedRef = useRef(false);
@@ -186,18 +180,8 @@ export default function FreeTable({
           aspectRatio: '3 / 4',
           background:
             'radial-gradient(ellipse at 50% 35%, rgba(42,30,68,0.75), rgba(14,10,26,0.9))',
-          border: picked === null
-            ? '1px solid rgba(212,175,55,0.22)'
-            : '1px solid rgba(212,175,55,0.55)',
+          border: '1px solid rgba(212,175,55,0.22)',
           touchAction: 'none',
-        }}
-        onClick={(e) => {
-          if (picked === null) return;
-          // Only a tap on the surface itself counts as "put it here" — a tap
-          // that landed on a card is that card's own business.
-          if (e.target !== e.currentTarget) return;
-          moveCard(picked, e.clientX, e.clientY);
-          setPicked(null);
         }}
       >
         {cards.length === 0 && (
@@ -239,23 +223,17 @@ export default function FreeTable({
                 moveCard(c.position_index, p.x, p.y);
               }}
               // A finished drag still fires a click. Without swallowing it, every
-              // drag would also pick the card up, and the next tap on the table
-              // would move it a second time.
+              // drag would also pop the info panel open.
               onClick={() => {
                 if (draggedRef.current) {
                   draggedRef.current = false;
                   return;
                 }
-                setPicked((p) => (p === c.position_index ? null : c.position_index));
+                setOpenCard(c.position_index);
               }}
               className="cursor-grab active:cursor-grabbing"
-              style={{
-                touchAction: 'none',
-                outline: picked === c.position_index
-                  ? '2px solid rgba(212,175,55,0.85)' : 'none',
-                outlineOffset: 2,
-                borderRadius: 8,
-              }}
+              style={{ touchAction: 'none' }}
+              aria-label={locale === 'ru' ? 'Открыть карту' : 'Open card'}
             >
               <div style={{ aspectRatio: `1 / ${CARD_ASPECT}` }}>
                 <CardFace
@@ -263,29 +241,10 @@ export default function FreeTable({
                   isReversed={c.is_reversed}
                   locale={locale}
                   className="w-full h-full"
+                  compact
                 />
               </div>
             </motion.div>
-            <div className="flex justify-center gap-2 mt-1">
-              <button
-                type="button"
-                onClick={() => setOpenCard(c.position_index)}
-                className="text-[0.6rem] underline"
-                style={{ color: 'rgba(201,194,224,0.65)' }}
-              >
-                {locale === 'ru' ? 'значение' : 'meaning'}
-              </button>
-              <button
-                type="button"
-                onClick={() => flipCard(c.position_index)}
-                aria-label={t.flip}
-                title={t.flip}
-                className="text-[0.6rem]"
-                style={{ color: 'rgba(212,175,55,0.7)' }}
-              >
-                ⟲
-              </button>
-            </div>
           </div>
         ))}
       </div>
@@ -325,9 +284,7 @@ export default function FreeTable({
           <span style={{ color: 'rgba(212,175,55,0.75)' }}>
             {t.deck} · {cards.length}/{maxCards}
           </span>
-          <span style={picked !== null ? { color: 'rgba(212,175,55,0.85)' } : undefined}>
-            {picked !== null ? t.hintPicked : cards.length === 0 ? t.hint : t.hintPlaced}
-          </span>
+          <span>{cards.length === 0 ? t.hint : t.hintPlaced}</span>
           {isFull && <span style={{ color: 'rgba(212,175,55,0.7)' }}>{t.full}</span>}
           {error && <span style={{ color: '#e06c75' }}>{error}</span>}
         </div>
@@ -344,6 +301,9 @@ export default function FreeTable({
           }
           positionMeaning=""
           locale={locale}
+          placement="side"
+          onFlip={() => flipCard(opened.position_index)}
+          flipLabel={t.flip}
           onClose={() => setOpenCard(null)}
         />
       )}

@@ -9,6 +9,10 @@ interface CardFaceProps {
   isReversed: boolean;
   locale: 'ru' | 'en';
   className?: string;
+  /** Image only, no footer. For small cards — on the free spread a card is
+   *  about 90px wide, and squeezing a name, keyword chips and two lines of
+   *  meaning under it leaves a stamp of an image and a wall of tiny text. */
+  compact?: boolean;
 }
 
 const SUIT_SHIMMER: Record<string, { color: string; duration: string }> = {
@@ -24,6 +28,7 @@ export default function CardFace({
   isReversed,
   locale,
   className = '',
+  compact = false,
 }: CardFaceProps) {
   const [imgError, setImgError] = useState(false);
 
@@ -137,7 +142,9 @@ export default function CardFace({
           )}
         </div>
 
-        {/* Card info footer */}
+        {/* Card info footer — dropped in compact mode, where the image is the
+            whole point and the details live in the info panel instead. */}
+        {!compact && (
         <div className="px-2 py-2 flex flex-col gap-1" style={{ flexShrink: 0 }}>
           {/* Name */}
           <p
@@ -180,6 +187,7 @@ export default function CardFace({
             {meaning}
           </p>
         </div>
+        )}
       </div>
     </div>
   );

@@ -21,6 +21,13 @@ interface CardDetailModalProps {
   positionMeaning: string;
   locale: 'ru' | 'en';
   onClose: () => void;
+  /** 'side' docks the panel to the right edge on a wide screen so the spread
+   *  stays visible beside it; on a phone there is no room for that, so it
+   *  falls back to the centred dialog. */
+  placement?: 'center' | 'side';
+  /** Shown as an action when the card can be turned over from here. */
+  onFlip?: () => void;
+  flipLabel?: string;
 }
 
 export default function CardDetailModal({
@@ -30,6 +37,9 @@ export default function CardDetailModal({
   positionMeaning,
   locale,
   onClose,
+  placement = 'center',
+  onFlip,
+  flipLabel,
 }: CardDetailModalProps) {
   const t = useTranslations('card');
   const prefersReducedMotion = useReducedMotion();
@@ -65,7 +75,9 @@ export default function CardDetailModal({
   return (
     /* Backdrop */
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${
+        placement === 'side' ? 'md:justify-end md:p-6' : ''
+      }`}
       style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
       initial={prefersReducedMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -78,7 +90,9 @@ export default function CardDetailModal({
     >
       {/* Panel — stop propagation so clicking inside doesn't close */}
       <motion.div
-        className="relative w-full max-w-3xl rounded-2xl flex flex-col"
+        className={`relative w-full rounded-2xl flex flex-col ${
+          placement === 'side' ? 'max-w-3xl md:max-w-sm md:h-full' : 'max-w-3xl'
+        }`}
         style={{
           background: '#0f0c24',
           border: '1px solid rgba(212,175,55,0.4)',
@@ -91,6 +105,23 @@ export default function CardDetailModal({
         transition={{ duration: 0.3, ease: 'easeOut' }}
         onClick={(e) => e.stopPropagation()}
       >
+        {onFlip && (
+          <button
+            className="absolute top-4 left-4 z-10 text-xs px-3 py-1.5 rounded-full"
+            // Solid backing: this sits over the card art, which can be pale
+            // yellow, and a translucent pill disappears against it.
+            style={{
+              border: '1px solid rgba(212,175,55,0.5)',
+              color: 'rgba(212,175,55,0.95)',
+              background: 'rgba(11,11,31,0.88)',
+              backdropFilter: 'blur(2px)',
+            }}
+            onClick={onFlip}
+          >
+            ⟲ {flipLabel ?? (locale === 'ru' ? 'Перевернуть' : 'Turn over')}
+          </button>
+        )}
+
         {/* Close button */}
         <button
           className="absolute top-4 right-4 z-10 text-white/50 hover:text-white transition-colors text-2xl leading-none"
