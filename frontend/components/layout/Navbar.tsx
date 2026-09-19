@@ -11,13 +11,13 @@ interface NavbarProps {
 }
 
 const NAV = {
-  ru: { tarot: 'Таро', daily: 'Карта дня', horoscope: 'Гороскоп', natal: 'Карта', numerology: 'Числа', history: 'Дневник', pricing: 'Premium', settings: 'Настройки', login: 'Войти', register: 'Регистрация', logout: 'Выйти' },
-  en: { tarot: 'Tarot', daily: 'Daily', horoscope: 'Horoscope', natal: 'Natal', numerology: 'Numbers', history: 'Journal', pricing: 'Premium', settings: 'Settings', login: 'Log in', register: 'Register', logout: 'Log out' },
-  de: { tarot: 'Tarot', daily: 'Tageskarte', horoscope: 'Horoskop', natal: 'Natal', numerology: 'Zahlen', history: 'Tagebuch', pricing: 'Premium', settings: 'Einstellungen', login: 'Anmelden', register: 'Registrieren', logout: 'Abmelden' },
-  fr: { tarot: 'Tarot', daily: 'Carte du jour', horoscope: 'Horoscope', natal: 'Natal', numerology: 'Nombres', history: 'Journal', pricing: 'Premium', settings: 'Réglages', login: 'Connexion', register: 'Inscription', logout: 'Déconnexion' },
-  es: { tarot: 'Tarot', daily: 'Carta del día', horoscope: 'Horóscopo', natal: 'Natal', numerology: 'Números', history: 'Diario', pricing: 'Premium', settings: 'Ajustes', login: 'Entrar', register: 'Registrarse', logout: 'Salir' },
-  pt: { tarot: 'Tarô', daily: 'Carta do dia', horoscope: 'Horóscopo', natal: 'Natal', numerology: 'Números', history: 'Diário', pricing: 'Premium', settings: 'Definições', login: 'Entrar', register: 'Registar', logout: 'Sair' },
-  uk: { tarot: 'Таро', daily: 'Карта дня', horoscope: 'Гороскоп', natal: 'Карта', numerology: 'Числа', history: 'Щоденник', pricing: 'Premium', settings: 'Налаштування', login: 'Увійти', register: 'Реєстрація', logout: 'Вийти' },
+  ru: { tarot: 'Таро', freeSpread: 'Свой расклад', daily: 'Карта дня', horoscope: 'Гороскоп', natal: 'Карта', numerology: 'Числа', history: 'Дневник', pricing: 'Premium', settings: 'Настройки', login: 'Войти', register: 'Регистрация', logout: 'Выйти' },
+  en: { tarot: 'Tarot', freeSpread: 'Free spread', daily: 'Daily', horoscope: 'Horoscope', natal: 'Natal', numerology: 'Numbers', history: 'Journal', pricing: 'Premium', settings: 'Settings', login: 'Log in', register: 'Register', logout: 'Log out' },
+  de: { tarot: 'Tarot', freeSpread: 'Freie Legung', daily: 'Tageskarte', horoscope: 'Horoskop', natal: 'Natal', numerology: 'Zahlen', history: 'Tagebuch', pricing: 'Premium', settings: 'Einstellungen', login: 'Anmelden', register: 'Registrieren', logout: 'Abmelden' },
+  fr: { tarot: 'Tarot', freeSpread: 'Tirage libre', daily: 'Carte du jour', horoscope: 'Horoscope', natal: 'Natal', numerology: 'Nombres', history: 'Journal', pricing: 'Premium', settings: 'Réglages', login: 'Connexion', register: 'Inscription', logout: 'Déconnexion' },
+  es: { tarot: 'Tarot', freeSpread: 'Tirada libre', daily: 'Carta del día', horoscope: 'Horóscopo', natal: 'Natal', numerology: 'Números', history: 'Diario', pricing: 'Premium', settings: 'Ajustes', login: 'Entrar', register: 'Registrarse', logout: 'Salir' },
+  pt: { tarot: 'Tarô', freeSpread: 'Tiragem livre', daily: 'Carta do dia', horoscope: 'Horóscopo', natal: 'Natal', numerology: 'Números', history: 'Diário', pricing: 'Premium', settings: 'Definições', login: 'Entrar', register: 'Registar', logout: 'Sair' },
+  uk: { tarot: 'Таро', freeSpread: 'Свій розклад', daily: 'Карта дня', horoscope: 'Гороскоп', natal: 'Карта', numerology: 'Числа', history: 'Щоденник', pricing: 'Premium', settings: 'Налаштування', login: 'Увійти', register: 'Реєстрація', logout: 'Вийти' },
 } as const;
 
 function GearIcon() {
@@ -64,6 +64,7 @@ export default function Navbar({ locale }: NavbarProps) {
       <nav className="hidden md:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
         {([
           ['/', t.tarot],
+          ['/table', t.freeSpread],
           ['/daily', t.daily],
           ['/horoscope', t.horoscope],
           ['/natal', t.natal],

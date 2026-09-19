@@ -12,6 +12,7 @@ const LABELS = {
     tarot: 'Таро', runes: 'Руны', natal: 'Карта',
     daily: 'Карта дня', numerology: 'Числа', horoscope: 'Гороскоп',
     journal: 'Дневник',
+    freeSpread: 'Свободный расклад',
     more: 'Ещё', premium: 'Premium', settings: 'Настройки',
     profile: 'Профиль', login: 'Войти',
   },
@@ -19,6 +20,7 @@ const LABELS = {
     tarot: 'Tarot', runes: 'Runes', natal: 'Natal',
     daily: 'Card of the day', numerology: 'Numbers', horoscope: 'Horoscope',
     journal: 'Journal',
+    freeSpread: 'Free spread',
     more: 'More', premium: 'Premium', settings: 'Settings',
     profile: 'Profile', login: 'Log in',
   },
@@ -26,6 +28,7 @@ const LABELS = {
     tarot: 'Tarot', runes: 'Runen', natal: 'Natal',
     daily: 'Tageskarte', numerology: 'Zahlen', horoscope: 'Horoskop',
     journal: 'Tagebuch',
+    freeSpread: 'Freie Legung',
     more: 'Mehr', premium: 'Premium', settings: 'Einstellungen',
     profile: 'Profil', login: 'Anmelden',
   },
@@ -33,6 +36,7 @@ const LABELS = {
     tarot: 'Tarot', runes: 'Runes', natal: 'Natal',
     daily: 'Carte du jour', numerology: 'Nombres', horoscope: 'Horoscope',
     journal: 'Journal',
+    freeSpread: 'Tirage libre',
     more: 'Plus', premium: 'Premium', settings: 'Réglages',
     profile: 'Profil', login: 'Connexion',
   },
@@ -40,6 +44,7 @@ const LABELS = {
     tarot: 'Tarot', runes: 'Runas', natal: 'Natal',
     daily: 'Carta del día', numerology: 'Números', horoscope: 'Horóscopo',
     journal: 'Diario',
+    freeSpread: 'Tirada libre',
     more: 'Más', premium: 'Premium', settings: 'Ajustes',
     profile: 'Perfil', login: 'Entrar',
   },
@@ -47,6 +52,7 @@ const LABELS = {
     tarot: 'Tarô', runes: 'Runas', natal: 'Natal',
     daily: 'Carta do dia', numerology: 'Números', horoscope: 'Horóscopo',
     journal: 'Diário',
+    freeSpread: 'Tiragem livre',
     more: 'Mais', premium: 'Premium', settings: 'Definições',
     profile: 'Perfil', login: 'Entrar',
   },
@@ -54,6 +60,7 @@ const LABELS = {
     tarot: 'Таро', runes: 'Руни', natal: 'Карта',
     daily: 'Карта дня', numerology: 'Числа', horoscope: 'Гороскоп',
     journal: 'Щоденник',
+    freeSpread: 'Вільний розклад',
     more: 'Ще', premium: 'Premium', settings: 'Налаштування',
     profile: 'Профіль', login: 'Увійти',
   },
@@ -75,6 +82,12 @@ const NatalIcon = () => (
 const SparkleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/>
+  </svg>
+);
+const FreeSpreadIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="7" width="9" height="13" rx="1.5" transform="rotate(-12 7.5 13.5)"/>
+    <rect x="12" y="5" width="9" height="13" rx="1.5" transform="rotate(10 16.5 11.5)"/>
   </svg>
 );
 const DailyIcon = () => (
@@ -149,6 +162,7 @@ export default function BottomBar() {
 
   const isHome = pathname === '/';
   const isNatal = pathname?.startsWith('/natal') ?? false;
+  const isFreeSpread = pathname?.startsWith('/table') ?? false;
   const isDaily = pathname?.startsWith('/daily') ?? false;
   const isNumerology = pathname?.startsWith('/numerology') ?? false;
   const isHoroscope = pathname?.startsWith('/horoscope') ?? false;
@@ -209,6 +223,14 @@ export default function BottomBar() {
                 boxShadow: '0 6px 24px rgba(0,0,0,0.5)',
               }}
             >
+              <Link
+                href="/table"
+                className="flex items-center gap-3 px-4 py-2.5"
+                style={{ color: isFreeSpread ? activeColor : 'rgba(201,194,224,0.85)' }}
+              >
+                <FreeSpreadIcon />
+                <span className="font-sans text-sm">{l.freeSpread}</span>
+              </Link>
               <Link
                 href="/daily"
                 className="flex items-center gap-3 px-4 py-2.5"
