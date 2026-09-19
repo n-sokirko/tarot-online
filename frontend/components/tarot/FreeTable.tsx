@@ -91,6 +91,9 @@ export default function FreeTable({
   const [drawing, setDrawing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [openCard, setOpenCard] = useState<number | null>(null);
+  // Bumped on every drop. Part of the dragged card's key, so a card released
+  // almost exactly where it started still gets its offset cleared.
+  const [dropCount, setDropCount] = useState(0);
   // Set while a drag is in flight, so the click a drag leaves behind can be
   // told apart from a real tap.
   const draggedRef = useRef(false);
@@ -211,16 +214,21 @@ export default function FreeTable({
             }}
           >
             <motion.div
+              // Keyed on where the card sits. On release the wrapper takes the
+              // new left/top and this element remounts with no transform at
+              // all, so the card simply stays under the finger. dragSnapToOrigin
+              // used to do the clearing, but it animated the card back towards
+              // its old spot while the wrapper jumped to the new one — two
+              // motions at once, which is what felt like a flinch.
+              key={`${c.x}:${c.y}:${dropCount}`}
               drag
               dragMomentum={false}
-              // The resting place is the wrapper's left/top; the drag transform
-              // has to go back to zero once the new spot is stored, or the two
-              // offsets add up on every move.
-              dragSnapToOrigin
+              whileDrag={{ scale: 1.04, zIndex: 100 }}
               onDragStart={() => { draggedRef.current = true; }}
               onDragEnd={(event, info) => {
                 const p = pointerPoint(event, info);
                 moveCard(c.position_index, p.x, p.y);
+                setDropCount((n) => n + 1);
               }}
               // A finished drag still fires a click. Without swallowing it, every
               // drag would also pop the info panel open.
@@ -257,6 +265,9 @@ export default function FreeTable({
           drag={!isFull}
           dragSnapToOrigin
           dragMomentum={false}
+          // The deck genuinely does return — it never leaves its corner — so
+          // give that one a soft spring instead of the default snap.
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           whileTap={{ scale: 0.96 }}
           disabled={isFull || drawing}
           onDragEnd={(event, info) => {
