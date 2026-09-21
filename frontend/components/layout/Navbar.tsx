@@ -2,154 +2,111 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/lib/auth-context';
+import { useState } from 'react';
 import AmbientPlayer from '@/components/audio/AmbientPlayer';
+import { useRitualContext } from '@/lib/ritual-context';
 import type { Locale } from '@/lib/i18n-config';
+import MoreMenu from './MoreMenu';
+import { navLabels } from './nav-labels';
 
 interface NavbarProps {
   locale: Locale;
 }
 
-const NAV = {
-  ru: { tarot: 'Таро', freeSpread: 'Свой расклад', daily: 'Карта дня', horoscope: 'Гороскоп', natal: 'Карта', numerology: 'Числа', history: 'Дневник', pricing: 'Premium', settings: 'Настройки', login: 'Войти', register: 'Регистрация', logout: 'Выйти' },
-  en: { tarot: 'Tarot', freeSpread: 'Free spread', daily: 'Daily', horoscope: 'Horoscope', natal: 'Natal', numerology: 'Numbers', history: 'Journal', pricing: 'Premium', settings: 'Settings', login: 'Log in', register: 'Register', logout: 'Log out' },
-  de: { tarot: 'Tarot', freeSpread: 'Freie Legung', daily: 'Tageskarte', horoscope: 'Horoskop', natal: 'Natal', numerology: 'Zahlen', history: 'Tagebuch', pricing: 'Premium', settings: 'Einstellungen', login: 'Anmelden', register: 'Registrieren', logout: 'Abmelden' },
-  fr: { tarot: 'Tarot', freeSpread: 'Tirage libre', daily: 'Carte du jour', horoscope: 'Horoscope', natal: 'Natal', numerology: 'Nombres', history: 'Journal', pricing: 'Premium', settings: 'Réglages', login: 'Connexion', register: 'Inscription', logout: 'Déconnexion' },
-  es: { tarot: 'Tarot', freeSpread: 'Tirada libre', daily: 'Carta del día', horoscope: 'Horóscopo', natal: 'Natal', numerology: 'Números', history: 'Diario', pricing: 'Premium', settings: 'Ajustes', login: 'Entrar', register: 'Registrarse', logout: 'Salir' },
-  pt: { tarot: 'Tarô', freeSpread: 'Tiragem livre', daily: 'Carta do dia', horoscope: 'Horóscopo', natal: 'Natal', numerology: 'Números', history: 'Diário', pricing: 'Premium', settings: 'Definições', login: 'Entrar', register: 'Registar', logout: 'Sair' },
-  uk: { tarot: 'Таро', freeSpread: 'Свій розклад', daily: 'Карта дня', horoscope: 'Гороскоп', natal: 'Карта', numerology: 'Числа', history: 'Щоденник', pricing: 'Premium', settings: 'Налаштування', login: 'Увійти', register: 'Реєстрація', logout: 'Вийти' },
-} as const;
-
-function GearIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-    </svg>
-  );
-}
-
+/**
+ * Obsidian header: wordmark, streak pill, ⋯ menu. On desktop the four main
+ * sections sit in the middle; on phones they live in the tab bar instead.
+ * The ambient player stays mounted here so music survives page changes.
+ */
 export default function Navbar({ locale }: NavbarProps) {
-  const { user, isLoading, logout } = useAuth();
   const pathname = usePathname();
-  const t = (NAV as unknown as Record<string, typeof NAV.en>)[locale] ?? NAV.en;
+  const t = navLabels(locale);
+  const { ritual } = useRitualContext();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const linkColor = (href: string) =>
-    pathname === href || (href !== '/' && pathname?.startsWith(href))
-      ? '#E0B26C'
-      : 'rgba(242,237,228,0.6)';
+  const active = (href: string) =>
+    href === '/' ? pathname === '/' : !!pathname?.startsWith(href);
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 md:px-8"
-      style={{
-        height: '56px',
-        background: 'rgba(11,10,15,0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(224,178,108,0.12)',
-      }}
-    >
-      {/* Logo */}
-      <Link
-        href="/"
-        className="font-serif text-base md:text-lg tracking-widest flex items-center gap-2"
-        style={{ color: '#E0B26C', letterSpacing: '0.2em' }}
+    <>
+      <header
+        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-[18px] md:px-8"
+        style={{
+          height: 56,
+          background: 'rgba(11,10,15,.78)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid rgba(255,255,255,.07)',
+        }}
       >
-        <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>✦</span>
-        TAROT
-      </Link>
+        <Link href="/" className="font-serif flex items-center" style={{ gap: 8, fontSize: 16, letterSpacing: '.22em' }}>
+          <span aria-hidden style={{ color: 'var(--accent)', fontSize: 13 }}>✦</span>
+          TAROT
+        </Link>
 
-      {/* Center nav — desktop only */}
-      <nav className="hidden md:flex items-center gap-5 absolute left-1/2 -translate-x-1/2">
-        {([
-          ['/', t.tarot],
-          ['/table', t.freeSpread],
-          ['/daily', t.daily],
-          ['/horoscope', t.horoscope],
-          ['/natal', t.natal],
-          ['/numerology', t.numerology],
-          ['/history', t.history],
-        ] as const).map(([href, label]) => (
-          <Link
-            key={href}
-            href={href}
-            className="text-xs font-sans tracking-widest uppercase transition-colors"
-            style={{ color: linkColor(href), letterSpacing: '0.18em' }}
+        <nav className="hidden md:flex items-center absolute left-1/2 -translate-x-1/2" style={{ gap: 28 }}>
+          {([
+            ['/', t.tarot],
+            ['/daily', t.daily],
+            ['/horoscope', t.horoscope],
+            ['/history', t.journal],
+          ] as const).map(([href, label]) => (
+            <Link
+              key={href}
+              href={href}
+              className="transition-colors hover:text-[var(--ink)]"
+              style={{ fontSize: 14, color: active(href) ? 'var(--accent)' : '#8E879B' }}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center" style={{ gap: 10 }}>
+          <AmbientPlayer />
+          {ritual.streak > 0 && (
+            <span
+              className="flex items-center"
+              title={t.streak(ritual.streak)}
+              style={{
+                gap: 7,
+                height: 28,
+                padding: '0 11px',
+                borderRadius: 999,
+                border: '1px solid rgba(143,211,196,.28)',
+                background: 'rgba(143,211,196,.07)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 11,
+                color: 'var(--streak)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span
+                aria-hidden
+                style={{
+                  width: 6, height: 6, borderRadius: '50%', background: 'var(--streak)',
+                  animation: 'breathe 3.2s ease-in-out infinite',
+                }}
+              />
+              {t.streak(ritual.streak)}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label={t.more}
+            aria-expanded={menuOpen}
+            className="flex items-center justify-center transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            style={{
+              width: 32, height: 32, borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,.12)', color: '#A49DAF', fontSize: 16, lineHeight: 1,
+            }}
           >
-            {label}
-          </Link>
-        ))}
-        <Link
-          href="/pricing"
-          className="text-xs font-sans tracking-widest uppercase transition-colors"
-          style={{ color: linkColor('/pricing') === 'rgba(242,237,228,0.6)' ? '#E0B26C' : '#E0B26C', letterSpacing: '0.18em' }}
-        >
-          {t.pricing}
-        </Link>
-      </nav>
-
-      {/* Right side */}
-      <div className="flex items-center gap-3 md:gap-4">
-        <AmbientPlayer />
-
-        {/* Settings — desktop */}
-        <Link
-          href="/settings"
-          className="hidden md:flex items-center gap-1.5 text-xs font-sans tracking-widest uppercase transition-colors"
-          style={{
-            color: pathname === '/settings' ? '#E0B26C' : 'rgba(242,237,228,0.45)',
-            letterSpacing: '0.12em',
-          }}
-          title={t.settings}
-        >
-          <GearIcon />
-          <span>{t.settings}</span>
-        </Link>
-
-        {!isLoading && (
-          <>
-            {user ? (
-              <div className="flex items-center gap-3">
-                <span
-                  className="hidden md:block text-xs font-sans"
-                  style={{ color: 'rgba(242,237,228,0.5)' }}
-                >
-                  {user.display_name || user.email.split('@')[0]}
-                </span>
-                <button
-                  onClick={logout}
-                  className="text-xs font-sans tracking-widest uppercase px-3 py-1.5 rounded-full"
-                  style={{
-                    color: 'rgba(242,237,228,0.5)',
-                    border: '1px solid rgba(224,178,108,0.2)',
-                    letterSpacing: '0.1em',
-                  }}
-                >
-                  {t.logout}
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/login"
-                  className="text-xs font-sans tracking-widest uppercase px-3 py-1.5 rounded-full"
-                  style={{ color: 'rgba(242,237,228,0.6)', border: '1px solid rgba(224,178,108,0.25)', letterSpacing: '0.1em' }}
-                >
-                  {t.login}
-                </Link>
-                <Link
-                  href="/register"
-                  className="hidden md:block text-xs font-sans tracking-widest uppercase px-3 py-1.5 rounded-full"
-                  style={{ background: 'rgba(224,178,108,0.1)', border: '1px solid #E0B26C', color: '#E0B26C', letterSpacing: '0.1em' }}
-                >
-                  {t.register}
-                </Link>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </header>
+            ⋯
+          </button>
+        </div>
+      </header>
+      <MoreMenu open={menuOpen} onClose={() => setMenuOpen(false)} labels={t} />
+    </>
   );
 }

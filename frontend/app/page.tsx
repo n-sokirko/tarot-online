@@ -1,257 +1,125 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { useTranslations, useLocale } from 'next-intl';
-import DeckPile from '@/components/tarot/DeckPile';
-import SpreadSelector, { type SpreadSlug } from '@/components/tarot/SpreadSelector';
-import Starfield from '@/components/visual/Starfield';
-import { createReading, getBillingMe } from '@/lib/api';
+import { useLocale } from 'next-intl';
+import { ApiError, createReading, getBillingMe, getDailyCard, type DailyCardResponse } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
+import { useRitualContext } from '@/lib/ritual-context';
+import QuestionBlock from '@/components/home/QuestionBlock';
+import DailyFan from '@/components/home/DailyFan';
+import WeekRitual from '@/components/home/WeekRitual';
+import SpreadRail, { type RailSpread } from '@/components/home/SpreadRail';
+import YesterdayCard from '@/components/home/YesterdayCard';
+import ShareCard from '@/components/home/ShareCard';
+import PremiumStrip from '@/components/home/PremiumStrip';
 
-type PageState = 'selecting' | 'idle' | 'shuffled' | 'loading' | 'error';
+const ERRORS = {
+  ru: {
+    limit: 'Бесплатные расклады на сегодня закончились. Завтра будут новые — или загляни в Premium.',
+    generic: 'Не получилось разложить карты. Попробуй ещё раз через минуту.',
+  },
+  en: {
+    limit: "You've used today's free readings. New ones tomorrow — or have a look at Premium.",
+    generic: "Couldn't lay out the cards. Try again in a minute.",
+  },
+} as const;
 
+/** Home, design "1a Обсидиан": question → card of the day → ritual → spreads. */
 export default function HomePage() {
-  const t = useTranslations('home');
-  const tReading = useTranslations('reading');
-  const locale = useLocale() as 'ru' | 'en';
-  const prefersReducedMotion = useReducedMotion();
+  const rawLocale = useLocale();
+  const locale: 'ru' | 'en' = rawLocale === 'ru' ? 'ru' : 'en';
   const router = useRouter();
+  const { ritual, checkIn } = useRitualContext();
 
-  const [pageState, setPageState] = useState<PageState>('selecting');
-  const [selectedSpread, setSelectedSpread] = useState<SpreadSlug>('three-card');
-  const [sessionKey, setSessionKey] = useState(0);
-  const [entitlements, setEntitlements] = useState<readonly string[]>([]);
+  const [question, setQuestion] = useState('');
+  const [shuffleSignal, setShuffleSignal] = useState(0);
+  const [daily, setDaily] = useState<DailyCardResponse | null>(null);
+  const [flipped, setFlipped] = useState(false);
+  const [opened, setOpened] = useState(false);
+  const [busy, setBusy] = useState<RailSpread | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [premium, setPremium] = useState(false);
 
-  // Fetch entitlements so premium spreads unlock for subscribers
   useEffect(() => {
-    if (!getAccessToken()) return;
-    getBillingMe()
-      .then((me) => setEntitlements(me.entitlements ?? []))
-      .catch(() => {/* silently ignore — entitlements stay empty */});
-  }, []);
-
-  const handleSpreadSelect = useCallback((slug: SpreadSlug) => {
-    setSelectedSpread(slug);
-    setPageState('idle');
-  }, []);
-
-  const handleShuffleComplete = useCallback(() => {
-    setPageState('shuffled');
-  }, []);
-
-  const handleDraw = useCallback(async () => {
-    setPageState('loading');
-    try {
-      const result = await createReading(locale, selectedSpread);
-      router.push(`/reading/${result.id}`);
-    } catch {
-      setPageState('error');
+    getDailyCard().then(setDaily).catch(() => {/* the fan still shows card backs */});
+    if (getAccessToken()) {
+      getBillingMe()
+        .then((me) => setPremium((me.entitlements ?? []).includes('sonnet_ai')))
+        .catch(() => {});
     }
-  }, [selectedSpread, router]);
-
-  const handleReset = useCallback(() => {
-    setPageState('selecting');
-    setSessionKey((k) => k + 1);
   }, []);
+
+  const onOpened = useCallback(() => {
+    setOpened(true);
+    if (!ritual.done_today) void checkIn();
+  }, [ritual.done_today, checkIn]);
+
+  const pick = useCallback(async (slug: RailSpread) => {
+    if (slug === 'free') {
+      router.push('/table');
+      return;
+    }
+    setBusy(slug);
+    setError(null);
+    try {
+      const reading = await createReading(rawLocale, slug, question.trim());
+      router.push(`/reading/${reading.id}`);
+    } catch (e) {
+      setError(e instanceof ApiError && (e.status === 402 || e.status === 429)
+        ? ERRORS[locale].limit
+        : ERRORS[locale].generic);
+      setBusy(null);
+    }
+  }, [router, rawLocale, question, locale]);
 
   return (
     <main
-      className="min-h-screen flex flex-col items-center px-4 py-12 md:py-20 relative overflow-x-hidden"
+      className="relative min-h-screen mx-auto"
       style={{
+        maxWidth: 560,
+        overflowX: 'hidden',
+        paddingBottom: 40,
         background:
-          'transparent',
+          'radial-gradient(520px 340px at 84% -6%, rgba(182,167,240,.20), transparent 70%),' +
+          'radial-gradient(420px 300px at 0% 18%, rgba(224,178,108,.12), transparent 70%)',
       }}
     >
-      {/* Decorative animated starfield */}
-      <Starfield seed="home" count={56} />
-
-      {/* Hero */}
-      <motion.header
-        className="text-center mb-10 md:mb-14 max-w-xl"
-        initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: 'easeOut' }}
-      >
-        <h1
-          className="font-serif text-4xl md:text-6xl lg:text-7xl leading-tight mb-4"
-          style={{ color: '#E0B26C', textShadow: '0 0 40px rgba(224,178,108,0.2)' }}
-        >
-          {t('title')}
-        </h1>
-        <p
-          className="font-serif text-base md:text-lg italic"
-          style={{ color: 'rgba(242,237,228,0.75)' }}
-        >
-          {t('subtitle')}
-        </p>
-        <p
-          className="mt-3 text-sm tracking-widest uppercase"
-          style={{ color: 'rgba(242,237,228,0.4)', letterSpacing: '0.15em' }}
-        >
-          {t('description')}
-        </p>
-      </motion.header>
-
-      {/* Main content */}
-      <div className="w-full max-w-2xl flex flex-col items-center gap-10">
-
-        {/* Step 0: Spread selector */}
-        <AnimatePresence mode="wait">
-          {pageState === 'selecting' && (
-            <motion.div
-              key="selector"
-              initial={prefersReducedMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.35 }}
-            >
-              {/* How it works — orient first-time visitors */}
-              <div className="flex items-center justify-center gap-2 md:gap-4 mb-8 flex-wrap">
-                {[
-                  { n: '1', ru: 'Задай вопрос', en: 'Ask a question' },
-                  { n: '2', ru: 'Перемешай колоду', en: 'Shuffle the deck' },
-                  { n: '3', ru: 'Получи AI-разбор', en: 'Get an AI reading' },
-                ].map((s, i) => (
-                  <div key={s.n} className="flex items-center gap-2 md:gap-4">
-                    <div className="flex flex-col items-center gap-1.5" style={{ maxWidth: 96 }}>
-                      <span
-                        className="flex items-center justify-center font-serif"
-                        style={{ width: 30, height: 30, borderRadius: 999, border: '1px solid rgba(224,178,108,0.4)', color: '#E0B26C', fontSize: '0.85rem' }}
-                      >
-                        {s.n}
-                      </span>
-                      <span className="font-sans text-[0.7rem] text-center leading-tight" style={{ color: 'rgba(242,237,228,0.75)' }}>
-                        {locale === 'ru' ? s.ru : s.en}
-                      </span>
-                    </div>
-                    {i < 2 && <span style={{ color: 'rgba(224,178,108,0.4)' }}>→</span>}
-                  </div>
-                ))}
-              </div>
-              <SpreadSelector key={sessionKey} onSelect={handleSpreadSelect} entitlements={entitlements} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Step 1: Deck + Shuffle */}
-        <AnimatePresence mode="wait">
-          {pageState !== 'selecting' && (
-            <motion.div
-              key="deck"
-              className="flex flex-col items-center gap-8"
-              initial={prefersReducedMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.4 }}
-            >
-              <DeckPile
-                key={sessionKey}
-                onShuffleComplete={handleShuffleComplete}
-              />
-
-              <AnimatePresence mode="wait">
-                {pageState === 'shuffled' && (
-                  <motion.div
-                    key="draw-btn"
-                    className="flex flex-col items-center gap-3"
-                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={prefersReducedMotion ? {} : { opacity: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    <p
-                      className="font-serif text-sm italic text-center"
-                      style={{ color: 'rgba(242,237,228,0.6)' }}
-                    >
-                      {tReading('draw_prompt')}
-                    </p>
-                    <motion.button
-                      className="px-10 py-3 rounded-full font-serif text-sm tracking-widest uppercase"
-                      style={{
-                        background: 'rgba(224,178,108,0.1)',
-                        border: '1px solid #E0B26C',
-                        color: '#E0B26C',
-                        letterSpacing: '0.15em',
-                      }}
-                      whileHover={
-                        prefersReducedMotion
-                          ? {}
-                          : {
-                              scale: 1.05,
-                              backgroundColor: 'rgba(224,178,108,0.2)',
-                              boxShadow: '0 0 20px rgba(224,178,108,0.2)',
-                            }
-                      }
-                      whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-                      onClick={() => void handleDraw()}
-                    >
-                      {tReading('draw')}
-                    </motion.button>
-                  </motion.div>
-                )}
-
-                {pageState === 'loading' && (
-                  <motion.p
-                    key="loading"
-                    className="font-serif italic text-center"
-                    style={{ color: 'rgba(224,178,108,0.7)' }}
-                    initial={prefersReducedMotion ? false : { opacity: 0 }}
-                    animate={
-                      prefersReducedMotion
-                        ? { opacity: 1 }
-                        : { opacity: [0.4, 1, 0.4] }
-                    }
-                    transition={
-                      prefersReducedMotion
-                        ? {}
-                        : { duration: 1.5, repeat: Infinity, ease: 'easeInOut' }
-                    }
-                  >
-                    {tReading('loading')}
-                  </motion.p>
-                )}
-
-                {pageState === 'error' && (
-                  <motion.div
-                    key="error"
-                    className="flex flex-col items-center gap-3"
-                    initial={prefersReducedMotion ? false : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                  >
-                    <p
-                      className="text-sm text-center"
-                      style={{ color: 'rgba(160,44,44,0.9)' }}
-                    >
-                      {tReading('error')}
-                    </p>
-                    <button
-                      className="text-xs underline"
-                      style={{ color: 'rgba(242,237,228,0.5)' }}
-                      onClick={handleReset}
-                    >
-                      ↺
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-      </div>
-
-      <footer
-        className="mt-auto pt-16 text-center"
+      {/* Decorative slow ring behind the title. */}
+      <div
+        aria-hidden
+        className="absolute pointer-events-none"
         style={{
-          color: 'rgba(242,237,228,0.25)',
-          fontSize: '0.65rem',
-          letterSpacing: '0.1em',
+          width: 280, height: 280, top: -90, right: -110, borderRadius: '50%',
+          border: '1px dashed rgba(224,178,108,.18)',
+          animation: 'spin 140s linear infinite',
         }}
-      >
-        TAROT ONLINE · {new Date().getFullYear()}
-      </footer>
+      />
+
+      <QuestionBlock
+        locale={locale}
+        question={question}
+        onQuestion={setQuestion}
+        onShuffle={() => setShuffleSignal((n) => n + 1)}
+      />
+      <DailyFan
+        locale={locale}
+        daily={daily}
+        flipped={flipped}
+        onFlip={setFlipped}
+        shuffleSignal={shuffleSignal}
+        onOpened={onOpened}
+      />
+      <WeekRitual locale={locale} ritual={ritual} />
+      <SpreadRail locale={locale} busy={busy} onPick={pick} />
+      {error && (
+        <p role="alert" style={{ margin: '14px 18px 0', fontSize: 13.5, lineHeight: 1.5, color: '#E7A48B' }}>
+          {error}
+        </p>
+      )}
+      <YesterdayCard locale={locale} />
+      <ShareCard locale={locale} daily={daily} opened={opened} />
+      {!premium && <PremiumStrip locale={locale} />}
     </main>
   );
 }

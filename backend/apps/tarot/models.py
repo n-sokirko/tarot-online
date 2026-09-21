@@ -45,3 +45,29 @@ class SpreadType(models.Model):
 
     def __str__(self) -> str:
         return self.name_en
+
+
+class RitualDay(models.Model):
+    """One day on which the person opened their card of the day.
+
+    The daily ritual on the home screen ("7 дней", the week grid) is built from
+    these rows, so it survives a device change — a streak kept in the browser
+    would reset the moment someone opens the Mini App on another phone.
+
+    `day` is the person's own calendar date, not the server's: the server runs
+    on UTC and most of the audience on UTC+3, so a server-side "today" would put
+    a 1 a.m. visit in Minsk on the previous day and break the streak.
+    """
+    user = models.ForeignKey(
+        'users.User', on_delete=models.CASCADE, related_name='ritual_days')
+    day = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'day'], name='ritual_day_once'),
+        ]
+        indexes = [models.Index(fields=['user', '-day'])]
+
+    def __str__(self) -> str:
+        return f'{self.user_id} @ {self.day}'

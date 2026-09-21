@@ -8,7 +8,7 @@ import { SettingsProvider } from '@/lib/settings-context';
 import Navbar from '@/components/layout/Navbar';
 import BottomBar from '@/components/layout/BottomBar';
 import TelegramInit from '@/components/telegram/TelegramInit';
-import RotatingWheel from '@/components/natal/RotatingWheel';
+import { RitualProvider } from '@/lib/ritual-context';
 import type { Locale } from '@/lib/i18n-config';
 import './globals.css';
 
@@ -70,13 +70,13 @@ export default async function RootLayout({
             <SettingsProvider>
             {/* Initialises Telegram WebApp and auto-logs-in Mini App users */}
             <TelegramInit />
-            {/* Site-wide rotating zodiac wheel, fixed behind all content */}
-            <RotatingWheel />
+            <RitualProvider>
             <Navbar locale={locale} />
-            <div style={{ paddingTop: '56px', paddingBottom: '60px' }} className="md:pb-0">
+            <div className="pt-14 pb-[92px] md:pb-0">
               {children}
             </div>
             <BottomBar />
+            </RitualProvider>
             </SettingsProvider>
           </AuthProvider>
         </NextIntlClientProvider>

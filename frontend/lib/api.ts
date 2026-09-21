@@ -53,6 +53,42 @@ export interface DailyCardResponse {
   is_reversed: boolean;
 }
 
+// ---- Daily ritual (home screen streak) ----
+
+export interface RitualDayState {
+  date: string;
+  weekday: number; // 0 = Monday
+  done: boolean;
+  is_today: boolean;
+  is_future: boolean;
+}
+
+export interface RitualState {
+  today: string;
+  done_today: boolean;
+  streak: number;
+  week: RitualDayState[];
+}
+
+/** The person's own calendar date. The server runs on UTC, the audience mostly
+ *  on UTC+3 — "today" has to come from here or a late-night visit lands on the
+ *  wrong day and breaks the streak. */
+export function localToday(d: Date = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+export async function getRitual(today: string = localToday()): Promise<RitualState> {
+  return request<RitualState>(`/api/v1/ritual/?today=${today}`);
+}
+
+export async function checkinRitual(today: string = localToday()): Promise<RitualState> {
+  return request<RitualState>('/api/v1/ritual/checkin/', {
+    method: 'POST',
+    body: JSON.stringify({ today }),
+  });
+}
+
 export async function getDailyCard(): Promise<DailyCardResponse> {
   return request<DailyCardResponse>('/api/v1/cards/daily/');
 }
