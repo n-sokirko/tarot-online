@@ -285,11 +285,11 @@ export default function PricingPage() {
         >
           <h1
             className="font-serif text-3xl md:text-4xl mb-3"
-            style={{ color: '#d4af37', letterSpacing: '0.05em' }}
+            style={{ color: '#E0B26C', letterSpacing: '0.05em' }}
           >
             ✦ {t.title}
           </h1>
-          <p className="font-serif text-sm md:text-base max-w-xl mx-auto" style={{ color: 'rgba(201,194,224,0.7)' }}>
+          <p className="font-serif text-sm md:text-base max-w-xl mx-auto" style={{ color: 'rgba(242,237,228,0.7)' }}>
             {t.subtitle}
           </p>
         </motion.header>
@@ -305,7 +305,7 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center text-sm mb-6 font-serif"
-            style={{ color: '#d4af37' }}
+            style={{ color: '#E0B26C' }}
           >
             {successMsg}
           </motion.p>
@@ -335,9 +335,9 @@ export default function PricingPage() {
             whileTap={{ scale: 0.97 }}
             className="px-7 py-3 rounded-full font-serif text-sm tracking-widest uppercase flex items-center gap-2"
             style={{
-              background: 'linear-gradient(135deg, rgba(212,175,55,0.14), rgba(212,175,55,0.04))',
-              border: '1px solid rgba(212,175,55,0.5)',
-              color: '#d4af37',
+              background: 'linear-gradient(135deg, rgba(224,178,108,0.14), rgba(224,178,108,0.04))',
+              border: '1px solid rgba(224,178,108,0.5)',
+              color: '#E0B26C',
               letterSpacing: '0.12em',
             }}
           >
@@ -348,7 +348,7 @@ export default function PricingPage() {
 
         <p
           className="mt-8 text-center text-[10px] tracking-widest uppercase"
-          style={{ color: 'rgba(201,194,224,0.4)', letterSpacing: '0.18em' }}
+          style={{ color: 'rgba(242,237,228,0.4)', letterSpacing: '0.18em' }}
         >
           {t.footnote}
         </p>
@@ -418,54 +418,54 @@ function PlanCard({
       className="rounded-2xl p-6 flex flex-col relative overflow-hidden"
       style={{
         background: recommended
-          ? 'linear-gradient(180deg, rgba(212,175,55,0.12), rgba(28,24,64,0.4))'
-          : 'linear-gradient(180deg, rgba(28,24,64,0.6), rgba(11,11,31,0.6))',
-        border: `1px solid ${recommended ? '#d4af37' : 'rgba(212,175,55,0.18)'}`,
-        boxShadow: recommended ? '0 0 32px rgba(212,175,55,0.18)' : 'none',
+          ? 'linear-gradient(180deg, rgba(224,178,108,0.12), rgba(19,16,25,0.4))'
+          : 'linear-gradient(180deg, rgba(19,16,25,0.6), rgba(11,10,15,0.6))',
+        border: `1px solid ${recommended ? '#E0B26C' : 'rgba(224,178,108,0.18)'}`,
+        boxShadow: recommended ? '0 0 32px rgba(224,178,108,0.18)' : 'none',
       }}
     >
       {recommended && (
         <span
           className="absolute top-4 right-4 text-[9px] tracking-widest uppercase px-2 py-1 rounded-full"
           style={{
-            background: 'rgba(212,175,55,0.2)',
-            color: '#d4af37',
+            background: 'rgba(224,178,108,0.2)',
+            color: '#E0B26C',
             letterSpacing: '0.18em',
-            border: '1px solid rgba(212,175,55,0.4)',
+            border: '1px solid rgba(224,178,108,0.4)',
           }}
         >
           {t.badge_recommended}
         </span>
       )}
 
-      <h2 className="font-serif text-xl mb-1" style={{ color: '#d4af37' }}>
+      <h2 className="font-serif text-xl mb-1" style={{ color: '#E0B26C' }}>
         {name}
       </h2>
 
       {/* Stars price */}
       {starsLabel ? (
         <div className="mb-1">
-          <span className="font-serif text-2xl" style={{ color: 'rgba(201,194,224,0.95)' }}>
+          <span className="font-serif text-2xl" style={{ color: 'rgba(242,237,228,0.95)' }}>
             {starsLabel}
           </span>
-          <span className="font-serif text-sm ml-1" style={{ color: 'rgba(201,194,224,0.5)' }}>
+          <span className="font-serif text-sm ml-1" style={{ color: 'rgba(242,237,228,0.5)' }}>
             · {priceLabel}
           </span>
         </div>
       ) : (
-        <div className="font-serif text-2xl mb-1" style={{ color: 'rgba(201,194,224,0.95)' }}>
+        <div className="font-serif text-2xl mb-1" style={{ color: 'rgba(242,237,228,0.95)' }}>
           {priceLabel}
         </div>
       )}
 
-      <p className="font-serif text-sm mb-5 mt-2" style={{ color: 'rgba(201,194,224,0.65)' }}>
+      <p className="font-serif text-sm mb-5 mt-2" style={{ color: 'rgba(242,237,228,0.65)' }}>
         {description}
       </p>
 
       <ul className="flex-1 space-y-2 mb-6">
         {features.map((f) => (
-          <li key={f} className="font-serif text-sm flex items-start gap-2" style={{ color: 'rgba(201,194,224,0.85)' }}>
-            <span style={{ color: '#d4af37', marginTop: '0.15em' }}>✦</span>
+          <li key={f} className="font-serif text-sm flex items-start gap-2" style={{ color: 'rgba(242,237,228,0.85)' }}>
+            <span style={{ color: '#E0B26C', marginTop: '0.15em' }}>✦</span>
             <span>{f}</span>
           </li>
         ))}
@@ -477,10 +477,10 @@ function PlanCard({
         className="w-full px-4 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
         style={{
           background: isFree
-            ? 'rgba(201,194,224,0.05)'
-            : 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-          border: isFree ? '1px solid rgba(201,194,224,0.15)' : '1px solid #d4af37',
-          color: isFree ? 'rgba(201,194,224,0.45)' : '#d4af37',
+            ? 'rgba(242,237,228,0.05)'
+            : 'linear-gradient(135deg, rgba(224,178,108,0.2), rgba(224,178,108,0.05))',
+          border: isFree ? '1px solid rgba(242,237,228,0.15)' : '1px solid #E0B26C',
+          color: isFree ? 'rgba(242,237,228,0.45)' : '#E0B26C',
           letterSpacing: '0.18em',
           opacity: isLoading ? 0.6 : 1,
           cursor: isFree || isLoading ? 'default' : 'pointer',

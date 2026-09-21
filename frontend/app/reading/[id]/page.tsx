@@ -52,13 +52,13 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center px-4"
         style={{ background: 'transparent' }}>
-        <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>
+        <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.6)' }}>
           {tReading('error')}
         </p>
         <button
           onClick={() => router.push('/')}
           className="mt-4 text-xs underline"
-          style={{ color: 'rgba(201,194,224,0.4)' }}
+          style={{ color: 'rgba(242,237,228,0.4)' }}
         >
           ↩ {tReading('shuffle')}
         </button>
@@ -72,7 +72,7 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
         style={{ background: 'transparent' }}>
         <motion.p
           className="font-serif italic"
-          style={{ color: 'rgba(212,175,55,0.7)' }}
+          style={{ color: 'rgba(224,178,108,0.7)' }}
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -93,7 +93,7 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         {STAR_POSITIONS.map((star, i) => (
           <div key={i} className="absolute rounded-full"
-            style={{ top: star.top, left: star.left, width: star.size, height: star.size, background: '#d4af37', opacity: star.opacity }}
+            style={{ top: star.top, left: star.left, width: star.size, height: star.size, background: '#E0B26C', opacity: star.opacity }}
           />
         ))}
       </div>
@@ -101,9 +101,9 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
       <div className="w-full max-w-2xl flex flex-col items-center gap-10">
         {/* Divider */}
         <div className="flex items-center gap-4 w-full max-w-xs" aria-hidden="true">
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.25)' }} />
-          <span style={{ color: 'rgba(212,175,55,0.5)', fontSize: '0.7rem' }}>✦</span>
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.25)' }} />
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.25)' }} />
+          <span style={{ color: 'rgba(224,178,108,0.5)', fontSize: '0.7rem' }}>✦</span>
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.25)' }} />
         </div>
 
         <motion.div
@@ -130,8 +130,8 @@ export default function ReadingPage({ params }: { params: { id: string } }) {
             onClick={() => router.push('/')}
             className="mt-4 px-6 py-2 rounded-full text-xs tracking-widest uppercase"
             style={{
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: 'rgba(201,194,224,0.5)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: 'rgba(242,237,228,0.5)',
               letterSpacing: '0.12em',
             }}
           >

@@ -36,25 +36,25 @@ export default function Navbar({ locale }: NavbarProps) {
 
   const linkColor = (href: string) =>
     pathname === href || (href !== '/' && pathname?.startsWith(href))
-      ? '#d4af37'
-      : 'rgba(201,194,224,0.6)';
+      ? '#E0B26C'
+      : 'rgba(242,237,228,0.6)';
 
   return (
     <header
       className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 md:px-8"
       style={{
         height: '56px',
-        background: 'rgba(11,11,31,0.85)',
+        background: 'rgba(11,10,15,0.85)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(212,175,55,0.12)',
+        borderBottom: '1px solid rgba(224,178,108,0.12)',
       }}
     >
       {/* Logo */}
       <Link
         href="/"
         className="font-serif text-base md:text-lg tracking-widest flex items-center gap-2"
-        style={{ color: '#d4af37', letterSpacing: '0.2em' }}
+        style={{ color: '#E0B26C', letterSpacing: '0.2em' }}
       >
         <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>✦</span>
         TAROT
@@ -83,7 +83,7 @@ export default function Navbar({ locale }: NavbarProps) {
         <Link
           href="/pricing"
           className="text-xs font-sans tracking-widest uppercase transition-colors"
-          style={{ color: linkColor('/pricing') === 'rgba(201,194,224,0.6)' ? '#d4af37' : '#d4af37', letterSpacing: '0.18em' }}
+          style={{ color: linkColor('/pricing') === 'rgba(242,237,228,0.6)' ? '#E0B26C' : '#E0B26C', letterSpacing: '0.18em' }}
         >
           {t.pricing}
         </Link>
@@ -98,7 +98,7 @@ export default function Navbar({ locale }: NavbarProps) {
           href="/settings"
           className="hidden md:flex items-center gap-1.5 text-xs font-sans tracking-widest uppercase transition-colors"
           style={{
-            color: pathname === '/settings' ? '#d4af37' : 'rgba(201,194,224,0.45)',
+            color: pathname === '/settings' ? '#E0B26C' : 'rgba(242,237,228,0.45)',
             letterSpacing: '0.12em',
           }}
           title={t.settings}
@@ -113,7 +113,7 @@ export default function Navbar({ locale }: NavbarProps) {
               <div className="flex items-center gap-3">
                 <span
                   className="hidden md:block text-xs font-sans"
-                  style={{ color: 'rgba(201,194,224,0.5)' }}
+                  style={{ color: 'rgba(242,237,228,0.5)' }}
                 >
                   {user.display_name || user.email.split('@')[0]}
                 </span>
@@ -121,8 +121,8 @@ export default function Navbar({ locale }: NavbarProps) {
                   onClick={logout}
                   className="text-xs font-sans tracking-widest uppercase px-3 py-1.5 rounded-full"
                   style={{
-                    color: 'rgba(201,194,224,0.5)',
-                    border: '1px solid rgba(212,175,55,0.2)',
+                    color: 'rgba(242,237,228,0.5)',
+                    border: '1px solid rgba(224,178,108,0.2)',
                     letterSpacing: '0.1em',
                   }}
                 >
@@ -134,14 +134,14 @@ export default function Navbar({ locale }: NavbarProps) {
                 <Link
                   href="/login"
                   className="text-xs font-sans tracking-widest uppercase px-3 py-1.5 rounded-full"
-                  style={{ color: 'rgba(201,194,224,0.6)', border: '1px solid rgba(212,175,55,0.25)', letterSpacing: '0.1em' }}
+                  style={{ color: 'rgba(242,237,228,0.6)', border: '1px solid rgba(224,178,108,0.25)', letterSpacing: '0.1em' }}
                 >
                   {t.login}
                 </Link>
                 <Link
                   href="/register"
                   className="hidden md:block text-xs font-sans tracking-widest uppercase px-3 py-1.5 rounded-full"
-                  style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#d4af37', letterSpacing: '0.1em' }}
+                  style={{ background: 'rgba(224,178,108,0.1)', border: '1px solid #E0B26C', color: '#E0B26C', letterSpacing: '0.1em' }}
                 >
                   {t.register}
                 </Link>

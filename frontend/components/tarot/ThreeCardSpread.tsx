@@ -114,7 +114,7 @@ export default function ThreeCardSpread({
         {/* Position label */}
         <p
           className="font-serif tracking-widest uppercase text-center"
-          style={{ color: '#d4af37', letterSpacing: '0.14em', fontSize: '0.75rem' }}
+          style={{ color: '#E0B26C', letterSpacing: '0.14em', fontSize: '0.75rem' }}
         >
           {positionLabel(pos)}
         </p>
@@ -151,7 +151,7 @@ export default function ThreeCardSpread({
           ) : (
             <div
               className="w-full rounded-xl"
-              style={{ aspectRatio: '2 / 3', border: '1px dashed rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.03)' }}
+              style={{ aspectRatio: '2 / 3', border: '1px dashed rgba(224,178,108,0.3)', background: 'rgba(224,178,108,0.03)' }}
             />
           )}
         </motion.div>
@@ -160,7 +160,7 @@ export default function ThreeCardSpread({
         {positionMeaning(pos) !== '' && drawnCard !== null && (
           <p
             className="hidden md:block text-xs text-center leading-relaxed max-w-[140px]"
-            style={{ color: 'rgba(201,194,224,0.5)' }}
+            style={{ color: 'rgba(242,237,228,0.5)' }}
           >
             {positionMeaning(pos)}
           </p>
@@ -223,7 +223,7 @@ export default function ThreeCardSpread({
               style={{
                 borderRadius: '9999px',
                 transition: 'all 0.25s',
-                background: activeSlide === i ? '#d4af37' : 'rgba(212,175,55,0.25)',
+                background: activeSlide === i ? '#E0B26C' : 'rgba(224,178,108,0.25)',
                 width: activeSlide === i ? '20px' : '8px',
                 height: '8px',
                 border: 'none',
@@ -244,7 +244,7 @@ export default function ThreeCardSpread({
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25 }}
               className="text-xs text-center px-6 leading-relaxed"
-              style={{ color: 'rgba(201,194,224,0.5)', maxWidth: '280px' }}
+              style={{ color: 'rgba(242,237,228,0.5)', maxWidth: '280px' }}
             >
               {positionMeaning(positions[activeSlide] ?? positions[0])}
             </motion.p>

@@ -95,7 +95,7 @@ export default function NineCardSpread({
                 <p
                   className="font-serif text-center leading-tight"
                   style={{
-                    color: 'rgba(212,175,55,0.65)',
+                    color: 'rgba(224,178,108,0.65)',
                     fontSize: '0.55rem',
                     letterSpacing: '0.08em',
                   }}
@@ -151,8 +151,8 @@ export default function NineCardSpread({
                     className="w-full rounded-lg"
                     style={{
                       aspectRatio: '2 / 3',
-                      border: '1px dashed rgba(212,175,55,0.2)',
-                      background: 'rgba(212,175,55,0.02)',
+                      border: '1px dashed rgba(224,178,108,0.2)',
+                      background: 'rgba(224,178,108,0.02)',
                     }}
                   />
                 )}

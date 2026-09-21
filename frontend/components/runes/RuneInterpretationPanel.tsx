@@ -145,11 +145,11 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
         className="w-full max-w-2xl mx-auto mt-12"
       >
         <div className="flex items-center gap-4 mb-6" aria-hidden>
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
-          <span style={{ color: 'rgba(212,175,55,0.6)', fontSize: '0.75rem', letterSpacing: '0.3em' }}>
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.2)' }} />
+          <span style={{ color: 'rgba(224,178,108,0.6)', fontSize: '0.75rem', letterSpacing: '0.3em' }}>
             ᛟ
           </span>
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.2)' }} />
         </div>
         <div className="flex justify-center mb-6">
           <SpeakButton text={interpretation.body_md} lang={locale} autoPlay={initial === null} />
@@ -160,7 +160,7 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
         />
         <p
           className="mt-8 text-[10px] tracking-widest uppercase opacity-50"
-          style={{ color: 'rgba(201,194,224,0.5)', letterSpacing: '0.18em' }}
+          style={{ color: 'rgba(242,237,228,0.5)', letterSpacing: '0.18em' }}
         >
           {t.footnote}
         </p>
@@ -181,7 +181,7 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
           >
             <motion.p
               className="font-serif italic"
-              style={{ color: 'rgba(212,175,55,0.75)' }}
+              style={{ color: 'rgba(224,178,108,0.75)' }}
               animate={{ opacity: [0.4, 1, 0.4] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
             >
@@ -190,7 +190,7 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
             {question && (
               <p
                 className="font-serif text-sm italic text-center max-w-md"
-                style={{ color: 'rgba(201,194,224,0.4)' }}
+                style={{ color: 'rgba(242,237,228,0.4)' }}
               >
                 &laquo;{question}&raquo;
               </p>
@@ -204,16 +204,16 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-4"
           >
-            <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.75)' }}>
+            <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.75)' }}>
               {t.payRequired}
             </p>
             <a
               href="/pricing"
               className="px-6 py-2.5 rounded-full text-xs tracking-widest uppercase"
               style={{
-                background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-                border: '1px solid #d4af37',
-                color: '#d4af37',
+                background: 'linear-gradient(135deg, rgba(224,178,108,0.2), rgba(224,178,108,0.05))',
+                border: '1px solid #E0B26C',
+                color: '#E0B26C',
                 letterSpacing: '0.18em',
               }}
             >
@@ -228,15 +228,15 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-3"
           >
-            <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>
+            <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.6)' }}>
               {t.error}
             </p>
             <button
               onClick={run}
               className="px-6 py-2 rounded-full text-xs tracking-widest uppercase"
               style={{
-                border: '1px solid rgba(212,175,55,0.4)',
-                color: 'rgba(212,175,55,0.85)',
+                border: '1px solid rgba(224,178,108,0.4)',
+                color: 'rgba(224,178,108,0.85)',
                 letterSpacing: '0.12em',
               }}
             >
@@ -262,25 +262,25 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
                 maxLength={1000}
                 className="w-full resize-none rounded-xl px-5 py-4 font-serif text-sm md:text-base leading-relaxed outline-none transition-all placeholder:italic"
                 style={{
-                  background: 'rgba(28,24,64,0.5)',
-                  border: '1px solid rgba(212,175,55,0.25)',
-                  color: 'rgba(201,194,224,0.9)',
+                  background: 'rgba(19,16,25,0.5)',
+                  border: '1px solid rgba(224,178,108,0.25)',
+                  color: 'rgba(242,237,228,0.9)',
                   minHeight: '80px',
                   maxHeight: '200px',
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(212,175,55,0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(224,178,108,0.5)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(224,178,108,0.08)';
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(212,175,55,0.25)';
+                  e.currentTarget.style.borderColor = 'rgba(224,178,108,0.25)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               />
               {question.length > 0 && (
                 <span
                   className="absolute bottom-2 right-3 text-[10px]"
-                  style={{ color: 'rgba(201,194,224,0.3)' }}
+                  style={{ color: 'rgba(242,237,228,0.3)' }}
                 >
                   {question.length}/1000
                 </span>
@@ -289,7 +289,7 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
 
             <p
               className="text-[11px] tracking-wide"
-              style={{ color: 'rgba(201,194,224,0.35)', letterSpacing: '0.05em' }}
+              style={{ color: 'rgba(242,237,228,0.35)', letterSpacing: '0.05em' }}
             >
               {t.hint}
             </p>
@@ -303,12 +303,12 @@ export default function RuneInterpretationPanel({ castId, locale, initial }: Pro
                 className="px-8 py-3 rounded-full text-xs tracking-widest uppercase transition-opacity"
                 style={{
                   background: question.trim()
-                    ? 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.05))'
-                    : 'rgba(201,194,224,0.05)',
-                  border: `1px solid ${question.trim() ? '#d4af37' : 'rgba(201,194,224,0.15)'}`,
-                  color: question.trim() ? '#d4af37' : 'rgba(201,194,224,0.35)',
+                    ? 'linear-gradient(135deg, rgba(224,178,108,0.25), rgba(224,178,108,0.05))'
+                    : 'rgba(242,237,228,0.05)',
+                  border: `1px solid ${question.trim() ? '#E0B26C' : 'rgba(242,237,228,0.15)'}`,
+                  color: question.trim() ? '#E0B26C' : 'rgba(242,237,228,0.35)',
                   letterSpacing: '0.22em',
-                  boxShadow: question.trim() ? '0 0 24px rgba(212,175,55,0.15)' : 'none',
+                  boxShadow: question.trim() ? '0 0 24px rgba(224,178,108,0.15)' : 'none',
                   cursor: question.trim() ? 'pointer' : 'default',
                 }}
               >

@@ -164,7 +164,7 @@ const STRINGS = {
   },
 } as const;
 
-function NumberOrb({ value, label, sublabel, accent = '#d4af37' }: {
+function NumberOrb({ value, label, sublabel, accent = '#E0B26C' }: {
   value: number;
   label: string;
   sublabel: string;
@@ -182,7 +182,7 @@ function NumberOrb({ value, label, sublabel, accent = '#d4af37' }: {
         style={{
           width: '108px',
           height: '108px',
-          background: `radial-gradient(circle at 35% 35%, rgba(212,175,55,0.18) 0%, rgba(11,11,31,0.6) 70%)`,
+          background: `radial-gradient(circle at 35% 35%, rgba(224,178,108,0.18) 0%, rgba(11,10,15,0.6) 70%)`,
           border: `1px solid ${accent}55`,
           boxShadow: `0 0 24px ${accent}33, inset 0 0 16px ${accent}22`,
         }}
@@ -201,7 +201,7 @@ function NumberOrb({ value, label, sublabel, accent = '#d4af37' }: {
       </div>
       <p
         className="font-sans text-[0.65rem] uppercase tracking-widest"
-        style={{ color: 'rgba(201,194,224,0.55)', letterSpacing: '0.2em' }}
+        style={{ color: 'rgba(242,237,228,0.55)', letterSpacing: '0.2em' }}
       >
         {label}
       </p>
@@ -292,16 +292,16 @@ export default function NumerologyPage() {
         <header className="text-center flex flex-col gap-2">
           <p
             className="font-sans text-xs uppercase tracking-widest"
-            style={{ color: 'rgba(212,175,55,0.55)', letterSpacing: '0.25em' }}
+            style={{ color: 'rgba(224,178,108,0.55)', letterSpacing: '0.25em' }}
           >
             ✦ {t.title} ✦
           </p>
-          <h1 className="font-serif text-4xl" style={{ color: '#d4af37' }}>
+          <h1 className="font-serif text-4xl" style={{ color: '#E0B26C' }}>
             {locale === 'ru' ? 'Числа твоей жизни' : 'The numbers of your life'}
           </h1>
           <p
             className="font-sans text-sm leading-relaxed max-w-md mx-auto"
-            style={{ color: 'rgba(201,194,224,0.7)' }}
+            style={{ color: 'rgba(242,237,228,0.7)' }}
           >
             {t.subtitle}
           </p>
@@ -320,7 +320,7 @@ export default function NumerologyPage() {
               <div className="flex flex-col gap-2">
                 <label
                   className="font-sans text-xs uppercase tracking-widest"
-                  style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.2em' }}
+                  style={{ color: 'rgba(242,237,228,0.6)', letterSpacing: '0.2em' }}
                 >
                   {t.name_label}
                 </label>
@@ -331,9 +331,9 @@ export default function NumerologyPage() {
                   placeholder={t.name_placeholder}
                   className="w-full px-4 py-3 rounded-xl bg-transparent outline-none font-sans"
                   style={{
-                    border: '1px solid rgba(212,175,55,0.3)',
-                    color: 'rgba(201,194,224,0.9)',
-                    background: 'rgba(212,175,55,0.04)',
+                    border: '1px solid rgba(224,178,108,0.3)',
+                    color: 'rgba(242,237,228,0.9)',
+                    background: 'rgba(224,178,108,0.04)',
                   }}
                   required
                 />
@@ -341,7 +341,7 @@ export default function NumerologyPage() {
               <div className="flex flex-col gap-2">
                 <label
                   className="font-sans text-xs uppercase tracking-widest"
-                  style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.2em' }}
+                  style={{ color: 'rgba(242,237,228,0.6)', letterSpacing: '0.2em' }}
                 >
                   {t.date_label}
                 </label>
@@ -351,9 +351,9 @@ export default function NumerologyPage() {
                   onChange={(e) => setBirthDate(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-transparent outline-none font-sans"
                   style={{
-                    border: '1px solid rgba(212,175,55,0.3)',
-                    color: 'rgba(201,194,224,0.9)',
-                    background: 'rgba(212,175,55,0.04)',
+                    border: '1px solid rgba(224,178,108,0.3)',
+                    color: 'rgba(242,237,228,0.9)',
+                    background: 'rgba(224,178,108,0.04)',
                   }}
                   required
                 />
@@ -370,13 +370,13 @@ export default function NumerologyPage() {
                 disabled={loading}
                 className="w-full py-3 rounded-full font-serif text-sm tracking-widest uppercase"
                 style={{
-                  background: loading ? 'rgba(212,175,55,0.05)' : 'rgba(212,175,55,0.1)',
-                  border: '1px solid #d4af37',
-                  color: '#d4af37',
+                  background: loading ? 'rgba(224,178,108,0.05)' : 'rgba(224,178,108,0.1)',
+                  border: '1px solid #E0B26C',
+                  color: '#E0B26C',
                   letterSpacing: '0.15em',
                   opacity: loading ? 0.6 : 1,
                 }}
-                whileHover={loading ? {} : { backgroundColor: 'rgba(212,175,55,0.2)' }}
+                whileHover={loading ? {} : { backgroundColor: 'rgba(224,178,108,0.2)' }}
               >
                 ✦ {loading ? t.calculating : t.submit}
               </motion.button>
@@ -391,10 +391,10 @@ export default function NumerologyPage() {
             >
               {/* Header with name + new reading */}
               <div className="flex flex-col items-center gap-2">
-                <p className="font-serif text-2xl" style={{ color: 'rgba(212,175,55,0.9)' }}>
+                <p className="font-serif text-2xl" style={{ color: 'rgba(224,178,108,0.9)' }}>
                   {reading.full_name}
                 </p>
-                <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.45)' }}>
+                <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.45)' }}>
                   {new Date(reading.birth_date).toLocaleDateString(
                     locale === 'ru' ? 'ru-RU' : 'en-US',
                     { day: 'numeric', month: 'long', year: 'numeric' },
@@ -404,7 +404,7 @@ export default function NumerologyPage() {
                   onClick={handleReset}
                   className="mt-2 text-[0.65rem] font-sans uppercase tracking-widest"
                   style={{
-                    color: 'rgba(201,194,224,0.5)',
+                    color: 'rgba(242,237,228,0.5)',
                     letterSpacing: '0.2em',
                   }}
                 >
@@ -414,7 +414,7 @@ export default function NumerologyPage() {
 
               {/* Number orbs grid */}
               <div className="flex flex-wrap justify-center gap-6">
-                <NumberOrb value={reading.life_path} label={t.life_path} sublabel={reading.titles.life_path} accent="#d4af37" />
+                <NumberOrb value={reading.life_path} label={t.life_path} sublabel={reading.titles.life_path} accent="#E0B26C" />
                 <NumberOrb value={reading.destiny} label={t.destiny} sublabel={reading.titles.destiny} accent="#c9a4d8" />
                 <NumberOrb value={reading.soul_urge} label={t.soul_urge} sublabel={reading.titles.soul_urge} accent="#a8c4ea" />
                 <NumberOrb value={reading.personality} label={t.personality} sublabel={reading.titles.personality} accent="#e8b88a" />
@@ -426,19 +426,19 @@ export default function NumerologyPage() {
                 <div
                   className="p-6 rounded-2xl text-center"
                   style={{
-                    background: 'rgba(212,175,55,0.05)',
-                    border: '1px solid rgba(212,175,55,0.2)',
+                    background: 'rgba(224,178,108,0.05)',
+                    border: '1px solid rgba(224,178,108,0.2)',
                   }}
                 >
                   <p
                     className="font-sans text-xs uppercase tracking-widest mb-3"
-                    style={{ color: 'rgba(212,175,55,0.7)', letterSpacing: '0.2em' }}
+                    style={{ color: 'rgba(224,178,108,0.7)', letterSpacing: '0.2em' }}
                   >
                     ✦ {t.life_path} {reading.life_path}
                   </p>
                   <p
                     className="font-serif text-base leading-relaxed italic"
-                    style={{ color: 'rgba(201,194,224,0.92)' }}
+                    style={{ color: 'rgba(242,237,228,0.92)' }}
                   >
                     {reading.life_path_summary}
                   </p>
@@ -450,13 +450,13 @@ export default function NumerologyPage() {
                 <div
                   className="p-6 rounded-2xl"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(28,24,64,0.6), rgba(11,11,31,0.4))',
-                    border: '1px solid rgba(180,140,200,0.2)',
+                    background: 'linear-gradient(135deg, rgba(19,16,25,0.6), rgba(11,10,15,0.4))',
+                    border: '1px solid rgba(182,167,240,0.2)',
                   }}
                 >
                   <p
                     className="font-sans text-xs uppercase tracking-widest mb-4 text-center"
-                    style={{ color: 'rgba(180,140,200,0.7)', letterSpacing: '0.2em' }}
+                    style={{ color: 'rgba(182,167,240,0.7)', letterSpacing: '0.2em' }}
                   >
                     ✦ {t.interpret}
                   </p>
@@ -465,7 +465,7 @@ export default function NumerologyPage() {
                   </div>
                   <div
                     className="font-serif text-sm leading-relaxed whitespace-pre-wrap"
-                    style={{ color: 'rgba(201,194,224,0.9)' }}
+                    style={{ color: 'rgba(242,237,228,0.9)' }}
                   >
                     {interpretation.body_md}
                   </div>
@@ -475,7 +475,7 @@ export default function NumerologyPage() {
                   {!isPremium && (
                     <p
                       className="text-xs text-center max-w-xs font-sans"
-                      style={{ color: 'rgba(201,194,224,0.55)' }}
+                      style={{ color: 'rgba(242,237,228,0.55)' }}
                     >
                       {t.interpret_cta}
                     </p>
@@ -485,13 +485,13 @@ export default function NumerologyPage() {
                     disabled={interpreting}
                     className="px-8 py-3 rounded-full font-serif text-sm tracking-widest uppercase"
                     style={{
-                      background: interpreting ? 'rgba(180,140,200,0.05)' : 'rgba(180,140,200,0.1)',
-                      border: '1px solid rgba(180,140,200,0.6)',
+                      background: interpreting ? 'rgba(182,167,240,0.05)' : 'rgba(182,167,240,0.1)',
+                      border: '1px solid rgba(182,167,240,0.6)',
                       color: 'rgba(220,180,240,0.9)',
                       letterSpacing: '0.15em',
                       opacity: interpreting ? 0.6 : 1,
                     }}
-                    whileHover={interpreting ? {} : { backgroundColor: 'rgba(180,140,200,0.2)' }}
+                    whileHover={interpreting ? {} : { backgroundColor: 'rgba(182,167,240,0.2)' }}
                   >
                     ✦ {interpreting ? t.interpreting : (isPremium ? t.interpret : t.open_pricing)}
                   </motion.button>

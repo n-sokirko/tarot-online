@@ -208,15 +208,15 @@ export default function DonateModal({
             transition={{ type: 'spring', stiffness: 300, damping: 26 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: 'linear-gradient(165deg, rgba(28,24,64,0.95), rgba(11,11,31,0.97))',
-              border: '1px solid rgba(212,175,55,0.3)',
+              background: 'linear-gradient(165deg, rgba(19,16,25,0.95), rgba(11,10,15,0.97))',
+              border: '1px solid rgba(224,178,108,0.3)',
               boxShadow: '0 12px 48px rgba(0,0,0,0.6)',
             }}
           >
             <header className="text-center flex flex-col gap-1.5">
               <span style={{ fontSize: '2rem', lineHeight: 1 }}>⭐</span>
-              <h2 className="font-serif text-2xl" style={{ color: '#d4af37' }}>{t.title}</h2>
-              <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.65)' }}>
+              <h2 className="font-serif text-2xl" style={{ color: '#E0B26C' }}>{t.title}</h2>
+              <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.65)' }}>
                 {t.subtitle}
               </p>
             </header>
@@ -231,9 +231,9 @@ export default function DonateModal({
                     onClick={() => { setAmount(p); setCustom(''); }}
                     className="py-3 rounded-xl font-serif text-sm transition-colors"
                     style={{
-                      background: active ? 'rgba(212,175,55,0.18)' : 'rgba(212,175,55,0.05)',
-                      border: `1px solid ${active ? '#d4af37' : 'rgba(212,175,55,0.2)'}`,
-                      color: active ? '#d4af37' : 'rgba(201,194,224,0.8)',
+                      background: active ? 'rgba(224,178,108,0.18)' : 'rgba(224,178,108,0.05)',
+                      border: `1px solid ${active ? '#E0B26C' : 'rgba(224,178,108,0.2)'}`,
+                      color: active ? '#E0B26C' : 'rgba(242,237,228,0.8)',
                     }}
                   >
                     {p} ⭐
@@ -250,9 +250,9 @@ export default function DonateModal({
                 placeholder={t.custom_placeholder}
                 className="py-3 px-2 rounded-xl font-serif text-sm text-center bg-transparent outline-none col-span-3"
                 style={{
-                  border: `1px solid ${custom.trim() ? '#d4af37' : 'rgba(212,175,55,0.2)'}`,
-                  color: 'rgba(201,194,224,0.9)',
-                  background: 'rgba(212,175,55,0.04)',
+                  border: `1px solid ${custom.trim() ? '#E0B26C' : 'rgba(224,178,108,0.2)'}`,
+                  color: 'rgba(242,237,228,0.9)',
+                  background: 'rgba(224,178,108,0.04)',
                 }}
               />
             </div>
@@ -260,7 +260,7 @@ export default function DonateModal({
             {msg && (
               <p
                 className="text-center text-xs font-sans"
-                style={{ color: msg.kind === 'ok' ? '#d4af37' : '#ff8a8a' }}
+                style={{ color: msg.kind === 'ok' ? '#E0B26C' : '#ff8a8a' }}
               >
                 {msg.text}
               </p>
@@ -271,9 +271,9 @@ export default function DonateModal({
               disabled={busy}
               className="w-full py-3 rounded-full font-serif text-sm tracking-widest uppercase flex items-center justify-center gap-2"
               style={{
-                background: 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.08))',
-                border: '1px solid #d4af37',
-                color: '#d4af37',
+                background: 'linear-gradient(135deg, rgba(224,178,108,0.25), rgba(224,178,108,0.08))',
+                border: '1px solid #E0B26C',
+                color: '#E0B26C',
                 letterSpacing: '0.12em',
                 opacity: busy ? 0.6 : 1,
               }}
@@ -284,7 +284,7 @@ export default function DonateModal({
             <button
               onClick={onClose}
               className="text-[0.7rem] font-sans uppercase tracking-widest mx-auto"
-              style={{ color: 'rgba(201,194,224,0.45)', letterSpacing: '0.2em' }}
+              style={{ color: 'rgba(242,237,228,0.45)', letterSpacing: '0.2em' }}
             >
               {t.close}
             </button>

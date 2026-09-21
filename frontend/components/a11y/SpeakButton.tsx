@@ -191,9 +191,9 @@ export default function SpeakButton({
       aria-pressed={speaking}
       className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-sans text-xs uppercase tracking-widest transition-colors"
       style={{
-        border: '1px solid rgba(212,175,55,0.4)',
-        background: speaking ? 'rgba(212,175,55,0.16)' : 'rgba(212,175,55,0.05)',
-        color: '#d4af37',
+        border: '1px solid rgba(224,178,108,0.4)',
+        background: speaking ? 'rgba(224,178,108,0.16)' : 'rgba(224,178,108,0.05)',
+        color: '#E0B26C',
         letterSpacing: '0.12em',
       }}
     >
@@ -206,7 +206,7 @@ export default function SpeakButton({
               style={{
                 width: 2,
                 height: 12,
-                background: '#d4af37',
+                background: '#E0B26C',
                 transformOrigin: 'bottom',
                 animation: `speak-bar ${0.6 + i * 0.18}s ease-in-out ${i * 0.12}s infinite`,
               }}

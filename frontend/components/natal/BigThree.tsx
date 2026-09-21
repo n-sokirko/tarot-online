@@ -129,9 +129,9 @@ function PlanetCard({ card, locale, delay }: { card: CardData; locale: 'ru' | 'e
       transition={{ duration: 0.5, delay }}
       className="flex flex-col items-center text-center rounded-2xl p-6"
       style={{
-        background: 'linear-gradient(180deg, rgba(28,24,64,0.7) 0%, rgba(11,11,31,0.7) 100%)',
-        border: '1px solid rgba(212,175,55,0.25)',
-        boxShadow: '0 0 30px rgba(212,175,55,0.06)',
+        background: 'linear-gradient(180deg, rgba(19,16,25,0.7) 0%, rgba(11,10,15,0.7) 100%)',
+        border: '1px solid rgba(224,178,108,0.25)',
+        boxShadow: '0 0 30px rgba(224,178,108,0.06)',
         minWidth: '140px',
         flex: '1 1 140px',
       }}
@@ -144,24 +144,24 @@ function PlanetCard({ card, locale, delay }: { card: CardData; locale: 'ru' | 'e
       {/* Planet name */}
       <div
         className="text-[10px] tracking-widest uppercase mb-1"
-        style={{ color: 'rgba(212,175,55,0.7)', letterSpacing: '0.22em' }}
+        style={{ color: 'rgba(224,178,108,0.7)', letterSpacing: '0.22em' }}
       >
         {card.name}
       </div>
 
       {/* Sign */}
-      <div className="font-serif text-base mb-0.5" style={{ color: 'rgba(201,194,224,0.9)' }}>
+      <div className="font-serif text-base mb-0.5" style={{ color: 'rgba(242,237,228,0.9)' }}>
         {card.signEmoji} {card.sign}
       </div>
 
       {/* Degree */}
-      <div className="text-xs mb-3" style={{ color: 'rgba(201,194,224,0.45)' }}>
+      <div className="text-xs mb-3" style={{ color: 'rgba(242,237,228,0.45)' }}>
         {card.degree}°{card.retrograde && <span className="ml-1 text-[10px]">{t.retrograde} ℞</span>}
         {card.house > 0 && <span className="ml-1">· {card.house} {t.house}</span>}
       </div>
 
       {/* Meaning */}
-      <p className="font-serif text-xs italic leading-relaxed" style={{ color: 'rgba(201,194,224,0.6)' }}>
+      <p className="font-serif text-xs italic leading-relaxed" style={{ color: 'rgba(242,237,228,0.6)' }}>
         {card.meaning}
       </p>
     </motion.div>
@@ -244,20 +244,20 @@ export default function BigThree({ planets, ascendant, isPremium, locale }: BigT
             transition={{ duration: 0.5, delay: 0.24 }}
             className="flex flex-col items-center justify-center text-center rounded-2xl p-6"
             style={{
-              background: 'rgba(11,11,31,0.4)',
-              border: '1px dashed rgba(212,175,55,0.2)',
+              background: 'rgba(11,10,15,0.4)',
+              border: '1px dashed rgba(224,178,108,0.2)',
               minWidth: '140px',
               flex: '1 1 140px',
             }}
           >
-            <div className="text-3xl mb-2" style={{ color: 'rgba(212,175,55,0.3)' }}>↑</div>
+            <div className="text-3xl mb-2" style={{ color: 'rgba(224,178,108,0.3)' }}>↑</div>
             <div
               className="text-[10px] tracking-widest uppercase mb-2"
-              style={{ color: 'rgba(212,175,55,0.4)', letterSpacing: '0.22em' }}
+              style={{ color: 'rgba(224,178,108,0.4)', letterSpacing: '0.22em' }}
             >
               {t.asc}
             </div>
-            <p className="font-serif text-xs italic" style={{ color: 'rgba(201,194,224,0.4)' }}>
+            <p className="font-serif text-xs italic" style={{ color: 'rgba(242,237,228,0.4)' }}>
               {t.unknown_time}
             </p>
           </motion.div>
@@ -272,16 +272,16 @@ export default function BigThree({ planets, ascendant, isPremium, locale }: BigT
           transition={{ delay: 0.5 }}
           className="mt-6 flex flex-col items-center gap-3 text-center"
         >
-          <p className="text-sm font-serif" style={{ color: 'rgba(201,194,224,0.55)' }}>
+          <p className="text-sm font-serif" style={{ color: 'rgba(242,237,228,0.55)' }}>
             {t.upgrade}
           </p>
           <a
             href="/pricing"
             className="px-6 py-2.5 rounded-full text-xs tracking-widest uppercase"
             style={{
-              background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-              border: '1px solid #d4af37',
-              color: '#d4af37',
+              background: 'linear-gradient(135deg, rgba(224,178,108,0.2), rgba(224,178,108,0.05))',
+              border: '1px solid #E0B26C',
+              color: '#E0B26C',
               letterSpacing: '0.18em',
             }}
           >

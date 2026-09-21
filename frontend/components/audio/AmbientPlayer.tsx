@@ -136,9 +136,9 @@ export default function AmbientPlayer() {
       style={{
         width: 32,
         height: 32,
-        background: on ? 'rgba(212,175,55,0.16)' : 'transparent',
-        border: `1px solid ${on ? '#d4af37' : 'rgba(212,175,55,0.25)'}`,
-        color: on ? '#d4af37' : 'rgba(201,194,224,0.55)',
+        background: on ? 'rgba(224,178,108,0.16)' : 'transparent',
+        border: `1px solid ${on ? '#E0B26C' : 'rgba(224,178,108,0.25)'}`,
+        color: on ? '#E0B26C' : 'rgba(242,237,228,0.55)',
       }}
     >
       {on ? (

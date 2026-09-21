@@ -21,24 +21,24 @@ export default function LocaleSwitcher({ currentLocale }: LocaleSwitcherProps) {
   return (
     <div
       className="flex items-center gap-1 font-sans text-xs tracking-widest"
-      style={{ color: 'rgba(201,194,224,0.5)', letterSpacing: '0.1em' }}
+      style={{ color: 'rgba(242,237,228,0.5)', letterSpacing: '0.1em' }}
     >
       <button
         onClick={() => switchTo('ru')}
         className="transition-colors"
         style={{
-          color: currentLocale === 'ru' ? '#d4af37' : 'rgba(201,194,224,0.4)',
+          color: currentLocale === 'ru' ? '#E0B26C' : 'rgba(242,237,228,0.4)',
           fontWeight: currentLocale === 'ru' ? 600 : 400,
         }}
       >
         RU
       </button>
-      <span style={{ color: 'rgba(212,175,55,0.3)' }}>|</span>
+      <span style={{ color: 'rgba(224,178,108,0.3)' }}>|</span>
       <button
         onClick={() => switchTo('en')}
         className="transition-colors"
         style={{
-          color: currentLocale === 'en' ? '#d4af37' : 'rgba(201,194,224,0.4)',
+          color: currentLocale === 'en' ? '#E0B26C' : 'rgba(242,237,228,0.4)',
           fontWeight: currentLocale === 'en' ? 600 : 400,
         }}
       >

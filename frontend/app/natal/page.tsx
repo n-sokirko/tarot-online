@@ -228,12 +228,12 @@ function Field({
     <div className="flex flex-col gap-1.5">
       <label
         className="text-xs tracking-widest uppercase"
-        style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.14em' }}
+        style={{ color: 'rgba(242,237,228,0.6)', letterSpacing: '0.14em' }}
       >
         {label}
       </label>
       {hint && (
-        <span className="text-[10px] italic" style={{ color: 'rgba(201,194,224,0.35)' }}>
+        <span className="text-[10px] italic" style={{ color: 'rgba(242,237,228,0.35)' }}>
           {hint}
         </span>
       )}
@@ -243,9 +243,9 @@ function Field({
 }
 
 const inputStyle: React.CSSProperties = {
-  background: 'rgba(11,11,31,0.6)',
-  border: '1px solid rgba(212,175,55,0.2)',
-  color: 'rgba(201,194,224,0.95)',
+  background: 'rgba(11,10,15,0.6)',
+  border: '1px solid rgba(224,178,108,0.2)',
+  color: 'rgba(242,237,228,0.95)',
   borderRadius: '12px',
   padding: '10px 14px',
   fontSize: '14px',
@@ -298,9 +298,9 @@ function NatalInterpretationBlock({
         className="w-full max-w-2xl mx-auto mt-10"
       >
         <div className="flex items-center gap-4 mb-6" aria-hidden>
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
-          <span style={{ color: 'rgba(212,175,55,0.6)', fontSize: '0.75rem' }}>✦</span>
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.2)' }} />
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.2)' }} />
+          <span style={{ color: 'rgba(224,178,108,0.6)', fontSize: '0.75rem' }}>✦</span>
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.2)' }} />
         </div>
         <div className="flex justify-center mb-6">
           <SpeakButton text={interp.body_md} lang={locale} autoPlay={initial === null} />
@@ -311,7 +311,7 @@ function NatalInterpretationBlock({
         />
         <p
           className="mt-8 text-[10px] tracking-widest uppercase opacity-50"
-          style={{ color: 'rgba(201,194,224,0.5)', letterSpacing: '0.18em' }}
+          style={{ color: 'rgba(242,237,228,0.5)', letterSpacing: '0.18em' }}
         >
           {t.interpret_footnote}
         </p>
@@ -324,20 +324,20 @@ function NatalInterpretationBlock({
       <div
         className="w-full max-w-2xl mx-auto mt-8 rounded-2xl px-6 py-6 text-center"
         style={{
-          background: 'linear-gradient(180deg, rgba(28,24,64,0.5), rgba(11,11,31,0.5))',
-          border: '1px solid rgba(212,175,55,0.2)',
+          background: 'linear-gradient(180deg, rgba(19,16,25,0.5), rgba(11,10,15,0.5))',
+          border: '1px solid rgba(224,178,108,0.2)',
         }}
       >
-        <p className="font-serif text-sm mb-4" style={{ color: 'rgba(201,194,224,0.7)' }}>
+        <p className="font-serif text-sm mb-4" style={{ color: 'rgba(242,237,228,0.7)' }}>
           {t.interpret_pay_required}
         </p>
         <a
           href="/pricing"
           className="px-6 py-2.5 rounded-full text-xs tracking-widest uppercase inline-block"
           style={{
-            background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-            border: '1px solid #d4af37',
-            color: '#d4af37',
+            background: 'linear-gradient(135deg, rgba(224,178,108,0.2), rgba(224,178,108,0.05))',
+            border: '1px solid #E0B26C',
+            color: '#E0B26C',
             letterSpacing: '0.18em',
           }}
         >
@@ -350,19 +350,19 @@ function NatalInterpretationBlock({
   return (
     <div className="flex flex-col items-center mt-8 gap-4">
       {error === 'payment' && (
-        <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.7)' }}>
+        <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.7)' }}>
           {t.interpret_pay_required}
         </p>
       )}
       {error === 'generic' && (
-        <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.7)' }}>
+        <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.7)' }}>
           {t.interpret_error}
         </p>
       )}
       {loading ? (
         <motion.p
           className="font-serif italic"
-          style={{ color: 'rgba(212,175,55,0.75)' }}
+          style={{ color: 'rgba(224,178,108,0.75)' }}
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -375,11 +375,11 @@ function NatalInterpretationBlock({
           onClick={() => void handleInterpret()}
           className="px-8 py-3 rounded-full text-xs tracking-widest uppercase"
           style={{
-            background: 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.05))',
-            border: '1px solid #d4af37',
-            color: '#d4af37',
+            background: 'linear-gradient(135deg, rgba(224,178,108,0.25), rgba(224,178,108,0.05))',
+            border: '1px solid #E0B26C',
+            color: '#E0B26C',
             letterSpacing: '0.22em',
-            boxShadow: '0 0 24px rgba(212,175,55,0.15)',
+            boxShadow: '0 0 24px rgba(224,178,108,0.15)',
           }}
         >
           ✦ {t.interpret_cta}
@@ -409,7 +409,7 @@ function PlanetList({
     <div className="w-full max-w-2xl mx-auto mt-8">
       <div
         className="text-[10px] tracking-widest uppercase mb-4"
-        style={{ color: 'rgba(212,175,55,0.55)', letterSpacing: '0.2em' }}
+        style={{ color: 'rgba(224,178,108,0.55)', letterSpacing: '0.2em' }}
       >
         {t.planets_section}
       </div>
@@ -421,21 +421,21 @@ function PlanetList({
               key={planet.name}
               className="flex items-center gap-3 rounded-xl px-4 py-2.5"
               style={{
-                background: 'rgba(28,24,64,0.4)',
-                border: '1px solid rgba(212,175,55,0.1)',
+                background: 'rgba(19,16,25,0.4)',
+                border: '1px solid rgba(224,178,108,0.1)',
               }}
             >
               <PlanetImage planet={planet.name} glyph={planet.glyph} size={36} />
               <div className="flex flex-col min-w-0">
-                <span className="text-xs" style={{ color: 'rgba(201,194,224,0.85)' }}>
+                <span className="text-xs" style={{ color: 'rgba(242,237,228,0.85)' }}>
                   {name}
                   {planet.retrograde && (
-                    <span className="ml-1 text-[10px]" style={{ color: 'rgba(201,194,224,0.45)' }}>
+                    <span className="ml-1 text-[10px]" style={{ color: 'rgba(242,237,228,0.45)' }}>
                       ℞ {t.retrograde}
                     </span>
                   )}
                 </span>
-                <span className="text-[11px]" style={{ color: 'rgba(201,194,224,0.5)' }}>
+                <span className="text-[11px]" style={{ color: 'rgba(242,237,228,0.5)' }}>
                   {planet.emoji} {planet.sign} {planet.position.toFixed(1)}°
                   {planet.house > 0 && ` · ${planet.house} ${t.house}`}
                 </span>
@@ -447,7 +447,7 @@ function PlanetList({
       {!isPremium && (
         <p
           className="text-xs mt-3 text-center font-serif italic"
-          style={{ color: 'rgba(201,194,224,0.35)' }}
+          style={{ color: 'rgba(242,237,228,0.35)' }}
         >
           {t.free_planets_hint}
         </p>
@@ -545,13 +545,13 @@ export default function NatalPage() {
         >
           <h1
             className="font-serif text-3xl md:text-4xl mb-3"
-            style={{ color: '#d4af37', letterSpacing: '0.08em', textShadow: '0 0 40px rgba(212,175,55,0.2)' }}
+            style={{ color: '#E0B26C', letterSpacing: '0.08em', textShadow: '0 0 40px rgba(224,178,108,0.2)' }}
           >
             ✦ {t.title}
           </h1>
           <p
             className="font-serif text-sm md:text-base italic max-w-xl mx-auto"
-            style={{ color: 'rgba(201,194,224,0.7)' }}
+            style={{ color: 'rgba(242,237,228,0.7)' }}
           >
             {t.subtitle}
           </p>
@@ -577,8 +577,8 @@ export default function NatalPage() {
                   onChange={(e) => setBirthName(e.target.value)}
                   placeholder="Анна / Anna"
                   style={inputStyle}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.5)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.2)'; }}
                 />
               </Field>
 
@@ -590,8 +590,8 @@ export default function NatalPage() {
                   onChange={(e) => setBirthDate(e.target.value)}
                   required
                   style={{ ...inputStyle, colorScheme: 'dark' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.5)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.2)'; }}
                 />
               </Field>
 
@@ -602,8 +602,8 @@ export default function NatalPage() {
                   value={birthTime}
                   onChange={(e) => setBirthTime(e.target.value)}
                   style={{ ...inputStyle, colorScheme: 'dark' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.5)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.2)'; }}
                 />
               </Field>
 
@@ -616,8 +616,8 @@ export default function NatalPage() {
                   placeholder={t.city_placeholder}
                   required
                   style={inputStyle}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.5)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(224,178,108,0.2)'; }}
                 />
               </Field>
 
@@ -643,12 +643,12 @@ export default function NatalPage() {
                   className="px-10 py-3 rounded-full text-xs tracking-widest uppercase"
                   style={{
                     background: birthDate && birthCity.trim()
-                      ? 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.05))'
-                      : 'rgba(201,194,224,0.05)',
-                    border: `1px solid ${birthDate && birthCity.trim() ? '#d4af37' : 'rgba(201,194,224,0.15)'}`,
-                    color: birthDate && birthCity.trim() ? '#d4af37' : 'rgba(201,194,224,0.35)',
+                      ? 'linear-gradient(135deg, rgba(224,178,108,0.25), rgba(224,178,108,0.05))'
+                      : 'rgba(242,237,228,0.05)',
+                    border: `1px solid ${birthDate && birthCity.trim() ? '#E0B26C' : 'rgba(242,237,228,0.15)'}`,
+                    color: birthDate && birthCity.trim() ? '#E0B26C' : 'rgba(242,237,228,0.35)',
                     letterSpacing: '0.22em',
-                    boxShadow: birthDate && birthCity.trim() ? '0 0 24px rgba(212,175,55,0.15)' : 'none',
+                    boxShadow: birthDate && birthCity.trim() ? '0 0 24px rgba(224,178,108,0.15)' : 'none',
                     opacity: loading ? 0.6 : 1,
                     cursor: !loading && birthDate && birthCity.trim() ? 'pointer' : 'default',
                   }}
@@ -691,22 +691,22 @@ export default function NatalPage() {
                   {/* Name / date card */}
                   <div
                     className="rounded-2xl px-5 py-4 flex flex-col gap-1"
-                    style={{ background: 'rgba(28,24,64,0.6)', border: '1px solid rgba(212,175,55,0.15)' }}
+                    style={{ background: 'rgba(19,16,25,0.6)', border: '1px solid rgba(224,178,108,0.15)' }}
                   >
                     {chart.birth_name && (
-                      <p className="font-serif text-lg" style={{ color: '#d4af37' }}>
+                      <p className="font-serif text-lg" style={{ color: '#E0B26C' }}>
                         {chart.birth_name}
                       </p>
                     )}
-                    <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.55)' }}>
+                    <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.55)' }}>
                       {chart.birth_date}
                       {chart.birth_time ? ` · ${chart.birth_time}` : ''}
                     </p>
-                    <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.45)' }}>
+                    <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.45)' }}>
                       {chart.birth_city}
                     </p>
                     {chart.ascendant !== null && (
-                      <p className="font-sans text-[11px] mt-1" style={{ color: 'rgba(212,175,55,0.6)' }}>
+                      <p className="font-sans text-[11px] mt-1" style={{ color: 'rgba(224,178,108,0.6)' }}>
                         ASC {chart.ascendant.toFixed(1)}°
                       </p>
                     )}
@@ -742,8 +742,8 @@ export default function NatalPage() {
                     whileTap={{ scale: 0.97 }}
                     className="px-8 py-2.5 rounded-full text-xs tracking-widest uppercase self-start"
                     style={{
-                      border: '1px solid rgba(212,175,55,0.3)',
-                      color: 'rgba(212,175,55,0.7)',
+                      border: '1px solid rgba(224,178,108,0.3)',
+                      color: 'rgba(224,178,108,0.7)',
                       letterSpacing: '0.18em',
                     }}
                   >

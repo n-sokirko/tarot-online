@@ -76,19 +76,19 @@ export default function HomePage() {
       >
         <h1
           className="font-serif text-4xl md:text-6xl lg:text-7xl leading-tight mb-4"
-          style={{ color: '#d4af37', textShadow: '0 0 40px rgba(212,175,55,0.2)' }}
+          style={{ color: '#E0B26C', textShadow: '0 0 40px rgba(224,178,108,0.2)' }}
         >
           {t('title')}
         </h1>
         <p
           className="font-serif text-base md:text-lg italic"
-          style={{ color: 'rgba(201,194,224,0.75)' }}
+          style={{ color: 'rgba(242,237,228,0.75)' }}
         >
           {t('subtitle')}
         </p>
         <p
           className="mt-3 text-sm tracking-widest uppercase"
-          style={{ color: 'rgba(201,194,224,0.4)', letterSpacing: '0.15em' }}
+          style={{ color: 'rgba(242,237,228,0.4)', letterSpacing: '0.15em' }}
         >
           {t('description')}
         </p>
@@ -118,15 +118,15 @@ export default function HomePage() {
                     <div className="flex flex-col items-center gap-1.5" style={{ maxWidth: 96 }}>
                       <span
                         className="flex items-center justify-center font-serif"
-                        style={{ width: 30, height: 30, borderRadius: 999, border: '1px solid rgba(212,175,55,0.4)', color: '#d4af37', fontSize: '0.85rem' }}
+                        style={{ width: 30, height: 30, borderRadius: 999, border: '1px solid rgba(224,178,108,0.4)', color: '#E0B26C', fontSize: '0.85rem' }}
                       >
                         {s.n}
                       </span>
-                      <span className="font-sans text-[0.7rem] text-center leading-tight" style={{ color: 'rgba(201,194,224,0.75)' }}>
+                      <span className="font-sans text-[0.7rem] text-center leading-tight" style={{ color: 'rgba(242,237,228,0.75)' }}>
                         {locale === 'ru' ? s.ru : s.en}
                       </span>
                     </div>
-                    {i < 2 && <span style={{ color: 'rgba(212,175,55,0.4)' }}>→</span>}
+                    {i < 2 && <span style={{ color: 'rgba(224,178,108,0.4)' }}>→</span>}
                   </div>
                 ))}
               </div>
@@ -163,16 +163,16 @@ export default function HomePage() {
                   >
                     <p
                       className="font-serif text-sm italic text-center"
-                      style={{ color: 'rgba(201,194,224,0.6)' }}
+                      style={{ color: 'rgba(242,237,228,0.6)' }}
                     >
                       {tReading('draw_prompt')}
                     </p>
                     <motion.button
                       className="px-10 py-3 rounded-full font-serif text-sm tracking-widest uppercase"
                       style={{
-                        background: 'rgba(212,175,55,0.1)',
-                        border: '1px solid #d4af37',
-                        color: '#d4af37',
+                        background: 'rgba(224,178,108,0.1)',
+                        border: '1px solid #E0B26C',
+                        color: '#E0B26C',
                         letterSpacing: '0.15em',
                       }}
                       whileHover={
@@ -180,8 +180,8 @@ export default function HomePage() {
                           ? {}
                           : {
                               scale: 1.05,
-                              backgroundColor: 'rgba(212,175,55,0.2)',
-                              boxShadow: '0 0 20px rgba(212,175,55,0.2)',
+                              backgroundColor: 'rgba(224,178,108,0.2)',
+                              boxShadow: '0 0 20px rgba(224,178,108,0.2)',
                             }
                       }
                       whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
@@ -196,7 +196,7 @@ export default function HomePage() {
                   <motion.p
                     key="loading"
                     className="font-serif italic text-center"
-                    style={{ color: 'rgba(212,175,55,0.7)' }}
+                    style={{ color: 'rgba(224,178,108,0.7)' }}
                     initial={prefersReducedMotion ? false : { opacity: 0 }}
                     animate={
                       prefersReducedMotion
@@ -228,7 +228,7 @@ export default function HomePage() {
                     </p>
                     <button
                       className="text-xs underline"
-                      style={{ color: 'rgba(201,194,224,0.5)' }}
+                      style={{ color: 'rgba(242,237,228,0.5)' }}
                       onClick={handleReset}
                     >
                       ↺
@@ -245,7 +245,7 @@ export default function HomePage() {
       <footer
         className="mt-auto pt-16 text-center"
         style={{
-          color: 'rgba(201,194,224,0.25)',
+          color: 'rgba(242,237,228,0.25)',
           fontSize: '0.65rem',
           letterSpacing: '0.1em',
         }}

@@ -108,24 +108,24 @@ function ChartCard({ chart, locale }: { chart: NatalChart; locale: 'ru' | 'en' }
       animate={{ opacity: 1, y: 0 }}
       className="rounded-2xl p-5 flex flex-col gap-3"
       style={{
-        background: 'rgba(28,24,64,0.6)',
-        border: '1px solid rgba(212,175,55,0.15)',
+        background: 'rgba(19,16,25,0.6)',
+        border: '1px solid rgba(224,178,108,0.15)',
       }}
     >
       {/* Name & date */}
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="font-serif text-base" style={{ color: '#d4af37' }}>
+          <p className="font-serif text-base" style={{ color: '#E0B26C' }}>
             {chart.birth_name || chart.birth_city}
           </p>
-          <p className="font-sans text-xs mt-0.5" style={{ color: 'rgba(201,194,224,0.45)' }}>
+          <p className="font-sans text-xs mt-0.5" style={{ color: 'rgba(242,237,228,0.45)' }}>
             {chart.birth_date}{chart.birth_time ? ` · ${chart.birth_time}` : ''} · {chart.birth_city}
           </p>
         </div>
         <Link
           href={`/natal?chart=${chart.id}`}
           className="px-3 py-1.5 rounded-full text-[10px] font-sans uppercase tracking-wider flex-shrink-0"
-          style={{ border: '1px solid rgba(212,175,55,0.3)', color: 'rgba(212,175,55,0.7)', letterSpacing: '0.12em' }}
+          style={{ border: '1px solid rgba(224,178,108,0.3)', color: 'rgba(224,178,108,0.7)', letterSpacing: '0.12em' }}
         >
           {t.open}
         </Link>
@@ -134,7 +134,7 @@ function ChartCard({ chart, locale }: { chart: NatalChart; locale: 'ru' | 'en' }
       {/* Big 3 chips */}
       <div className="flex flex-wrap gap-2">
         {sun && (
-          <span className="px-2.5 py-1 rounded-full text-xs font-sans" style={{ background: 'rgba(212,175,55,0.08)', color: 'rgba(212,175,55,0.85)', border: '1px solid rgba(212,175,55,0.2)' }}>
+          <span className="px-2.5 py-1 rounded-full text-xs font-sans" style={{ background: 'rgba(224,178,108,0.08)', color: 'rgba(224,178,108,0.85)', border: '1px solid rgba(224,178,108,0.2)' }}>
             ☉ {signName(sun.sign)}
           </span>
         )}
@@ -174,33 +174,33 @@ export default function NatalHistoryPage() {
     <main className="min-h-screen px-4 py-12">
       <div className="max-w-2xl mx-auto flex flex-col gap-8">
         <header className="text-center flex flex-col gap-2">
-          <p className="font-sans text-xs uppercase tracking-widest" style={{ color: 'rgba(212,175,55,0.55)', letterSpacing: '0.25em' }}>
+          <p className="font-sans text-xs uppercase tracking-widest" style={{ color: 'rgba(224,178,108,0.55)', letterSpacing: '0.25em' }}>
             ✦ {t.subtitle} ✦
           </p>
-          <h1 className="font-serif text-3xl" style={{ color: '#d4af37' }}>{t.title}</h1>
+          <h1 className="font-serif text-3xl" style={{ color: '#E0B26C' }}>{t.title}</h1>
         </header>
 
         {!isLoggedIn ? (
           <div className="text-center flex flex-col gap-4 py-12">
-            <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>{t.login_required}</p>
+            <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.6)' }}>{t.login_required}</p>
             <Link href="/login?next=/natal/history" className="px-6 py-2.5 rounded-full text-xs font-sans uppercase tracking-widest mx-auto"
-              style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#d4af37', letterSpacing: '0.18em' }}>
+              style={{ background: 'rgba(224,178,108,0.1)', border: '1px solid #E0B26C', color: '#E0B26C', letterSpacing: '0.18em' }}>
               {t.login}
             </Link>
           </div>
         ) : loading ? (
           <div className="text-center py-16">
             <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}
-              className="font-serif text-sm" style={{ color: 'rgba(212,175,55,0.6)' }}>
+              className="font-serif text-sm" style={{ color: 'rgba(224,178,108,0.6)' }}>
               ✦ ...
             </motion.div>
           </div>
         ) : charts.length === 0 ? (
           <div className="text-center flex flex-col gap-4 py-12">
-            <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.55)' }}>{t.empty}</p>
-            <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.35)' }}>{t.empty_hint}</p>
+            <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.55)' }}>{t.empty}</p>
+            <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.35)' }}>{t.empty_hint}</p>
             <Link href="/natal" className="px-6 py-2.5 rounded-full text-xs font-sans uppercase tracking-widest mx-auto"
-              style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#d4af37', letterSpacing: '0.18em' }}>
+              style={{ background: 'rgba(224,178,108,0.1)', border: '1px solid #E0B26C', color: '#E0B26C', letterSpacing: '0.18em' }}>
               ✦ {t.calculate}
             </Link>
           </div>

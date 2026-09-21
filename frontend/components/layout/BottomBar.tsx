@@ -157,8 +157,8 @@ export default function BottomBar() {
   // Close on route change.
   useEffect(() => { setMoreOpen(false); }, [pathname]);
 
-  const activeColor = '#d4af37';
-  const inactiveColor = 'rgba(201,194,224,0.35)';
+  const activeColor = '#E0B26C';
+  const inactiveColor = 'rgba(242,237,228,0.35)';
 
   const isHome = pathname === '/';
   const isNatal = pathname?.startsWith('/natal') ?? false;
@@ -177,10 +177,10 @@ export default function BottomBar() {
       className="fixed bottom-0 left-0 right-0 z-40 flex md:hidden items-center justify-around"
       style={{
         height: '60px',
-        background: 'rgba(11,11,31,0.92)',
+        background: 'rgba(11,10,15,0.92)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderTop: '1px solid rgba(212,175,55,0.12)',
+        borderTop: '1px solid rgba(224,178,108,0.12)',
       }}
     >
       <Link href="/" className="flex flex-col items-center gap-1" style={{ color: isHome ? activeColor : inactiveColor }}>
@@ -218,15 +218,15 @@ export default function BottomBar() {
               transition={{ duration: 0.18 }}
               className="absolute bottom-[64px] right-1/2 translate-x-1/2 w-44 rounded-2xl py-2 flex flex-col"
               style={{
-                background: 'rgba(11,11,31,0.97)',
-                border: '1px solid rgba(212,175,55,0.25)',
+                background: 'rgba(11,10,15,0.97)',
+                border: '1px solid rgba(224,178,108,0.25)',
                 boxShadow: '0 6px 24px rgba(0,0,0,0.5)',
               }}
             >
               <Link
                 href="/table"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isFreeSpread ? activeColor : 'rgba(201,194,224,0.85)' }}
+                style={{ color: isFreeSpread ? activeColor : 'rgba(242,237,228,0.85)' }}
               >
                 <FreeSpreadIcon />
                 <span className="font-sans text-sm">{l.freeSpread}</span>
@@ -234,7 +234,7 @@ export default function BottomBar() {
               <Link
                 href="/daily"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isDaily ? activeColor : 'rgba(201,194,224,0.85)' }}
+                style={{ color: isDaily ? activeColor : 'rgba(242,237,228,0.85)' }}
               >
                 <DailyIcon />
                 <span className="font-sans text-sm">{l.daily}</span>
@@ -242,7 +242,7 @@ export default function BottomBar() {
               <Link
                 href="/numerology"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isNumerology ? activeColor : 'rgba(201,194,224,0.85)' }}
+                style={{ color: isNumerology ? activeColor : 'rgba(242,237,228,0.85)' }}
               >
                 <NumIcon />
                 <span className="font-sans text-sm">{l.numerology}</span>
@@ -250,7 +250,7 @@ export default function BottomBar() {
               <Link
                 href="/history"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isHistory ? activeColor : 'rgba(201,194,224,0.85)' }}
+                style={{ color: isHistory ? activeColor : 'rgba(242,237,228,0.85)' }}
               >
                 <JournalIcon />
                 <span className="font-sans text-sm">{l.journal}</span>
@@ -258,16 +258,16 @@ export default function BottomBar() {
               <Link
                 href="/settings"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isSettings ? activeColor : 'rgba(201,194,224,0.85)' }}
+                style={{ color: isSettings ? activeColor : 'rgba(242,237,228,0.85)' }}
               >
                 <SettingsIcon />
                 <span className="font-sans text-sm">{l.settings}</span>
               </Link>
-              <div style={{ height: 1, background: 'rgba(212,175,55,0.12)', margin: '4px 12px' }} />
+              <div style={{ height: 1, background: 'rgba(224,178,108,0.12)', margin: '4px 12px' }} />
               <Link
                 href="/pricing"
                 className="flex items-center gap-3 px-4 py-2.5"
-                style={{ color: isPricing ? activeColor : 'rgba(212,175,55,0.8)' }}
+                style={{ color: isPricing ? activeColor : 'rgba(224,178,108,0.8)' }}
               >
                 <PricingIcon />
                 <span className="font-sans text-sm">{l.premium}</span>

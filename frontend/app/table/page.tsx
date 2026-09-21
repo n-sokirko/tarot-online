@@ -60,11 +60,11 @@ export default function TablePage() {
   if (failed) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center gap-4 px-4">
-        <p style={{ color: 'rgba(201,194,224,0.7)' }}>{t.error}</p>
+        <p style={{ color: 'rgba(242,237,228,0.7)' }}>{t.error}</p>
         <button
           onClick={start}
           className="px-5 py-2 rounded-full text-xs tracking-widest uppercase"
-          style={{ border: '1px solid rgba(212,175,55,0.35)', color: 'rgba(212,175,55,0.85)' }}
+          style={{ border: '1px solid rgba(224,178,108,0.35)', color: 'rgba(224,178,108,0.85)' }}
         >
           {t.retry}
         </button>
@@ -77,7 +77,7 @@ export default function TablePage() {
       <main className="min-h-screen flex items-center justify-center px-4">
         <motion.p
           className="font-serif italic"
-          style={{ color: 'rgba(212,175,55,0.7)' }}
+          style={{ color: 'rgba(224,178,108,0.7)' }}
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -91,10 +91,10 @@ export default function TablePage() {
     <main className="min-h-screen flex flex-col items-center px-4 py-10 md:py-16">
       <div className="w-full max-w-md flex flex-col gap-6">
         <header className="flex flex-col gap-2 text-center">
-          <h1 className="font-serif text-2xl" style={{ color: 'rgba(212,175,55,0.9)' }}>
+          <h1 className="font-serif text-2xl" style={{ color: 'rgba(224,178,108,0.9)' }}>
             {t.title}
           </h1>
-          <p className="text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>{t.lead}</p>
+          <p className="text-sm" style={{ color: 'rgba(242,237,228,0.6)' }}>{t.lead}</p>
         </header>
 
         <FreeTable
@@ -114,14 +114,14 @@ export default function TablePage() {
               disabled={cards.length === 0}
               className="px-6 py-3 rounded-full text-sm tracking-wide disabled:opacity-40"
               style={{
-                border: '1px solid rgba(212,175,55,0.45)',
-                color: 'rgba(212,175,55,0.95)',
-                background: 'rgba(212,175,55,0.06)',
+                border: '1px solid rgba(224,178,108,0.45)',
+                color: 'rgba(224,178,108,0.95)',
+                background: 'rgba(224,178,108,0.06)',
               }}
             >
               ✦ {t.help}
             </button>
-            <p className="text-xs text-center" style={{ color: 'rgba(201,194,224,0.45)' }}>
+            <p className="text-xs text-center" style={{ color: 'rgba(242,237,228,0.45)' }}>
               {cards.length === 0 ? t.needCard : t.helpHint}
             </p>
           </div>
@@ -136,7 +136,7 @@ export default function TablePage() {
         <button
           onClick={() => router.push('/')}
           className="self-center mt-2 text-xs underline"
-          style={{ color: 'rgba(201,194,224,0.4)' }}
+          style={{ color: 'rgba(242,237,228,0.4)' }}
         >
           {t.back}
         </button>

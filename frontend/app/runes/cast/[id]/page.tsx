@@ -38,7 +38,7 @@ export default function RuneCastPage({ params }: { params: { id: string } }) {
         className="min-h-screen flex flex-col items-center justify-center"
         style={{ background: 'transparent' }}
       >
-        <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>
+        <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.6)' }}>
           {t.error}
         </p>
       </main>
@@ -55,7 +55,7 @@ export default function RuneCastPage({ params }: { params: { id: string } }) {
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
           className="font-serif italic"
-          style={{ color: 'rgba(212,175,55,0.7)' }}
+          style={{ color: 'rgba(224,178,108,0.7)' }}
         >
           {t.loading}
         </motion.p>
@@ -86,8 +86,8 @@ export default function RuneCastPage({ params }: { params: { id: string } }) {
           onClick={() => router.push('/runes')}
           className="mt-4 px-6 py-2 rounded-full text-xs tracking-widest uppercase"
           style={{
-            border: '1px solid rgba(212,175,55,0.3)',
-            color: 'rgba(201,194,224,0.5)',
+            border: '1px solid rgba(224,178,108,0.3)',
+            color: 'rgba(242,237,228,0.5)',
             letterSpacing: '0.12em',
           }}
         >

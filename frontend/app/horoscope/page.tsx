@@ -171,7 +171,7 @@ function Section({ label, text, accent }: { label: string; text: string; accent:
   return (
     <div
       className="p-5 rounded-2xl"
-      style={{ background: 'rgba(212,175,55,0.04)', border: `1px solid ${accent}33` }}
+      style={{ background: 'rgba(224,178,108,0.04)', border: `1px solid ${accent}33` }}
     >
       <p
         className="font-sans text-[0.65rem] uppercase tracking-widest mb-2"
@@ -179,7 +179,7 @@ function Section({ label, text, accent }: { label: string; text: string; accent:
       >
         {label}
       </p>
-      <p className="font-serif text-sm leading-relaxed" style={{ color: 'rgba(201,194,224,0.92)' }}>
+      <p className="font-serif text-sm leading-relaxed" style={{ color: 'rgba(242,237,228,0.92)' }}>
         {text}
       </p>
     </div>
@@ -244,7 +244,7 @@ export default function HoroscopePage() {
     setError('');
   };
 
-  const accent = horo ? (ELEMENT_ACCENT[horo.element] ?? '#d4af37') : '#d4af37';
+  const accent = horo ? (ELEMENT_ACCENT[horo.element] ?? '#E0B26C') : '#E0B26C';
 
   return (
     <main
@@ -261,16 +261,16 @@ export default function HoroscopePage() {
         <header className="text-center flex flex-col gap-2">
           <p
             className="font-sans text-xs uppercase tracking-widest"
-            style={{ color: 'rgba(212,175,55,0.55)', letterSpacing: '0.25em' }}
+            style={{ color: 'rgba(224,178,108,0.55)', letterSpacing: '0.25em' }}
           >
             ✦ {t.title} ✦
           </p>
-          <h1 className="font-serif text-4xl" style={{ color: '#d4af37' }}>
+          <h1 className="font-serif text-4xl" style={{ color: '#E0B26C' }}>
             {t.heading}
           </h1>
           <p
             className="font-sans text-sm leading-relaxed max-w-md mx-auto"
-            style={{ color: 'rgba(201,194,224,0.7)' }}
+            style={{ color: 'rgba(242,237,228,0.7)' }}
           >
             {t.subtitle}
           </p>
@@ -286,29 +286,29 @@ export default function HoroscopePage() {
               exit={{ opacity: 0 }}
             >
               {signs.map((s) => {
-                const a = ELEMENT_ACCENT[s.element] ?? '#d4af37';
+                const a = ELEMENT_ACCENT[s.element] ?? '#E0B26C';
                 return (
                   <motion.button
                     key={s.slug}
                     onClick={() => void handleSelect(s.slug)}
                     className="flex flex-col items-center gap-1.5 py-4 rounded-2xl"
                     style={{
-                      background: 'rgba(212,175,55,0.04)',
+                      background: 'rgba(224,178,108,0.04)',
                       border: `1px solid ${a}33`,
                     }}
-                    whileHover={{ backgroundColor: 'rgba(212,175,55,0.1)', scale: 1.04 }}
+                    whileHover={{ backgroundColor: 'rgba(224,178,108,0.1)', scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
                   >
                     <ZodiacImage sign={s.slug} symbol={s.symbol} size={60} accent={a} />
                     <span
                       className="font-serif text-sm"
-                      style={{ color: 'rgba(201,194,224,0.9)' }}
+                      style={{ color: 'rgba(242,237,228,0.9)' }}
                     >
                       {s.name}
                     </span>
                     <span
                       className="font-sans text-[0.55rem] uppercase tracking-wider"
-                      style={{ color: 'rgba(201,194,224,0.4)', letterSpacing: '0.1em' }}
+                      style={{ color: 'rgba(242,237,228,0.4)', letterSpacing: '0.1em' }}
                     >
                       {s.date_range}
                     </span>
@@ -327,13 +327,13 @@ export default function HoroscopePage() {
               <button
                 onClick={handleBack}
                 className="self-start text-[0.7rem] font-sans uppercase tracking-widest"
-                style={{ color: 'rgba(201,194,224,0.5)', letterSpacing: '0.2em' }}
+                style={{ color: 'rgba(242,237,228,0.5)', letterSpacing: '0.2em' }}
               >
                 {t.back}
               </button>
 
               {loading && (
-                <p className="text-center font-serif text-sm" style={{ color: 'rgba(201,194,224,0.6)' }}>
+                <p className="text-center font-serif text-sm" style={{ color: 'rgba(242,237,228,0.6)' }}>
                   ✦ ...
                 </p>
               )}
@@ -346,7 +346,7 @@ export default function HoroscopePage() {
                     <p className="font-serif text-2xl" style={{ color: accent }}>
                       {locale === 'ru' ? horo.name_ru : horo.name_en}
                     </p>
-                    <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.45)' }}>
+                    <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.45)' }}>
                       {new Date(horo.date).toLocaleDateString(
                         locale === 'ru' ? 'ru-RU' : 'en-US',
                         { day: 'numeric', month: 'long', year: 'numeric' },
@@ -369,11 +369,11 @@ export default function HoroscopePage() {
                       <div
                         key={chip.label}
                         className="px-4 py-2 rounded-full text-center"
-                        style={{ background: 'rgba(212,175,55,0.06)', border: `1px solid ${accent}33` }}
+                        style={{ background: 'rgba(224,178,108,0.06)', border: `1px solid ${accent}33` }}
                       >
                         <p
                           className="font-sans text-[0.55rem] uppercase tracking-widest"
-                          style={{ color: 'rgba(201,194,224,0.45)', letterSpacing: '0.15em' }}
+                          style={{ color: 'rgba(242,237,228,0.45)', letterSpacing: '0.15em' }}
                         >
                           {chip.label}
                         </p>
@@ -385,7 +385,7 @@ export default function HoroscopePage() {
                   {/* Sections */}
                   <Section label={t.overall} text={horo.overall} accent={accent} />
                   <Section label={t.love} text={horo.love} accent="#c9a4d8" />
-                  <Section label={t.career} text={horo.career} accent="#d4af37" />
+                  <Section label={t.career} text={horo.career} accent="#E0B26C" />
                   <Section label={t.wellbeing} text={horo.wellbeing} accent="#9ad9c0" />
 
                   {/* Listen to the daily horoscope */}
@@ -401,13 +401,13 @@ export default function HoroscopePage() {
                     <div
                       className="p-6 rounded-2xl"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(28,24,64,0.6), rgba(11,11,31,0.4))',
-                        border: '1px solid rgba(180,140,200,0.2)',
+                        background: 'linear-gradient(135deg, rgba(19,16,25,0.6), rgba(11,10,15,0.4))',
+                        border: '1px solid rgba(182,167,240,0.2)',
                       }}
                     >
                       <p
                         className="font-sans text-xs uppercase tracking-widest mb-4 text-center"
-                        style={{ color: 'rgba(180,140,200,0.7)', letterSpacing: '0.2em' }}
+                        style={{ color: 'rgba(182,167,240,0.7)', letterSpacing: '0.2em' }}
                       >
                         ✦ {t.deep}
                       </p>
@@ -416,7 +416,7 @@ export default function HoroscopePage() {
                       </div>
                       <div
                         className="font-serif text-sm leading-relaxed whitespace-pre-wrap"
-                        style={{ color: 'rgba(201,194,224,0.9)' }}
+                        style={{ color: 'rgba(242,237,228,0.9)' }}
                       >
                         {aiReading.body_md}
                       </div>
@@ -425,7 +425,7 @@ export default function HoroscopePage() {
                     <div className="flex flex-col items-center gap-3">
                       <p
                         className="text-xs text-center max-w-xs font-sans"
-                        style={{ color: 'rgba(201,194,224,0.55)' }}
+                        style={{ color: 'rgba(242,237,228,0.55)' }}
                       >
                         {user ? t.deep_cta : t.login_cta}
                       </p>
@@ -434,13 +434,13 @@ export default function HoroscopePage() {
                         disabled={interpreting}
                         className="px-8 py-3 rounded-full font-serif text-sm tracking-widest uppercase"
                         style={{
-                          background: interpreting ? 'rgba(180,140,200,0.05)' : 'rgba(180,140,200,0.1)',
-                          border: '1px solid rgba(180,140,200,0.6)',
+                          background: interpreting ? 'rgba(182,167,240,0.05)' : 'rgba(182,167,240,0.1)',
+                          border: '1px solid rgba(182,167,240,0.6)',
                           color: 'rgba(220,180,240,0.9)',
                           letterSpacing: '0.15em',
                           opacity: interpreting ? 0.6 : 1,
                         }}
-                        whileHover={interpreting ? {} : { backgroundColor: 'rgba(180,140,200,0.2)' }}
+                        whileHover={interpreting ? {} : { backgroundColor: 'rgba(182,167,240,0.2)' }}
                       >
                         ✦ {interpreting ? t.interpreting : (user ? t.deep : t.login_cta)}
                       </motion.button>

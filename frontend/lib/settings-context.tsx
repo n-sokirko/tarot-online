@@ -21,7 +21,7 @@ export const FONT_SCALE: Record<FontSize, number> = {
 };
 
 export const ACCENT_PALETTES: Record<AccentColor, { primary: string; glow: string; label: string }> = {
-  gold:   { primary: '#d4af37', glow: '#d4af3766', label: 'Золото' },
+  gold:   { primary: '#E0B26C', glow: '#E0B26C66', label: 'Золото' },
   violet: { primary: '#b87de8', glow: '#b87de866', label: 'Аметист' },
   rose:   { primary: '#e87daa', glow: '#e87daa66', label: 'Роза' },
   teal:   { primary: '#5ecfcf', glow: '#5ecfcf66', label: 'Опал' },

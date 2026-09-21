@@ -183,14 +183,14 @@ export default function FreeTable({
           aspectRatio: '3 / 4',
           background:
             'radial-gradient(ellipse at 50% 35%, rgba(42,30,68,0.75), rgba(14,10,26,0.9))',
-          border: '1px solid rgba(212,175,55,0.22)',
+          border: '1px solid rgba(224,178,108,0.22)',
           touchAction: 'none',
         }}
       >
         {cards.length === 0 && (
           <p
             className="absolute inset-0 flex items-center justify-center px-8 text-center text-sm font-serif italic"
-            style={{ color: 'rgba(201,194,224,0.4)' }}
+            style={{ color: 'rgba(242,237,228,0.4)' }}
           >
             {t.empty}
           </p>
@@ -291,12 +291,12 @@ export default function FreeTable({
           </div>
         </motion.button>
 
-        <div className="flex flex-col gap-1 text-xs" style={{ color: 'rgba(201,194,224,0.55)' }}>
-          <span style={{ color: 'rgba(212,175,55,0.75)' }}>
+        <div className="flex flex-col gap-1 text-xs" style={{ color: 'rgba(242,237,228,0.55)' }}>
+          <span style={{ color: 'rgba(224,178,108,0.75)' }}>
             {t.deck} · {cards.length}/{maxCards}
           </span>
           <span>{cards.length === 0 ? t.hint : t.hintPlaced}</span>
-          {isFull && <span style={{ color: 'rgba(212,175,55,0.7)' }}>{t.full}</span>}
+          {isFull && <span style={{ color: 'rgba(224,178,108,0.7)' }}>{t.full}</span>}
           {error && <span style={{ color: '#e06c75' }}>{error}</span>}
         </div>
       </div>

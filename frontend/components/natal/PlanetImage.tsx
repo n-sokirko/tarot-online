@@ -39,9 +39,9 @@ export default function PlanetImage({
       <span
         style={{
           fontSize: size * 0.65,
-          color: '#d4af37',
+          color: '#E0B26C',
           lineHeight: 1,
-          textShadow: glow ? '0 0 18px rgba(212,175,55,0.8), 0 0 36px rgba(212,175,55,0.4)' : undefined,
+          textShadow: glow ? '0 0 18px rgba(224,178,108,0.8), 0 0 36px rgba(224,178,108,0.4)' : undefined,
         }}
       >
         {glyph}
@@ -64,7 +64,7 @@ export default function PlanetImage({
         justifyContent: 'center',
         // No overflow:hidden — it clips drop-shadow. Glow handled via container bg.
         ...(glow && {
-          background: `radial-gradient(circle at 50% 55%, rgba(212,175,55,0.22) 0%, transparent 70%)`,
+          background: `radial-gradient(circle at 50% 55%, rgba(224,178,108,0.22) 0%, transparent 70%)`,
           borderRadius: '50%',
         }),
       }}
@@ -78,7 +78,7 @@ export default function PlanetImage({
           objectFit: 'contain',
           display: 'block',
           filter: glow
-            ? `drop-shadow(0 0 ${Math.round(size / 4)}px rgba(212,175,55,0.95)) drop-shadow(0 0 ${Math.round(size / 2)}px rgba(212,175,55,0.4)) brightness(1.15)`
+            ? `drop-shadow(0 0 ${Math.round(size / 4)}px rgba(224,178,108,0.95)) drop-shadow(0 0 ${Math.round(size / 2)}px rgba(224,178,108,0.4)) brightness(1.15)`
             : 'brightness(1.05)',
         }}
         onError={() => setFailed(true)}

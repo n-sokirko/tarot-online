@@ -30,7 +30,7 @@ function renderInline(text: string) {
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       return (
-        <strong key={i} style={{ color: '#d4af37', fontWeight: 600 }}>
+        <strong key={i} style={{ color: '#E0B26C', fontWeight: 600 }}>
           {part.slice(2, -2)}
         </strong>
       );

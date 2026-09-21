@@ -34,7 +34,7 @@ export default function RuneStone({ symbol, name, positionLabel, delay = 0, size
       {positionLabel && (
         <span
           className="text-[9px] tracking-widest uppercase"
-          style={{ color: 'rgba(212,175,55,0.5)', letterSpacing: '0.22em' }}
+          style={{ color: 'rgba(224,178,108,0.5)', letterSpacing: '0.22em' }}
         >
           {positionLabel}
         </span>
@@ -49,8 +49,8 @@ export default function RuneStone({ symbol, name, positionLabel, delay = 0, size
             'radial-gradient(ellipse at 30% 25%, #4a4338 0%, #2b2620 55%, #1a1612 100%)',
           boxShadow:
             'inset 0 2px 4px rgba(255,240,200,0.08), inset 0 -3px 6px rgba(0,0,0,0.6), 0 6px 16px rgba(0,0,0,0.5)',
-          color: '#d4af37',
-          textShadow: '0 0 8px rgba(212,175,55,0.4), 0 1px 2px rgba(0,0,0,0.8)',
+          color: '#E0B26C',
+          textShadow: '0 0 8px rgba(224,178,108,0.4), 0 1px 2px rgba(0,0,0,0.8)',
           cursor: onClick ? 'pointer' : 'default',
           position: 'relative',
         }}
@@ -71,7 +71,7 @@ export default function RuneStone({ symbol, name, positionLabel, delay = 0, size
       </div>
       <span
         className="font-serif text-xs tracking-wide"
-        style={{ color: 'rgba(201,194,224,0.85)' }}
+        style={{ color: 'rgba(242,237,228,0.85)' }}
       >
         {name}
       </span>

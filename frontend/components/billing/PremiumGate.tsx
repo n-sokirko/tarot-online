@@ -92,26 +92,26 @@ export default function PremiumGate({ requires, locale = 'ru', fallback, childre
     <div
       className="rounded-2xl px-6 py-8 flex flex-col items-center text-center gap-3 max-w-md mx-auto"
       style={{
-        background: 'linear-gradient(180deg, rgba(28,24,64,0.6), rgba(11,11,31,0.6))',
-        border: '1px solid rgba(212,175,55,0.25)',
+        background: 'linear-gradient(180deg, rgba(19,16,25,0.6), rgba(11,10,15,0.6))',
+        border: '1px solid rgba(224,178,108,0.25)',
       }}
     >
       <span
         className="text-[10px] tracking-widest uppercase"
-        style={{ color: '#d4af37', letterSpacing: '0.25em' }}
+        style={{ color: '#E0B26C', letterSpacing: '0.25em' }}
       >
         ✦ {t.title}
       </span>
-      <p className="font-serif text-base" style={{ color: 'rgba(201,194,224,0.85)' }}>
+      <p className="font-serif text-base" style={{ color: 'rgba(242,237,228,0.85)' }}>
         {t.body}
       </p>
       <a
         href={needsLogin ? '/login' : '/pricing'}
         className="mt-2 px-6 py-2.5 rounded-full text-xs tracking-widest uppercase"
         style={{
-          background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-          border: '1px solid #d4af37',
-          color: '#d4af37',
+          background: 'linear-gradient(135deg, rgba(224,178,108,0.2), rgba(224,178,108,0.05))',
+          border: '1px solid #E0B26C',
+          color: '#E0B26C',
           letterSpacing: '0.18em',
         }}
       >

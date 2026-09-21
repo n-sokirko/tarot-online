@@ -16,7 +16,7 @@ interface CardFaceProps {
 }
 
 const SUIT_SHIMMER: Record<string, { color: string; duration: string }> = {
-  major:     { color: 'rgba(212,175,55,0.22)',  duration: '4s' },
+  major:     { color: 'rgba(224,178,108,0.22)',  duration: '4s' },
   wands:     { color: 'rgba(255,110,40,0.22)',  duration: '3.5s' },
   cups:      { color: 'rgba(60,160,230,0.22)',  duration: '4.5s' },
   swords:    { color: 'rgba(180,210,240,0.22)', duration: '3.8s' },
@@ -51,8 +51,8 @@ export default function CardFace({
       <div
         className="absolute inset-0 rounded-xl overflow-hidden flex flex-col"
         style={{
-          background: 'linear-gradient(135deg, #1e1245 0%, #0b0b1f 100%)',
-          border: '2px solid #d4af37',
+          background: 'linear-gradient(135deg, #1e1245 0%, #0B0A0F 100%)',
+          border: '2px solid #E0B26C',
         }}
       >
         {/* Card image area */}
@@ -65,7 +65,7 @@ export default function CardFace({
             <div
               className="absolute inset-0 flex flex-col items-center justify-center gap-2"
               style={{
-                background: 'linear-gradient(135deg, #1e1245 0%, #0b0b1f 100%)',
+                background: 'linear-gradient(135deg, #1e1245 0%, #0B0A0F 100%)',
               }}
             >
               <svg
@@ -77,9 +77,9 @@ export default function CardFace({
                 aria-hidden="true"
               >
                 {/* Outer circle */}
-                <circle cx="28" cy="28" r="26" stroke="rgba(212,175,55,0.35)" strokeWidth="0.75" />
+                <circle cx="28" cy="28" r="26" stroke="rgba(224,178,108,0.35)" strokeWidth="0.75" />
                 {/* Inner circle */}
-                <circle cx="28" cy="28" r="18" stroke="rgba(212,175,55,0.25)" strokeWidth="0.75" />
+                <circle cx="28" cy="28" r="18" stroke="rgba(224,178,108,0.25)" strokeWidth="0.75" />
                 {/* Eight-pointed star spokes */}
                 {[0, 45, 90, 135].map((deg) => (
                   <line
@@ -88,7 +88,7 @@ export default function CardFace({
                     y1="4"
                     x2="28"
                     y2="52"
-                    stroke="rgba(212,175,55,0.4)"
+                    stroke="rgba(224,178,108,0.4)"
                     strokeWidth="0.75"
                     transform={`rotate(${deg} 28 28)`}
                   />
@@ -104,16 +104,16 @@ export default function CardFace({
                       cx={cx}
                       cy={cy}
                       r="1.5"
-                      fill="rgba(212,175,55,0.5)"
+                      fill="rgba(224,178,108,0.5)"
                     />
                   );
                 })}
                 {/* Central asterisk */}
-                <circle cx="28" cy="28" r="3" fill="rgba(212,175,55,0.45)" />
+                <circle cx="28" cy="28" r="3" fill="rgba(224,178,108,0.45)" />
               </svg>
               <span
                 className="font-serif text-center px-2 leading-tight"
-                style={{ color: '#d4af37', fontSize: '0.75rem' }}
+                style={{ color: '#E0B26C', fontSize: '0.75rem' }}
               >
                 {name}
               </span>
@@ -149,7 +149,7 @@ export default function CardFace({
           {/* Name */}
           <p
             className="font-serif text-center leading-tight truncate"
-            style={{ color: '#d4af37', fontSize: '0.7rem' }}
+            style={{ color: '#E0B26C', fontSize: '0.7rem' }}
           >
             {name}
             {isReversed && (
@@ -164,9 +164,9 @@ export default function CardFace({
                 key={kw}
                 className="rounded-full px-1.5 py-0.5 leading-none"
                 style={{
-                  background: 'rgba(212,175,55,0.12)',
-                  color: 'rgba(212,175,55,0.8)',
-                  border: '1px solid rgba(212,175,55,0.25)',
+                  background: 'rgba(224,178,108,0.12)',
+                  color: 'rgba(224,178,108,0.8)',
+                  border: '1px solid rgba(224,178,108,0.25)',
                   fontSize: '0.55rem',
                 }}
               >
@@ -179,7 +179,7 @@ export default function CardFace({
           <p
             className="text-center leading-tight line-clamp-2"
             style={{
-              color: '#c9c2e0',
+              color: '#F2EDE4',
               fontSize: '0.55rem',
               opacity: 0.8,
             }}

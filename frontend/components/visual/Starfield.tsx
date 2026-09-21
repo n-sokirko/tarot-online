@@ -62,7 +62,7 @@ export default function Starfield({
             className="absolute rounded-full"
             style={{
               top: '-10%', left: '-8%', width: '46vw', height: '46vw', maxWidth: 520, maxHeight: 520,
-              background: 'radial-gradient(circle, rgba(212,175,55,0.10) 0%, transparent 65%)',
+              background: 'radial-gradient(circle, rgba(224,178,108,0.10) 0%, transparent 65%)',
               animation: 'slow-spin 80s linear infinite, glow-pulse 9s ease-in-out infinite',
             }}
           />
@@ -87,8 +87,8 @@ export default function Starfield({
             left: `${s.left}%`,
             width: s.size,
             height: s.size,
-            background: s.gold ? 'rgba(212,175,55,0.9)' : 'rgba(255,255,255,0.9)',
-            boxShadow: s.gold ? '0 0 4px rgba(212,175,55,0.7)' : '0 0 3px rgba(255,255,255,0.5)',
+            background: s.gold ? 'rgba(224,178,108,0.9)' : 'rgba(255,255,255,0.9)',
+            boxShadow: s.gold ? '0 0 4px rgba(224,178,108,0.7)' : '0 0 3px rgba(255,255,255,0.5)',
             '--tw-min': s.min,
             '--tw-max': 0.9,
             animation: `star-twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,

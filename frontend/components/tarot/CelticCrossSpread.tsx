@@ -131,9 +131,9 @@ export default function CelticCrossSpread({
             className="flex items-center justify-center font-serif"
             style={{
               width: 22, height: 22, borderRadius: 999,
-              background: 'rgba(212,175,55,0.12)',
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: '#d4af37', fontSize: '0.7rem',
+              background: 'rgba(224,178,108,0.12)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: '#E0B26C', fontSize: '0.7rem',
             }}
           >
             {slot.idx + 1}
@@ -168,8 +168,8 @@ export default function CelticCrossSpread({
               className="w-full rounded-lg"
               style={{
                 aspectRatio: '2 / 3',
-                border: '1px dashed rgba(212,175,55,0.2)',
-                background: 'rgba(212,175,55,0.02)',
+                border: '1px dashed rgba(224,178,108,0.2)',
+                background: 'rgba(224,178,108,0.02)',
               }}
             />
           )}
@@ -185,7 +185,7 @@ export default function CelticCrossSpread({
         {/* Cross section */}
         <p
           className="font-serif text-xs tracking-widest uppercase text-center"
-          style={{ color: 'rgba(212,175,55,0.45)', letterSpacing: '0.18em' }}
+          style={{ color: 'rgba(224,178,108,0.45)', letterSpacing: '0.18em' }}
         >
           {locale === 'ru' ? 'Крест ситуации' : 'The Cross'}
         </p>
@@ -215,7 +215,7 @@ export default function CelticCrossSpread({
         {/* Staff section */}
         <p
           className="font-serif text-xs tracking-widest uppercase text-center mt-2"
-          style={{ color: 'rgba(212,175,55,0.45)', letterSpacing: '0.18em' }}
+          style={{ color: 'rgba(224,178,108,0.45)', letterSpacing: '0.18em' }}
         >
           {locale === 'ru' ? 'Посох развития' : 'The Staff'}
         </p>
@@ -282,7 +282,7 @@ export default function CelticCrossSpread({
             gridRow: '1 / 5',
             width: '1px',
             height: '100%',
-            background: 'rgba(212,175,55,0.15)',
+            background: 'rgba(224,178,108,0.15)',
             justifySelf: 'center',
           }}
         />
@@ -299,7 +299,7 @@ export default function CelticCrossSpread({
       <div className="w-full max-w-2xl mx-auto mt-10 flex flex-col gap-2 px-2">
         <p
           className="font-serif text-xs tracking-widest uppercase text-center mb-2"
-          style={{ color: 'rgba(212,175,55,0.5)', letterSpacing: '0.18em' }}
+          style={{ color: 'rgba(224,178,108,0.5)', letterSpacing: '0.18em' }}
         >
           {locale === 'ru' ? 'Карты расклада — нажми для разбора' : 'Cards — tap for details'}
         </p>
@@ -312,33 +312,33 @@ export default function CelticCrossSpread({
             <button
               key={i}
               onClick={() => setSelectedCardIndex(i)}
-              className="w-full text-left flex items-start gap-3 p-3 rounded-xl transition-colors hover:bg-[rgba(212,175,55,0.08)]"
-              style={{ background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.15)' }}
+              className="w-full text-left flex items-start gap-3 p-3 rounded-xl transition-colors hover:bg-[rgba(224,178,108,0.08)]"
+              style={{ background: 'rgba(224,178,108,0.04)', border: '1px solid rgba(224,178,108,0.15)' }}
             >
               <span
                 className="flex items-center justify-center font-serif shrink-0"
                 style={{
                   width: 26, height: 26, borderRadius: 999,
-                  background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.3)',
-                  color: '#d4af37', fontSize: '0.8rem',
+                  background: 'rgba(224,178,108,0.12)', border: '1px solid rgba(224,178,108,0.3)',
+                  color: '#E0B26C', fontSize: '0.8rem',
                 }}
               >
                 {i + 1}
               </span>
               <span className="flex flex-col gap-0.5 min-w-0">
-                <span className="font-sans text-[0.62rem] uppercase tracking-wider" style={{ color: 'rgba(201,194,224,0.5)', letterSpacing: '0.1em' }}>
+                <span className="font-sans text-[0.62rem] uppercase tracking-wider" style={{ color: 'rgba(242,237,228,0.5)', letterSpacing: '0.1em' }}>
                   {positionLabel(pos)}
                 </span>
-                <span className="font-serif text-sm" style={{ color: '#d4af37' }}>
+                <span className="font-serif text-sm" style={{ color: '#E0B26C' }}>
                   {name}
                   {dc.is_reversed && (
-                    <span style={{ color: 'rgba(201,194,224,0.5)', fontSize: '0.75rem' }}>
+                    <span style={{ color: 'rgba(242,237,228,0.5)', fontSize: '0.75rem' }}>
                       {' '}· {locale === 'ru' ? 'перевёрнута' : 'reversed'}
                     </span>
                   )}
                 </span>
                 {kws.length > 0 && (
-                  <span className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.7)' }}>
+                  <span className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.7)' }}>
                     {kws.slice(0, 3).join(' · ')}
                   </span>
                 )}

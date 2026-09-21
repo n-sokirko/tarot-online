@@ -65,8 +65,8 @@ export default function TelegramInit() {
       tg.expand();
       // Match the dark mystical theme
       try {
-        tg.setHeaderColor('#0b0b1f');
-        tg.setBackgroundColor('#0b0b1f');
+        tg.setHeaderColor('#0B0A0F');
+        tg.setBackgroundColor('#0B0A0F');
       } catch {
         // Older Telegram clients may not support colour customisation — ignore
       }

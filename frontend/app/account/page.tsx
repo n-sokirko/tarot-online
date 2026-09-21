@@ -152,7 +152,7 @@ export default function AccountPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           className="font-serif text-2xl md:text-3xl mb-8 text-center"
-          style={{ color: '#d4af37', letterSpacing: '0.05em' }}
+          style={{ color: '#E0B26C', letterSpacing: '0.05em' }}
         >
           ✦ {t.title}
         </motion.h1>
@@ -161,9 +161,9 @@ export default function AccountPage() {
           <p
             className="mb-6 text-center font-serif text-sm rounded-full px-4 py-2"
             style={{
-              background: 'rgba(212,175,55,0.1)',
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: '#d4af37',
+              background: 'rgba(224,178,108,0.1)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: '#E0B26C',
             }}
           >
             {t.upgrade_success}
@@ -173,13 +173,13 @@ export default function AccountPage() {
         <div
           className="rounded-2xl p-6 space-y-5"
           style={{
-            background: 'linear-gradient(180deg, rgba(28,24,64,0.7), rgba(11,11,31,0.6))',
-            border: '1px solid rgba(212,175,55,0.18)',
+            background: 'linear-gradient(180deg, rgba(19,16,25,0.7), rgba(11,10,15,0.6))',
+            border: '1px solid rgba(224,178,108,0.18)',
           }}
         >
           <Row label={user?.email ?? ''} value="" muted />
           {!me ? (
-            <p className="font-serif text-sm" style={{ color: 'rgba(201,194,224,0.5)' }}>
+            <p className="font-serif text-sm" style={{ color: 'rgba(242,237,228,0.5)' }}>
               {t.loading}
             </p>
           ) : (
@@ -205,7 +205,7 @@ export default function AccountPage() {
               ) : (
                 <p
                   className="font-serif text-sm italic"
-                  style={{ color: 'rgba(201,194,224,0.5)' }}
+                  style={{ color: 'rgba(242,237,228,0.5)' }}
                 >
                   {t.no_subscription}
                 </p>
@@ -219,9 +219,9 @@ export default function AccountPage() {
             href="/pricing"
             className="px-6 py-2.5 rounded-full text-xs tracking-widest uppercase"
             style={{
-              background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-              border: '1px solid #d4af37',
-              color: '#d4af37',
+              background: 'linear-gradient(135deg, rgba(224,178,108,0.2), rgba(224,178,108,0.05))',
+              border: '1px solid #E0B26C',
+              color: '#E0B26C',
               letterSpacing: '0.18em',
             }}
           >
@@ -231,8 +231,8 @@ export default function AccountPage() {
             href="/history"
             className="px-6 py-2.5 rounded-full text-xs tracking-widest uppercase"
             style={{
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: 'rgba(201,194,224,0.75)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: 'rgba(242,237,228,0.75)',
               letterSpacing: '0.18em',
             }}
           >
@@ -241,7 +241,7 @@ export default function AccountPage() {
           <button
             onClick={() => { logout(); router.push('/'); }}
             className="text-xs tracking-widest uppercase opacity-70"
-            style={{ color: 'rgba(201,194,224,0.6)', letterSpacing: '0.18em' }}
+            style={{ color: 'rgba(242,237,228,0.6)', letterSpacing: '0.18em' }}
           >
             {t.logout}
           </button>
@@ -256,13 +256,13 @@ function Row({ label, value, muted }: { label: string; value: string; muted?: bo
     <div className="flex justify-between items-baseline gap-4">
       <span
         className="font-serif text-sm tracking-wide"
-        style={{ color: muted ? 'rgba(201,194,224,0.45)' : 'rgba(201,194,224,0.65)' }}
+        style={{ color: muted ? 'rgba(242,237,228,0.45)' : 'rgba(242,237,228,0.65)' }}
       >
         {label}
       </span>
       <span
         className="font-serif text-sm text-right"
-        style={{ color: 'rgba(201,194,224,0.9)' }}
+        style={{ color: 'rgba(242,237,228,0.9)' }}
       >
         {value}
       </span>

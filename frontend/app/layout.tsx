@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
-import { Cormorant_Garamond, Inter } from 'next/font/google';
+import { JetBrains_Mono, Manrope, Prata } from 'next/font/google';
 import { AuthProvider } from '@/lib/auth-context';
 import { SettingsProvider } from '@/lib/settings-context';
 import Navbar from '@/components/layout/Navbar';
@@ -12,17 +12,28 @@ import RotatingWheel from '@/components/natal/RotatingWheel';
 import type { Locale } from '@/lib/i18n-config';
 import './globals.css';
 
-const cormorant = Cormorant_Garamond({
+// Design system "Обсидиан" (design_handoff_tarot_redesign): Prata for headings,
+// card names and quotes; Manrope for interface text; JetBrains Mono for labels,
+// counters and card numbers. next/font self-hosts them, so no request goes to
+// Google at runtime. All three ship Cyrillic.
+const prata = Prata({
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-cormorant',
+  weight: '400',
+  variable: '--font-prata',
   display: 'swap',
 });
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
-  variable: '--font-inter',
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-manrope',
+  display: 'swap',
+});
+
+const mono = JetBrains_Mono({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
   display: 'swap',
 });
 
@@ -42,7 +53,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${cormorant.variable} ${inter.variable}`}
+      className={`${prata.variable} ${manrope.variable} ${mono.variable}`}
     >
       <head>
         {/* Telegram Mini App SDK — must load before hydration so

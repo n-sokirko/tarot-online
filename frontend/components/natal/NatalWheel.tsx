@@ -53,7 +53,7 @@ const ELEMENT_COLORS: Record<string, string> = {
 };
 
 const ASPECT_COLORS: Record<string, string> = {
-  Conjunction: 'rgba(212,175,55,0.5)',
+  Conjunction: 'rgba(224,178,108,0.5)',
   Trine: 'rgba(80,120,220,0.4)',
   Square: 'rgba(200,80,80,0.4)',
   Sextile: 'rgba(80,180,120,0.35)',
@@ -133,7 +133,7 @@ function ZodiacRing({ ascPos }: { ascPos: number }) {
             <path
               d={arcPath(startDeg, endDeg, R_ZODIAC_INNER, R_ZODIAC_OUTER, ascPos)}
               fill={color}
-              stroke="rgba(212,175,55,0.25)"
+              stroke="rgba(224,178,108,0.25)"
               strokeWidth="0.5"
             />
             <text
@@ -142,7 +142,7 @@ function ZodiacRing({ ascPos }: { ascPos: number }) {
               textAnchor="middle"
               dominantBaseline="central"
               fontSize="11"
-              fill="rgba(212,175,55,0.8)"
+              fill="rgba(224,178,108,0.8)"
               style={{ userSelect: 'none', pointerEvents: 'none' }}
             >
               {ZODIAC_GLYPHS[i]}
@@ -151,8 +151,8 @@ function ZodiacRing({ ascPos }: { ascPos: number }) {
         );
       })}
       {/* Outer and inner border circles */}
-      <circle cx={CX} cy={CY} r={R_ZODIAC_OUTER} fill="none" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
-      <circle cx={CX} cy={CY} r={R_ZODIAC_INNER} fill="none" stroke="rgba(212,175,55,0.25)" strokeWidth="0.5" />
+      <circle cx={CX} cy={CY} r={R_ZODIAC_OUTER} fill="none" stroke="rgba(224,178,108,0.3)" strokeWidth="0.5" />
+      <circle cx={CX} cy={CY} r={R_ZODIAC_INNER} fill="none" stroke="rgba(224,178,108,0.25)" strokeWidth="0.5" />
     </g>
   );
 }
@@ -173,7 +173,7 @@ function HouseRing({ houses, ascPos }: { houses: NatalHouse[]; ascPos: number })
             <line
               x1={outerPt.x} y1={outerPt.y}
               x2={innerPt.x} y2={innerPt.y}
-              stroke="rgba(212,175,55,0.2)"
+              stroke="rgba(224,178,108,0.2)"
               strokeWidth="0.75"
             />
             <text
@@ -182,7 +182,7 @@ function HouseRing({ houses, ascPos }: { houses: NatalHouse[]; ascPos: number })
               textAnchor="middle"
               dominantBaseline="central"
               fontSize="8"
-              fill="rgba(201,194,224,0.4)"
+              fill="rgba(242,237,228,0.4)"
               style={{ userSelect: 'none', pointerEvents: 'none' }}
             >
               {house.number}
@@ -190,8 +190,8 @@ function HouseRing({ houses, ascPos }: { houses: NatalHouse[]; ascPos: number })
           </g>
         );
       })}
-      <circle cx={CX} cy={CY} r={R_HOUSE_OUTER} fill="none" stroke="rgba(212,175,55,0.18)" strokeWidth="0.5" />
-      <circle cx={CX} cy={CY} r={R_HOUSE_INNER} fill="none" stroke="rgba(212,175,55,0.15)" strokeWidth="0.5" />
+      <circle cx={CX} cy={CY} r={R_HOUSE_OUTER} fill="none" stroke="rgba(224,178,108,0.18)" strokeWidth="0.5" />
+      <circle cx={CX} cy={CY} r={R_HOUSE_INNER} fill="none" stroke="rgba(224,178,108,0.15)" strokeWidth="0.5" />
     </g>
   );
 }
@@ -313,8 +313,8 @@ function PlanetDots({
               cx={pt.x.toFixed(2)}
               cy={pt.y.toFixed(2)}
               r={isBig3 ? 5.5 : 4}
-              fill={isBig3 ? '#d4af37' : 'rgba(201,194,224,0.7)'}
-              stroke={isBig3 ? 'rgba(212,175,55,0.4)' : 'rgba(201,194,224,0.2)'}
+              fill={isBig3 ? '#E0B26C' : 'rgba(242,237,228,0.7)'}
+              stroke={isBig3 ? 'rgba(224,178,108,0.4)' : 'rgba(242,237,228,0.2)'}
               strokeWidth="1"
             />
             {/* Glyph label */}
@@ -324,7 +324,7 @@ function PlanetDots({
               textAnchor="middle"
               dominantBaseline="central"
               fontSize={isBig3 ? '11' : '9'}
-              fill={isBig3 ? '#d4af37' : 'rgba(201,194,224,0.85)'}
+              fill={isBig3 ? '#E0B26C' : 'rgba(242,237,228,0.85)'}
               style={{ userSelect: 'none', pointerEvents: 'none' }}
             >
               {planet.glyph}
@@ -346,7 +346,7 @@ function AscendantMarker({ ascPos }: { ascPos: number }) {
       <line
         x1={outerPt.x.toFixed(2)} y1={outerPt.y.toFixed(2)}
         x2={innerPt.x.toFixed(2)} y2={innerPt.y.toFixed(2)}
-        stroke="#d4af37"
+        stroke="#E0B26C"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -356,7 +356,7 @@ function AscendantMarker({ ascPos }: { ascPos: number }) {
         textAnchor="end"
         dominantBaseline="central"
         fontSize="8"
-        fill="rgba(212,175,55,0.75)"
+        fill="rgba(224,178,108,0.75)"
         style={{ userSelect: 'none', pointerEvents: 'none' }}
       >
         AC
@@ -368,14 +368,14 @@ function AscendantMarker({ ascPos }: { ascPos: number }) {
 function CenterInfo({ name, date }: { name?: string; date?: string }) {
   return (
     <g>
-      <circle cx={CX} cy={CY} r={R_CENTER} fill="rgba(11,11,31,0.85)" stroke="rgba(212,175,55,0.2)" strokeWidth="0.5" />
+      <circle cx={CX} cy={CY} r={R_CENTER} fill="rgba(11,10,15,0.85)" stroke="rgba(224,178,108,0.2)" strokeWidth="0.5" />
       {name && (
         <text
           x={CX} y={CY - 8}
           textAnchor="middle"
           dominantBaseline="central"
           fontSize="8"
-          fill="rgba(212,175,55,0.65)"
+          fill="rgba(224,178,108,0.65)"
           style={{ userSelect: 'none', pointerEvents: 'none' }}
         >
           {name.length > 14 ? name.slice(0, 13) + '…' : name}
@@ -387,7 +387,7 @@ function CenterInfo({ name, date }: { name?: string; date?: string }) {
           textAnchor="middle"
           dominantBaseline="central"
           fontSize="7"
-          fill="rgba(201,194,224,0.4)"
+          fill="rgba(242,237,228,0.4)"
           style={{ userSelect: 'none', pointerEvents: 'none' }}
         >
           {date}
@@ -426,7 +426,7 @@ export default function NatalWheel({
           style={{ display: 'block' }}
         >
           {/* Dark background */}
-          <circle cx={CX} cy={CY} r={R_ZODIAC_OUTER} fill="rgba(11,11,31,0.95)" />
+          <circle cx={CX} cy={CY} r={R_ZODIAC_OUTER} fill="rgba(11,10,15,0.95)" />
 
           {/* Aspect lines (innermost layer) */}
           <AspectLines
@@ -437,13 +437,13 @@ export default function NatalWheel({
           />
 
           {/* Aspect circle boundary */}
-          <circle cx={CX} cy={CY} r={R_ASPECT} fill="none" stroke="rgba(212,175,55,0.08)" strokeWidth="0.5" />
+          <circle cx={CX} cy={CY} r={R_ASPECT} fill="none" stroke="rgba(224,178,108,0.08)" strokeWidth="0.5" />
 
           {/* House ring */}
           <HouseRing houses={houses} ascPos={ascPos} />
 
           {/* Planet ring background */}
-          <circle cx={CX} cy={CY} r={R_PLANET + 16} fill="none" stroke="rgba(212,175,55,0.08)" strokeWidth="0.5" />
+          <circle cx={CX} cy={CY} r={R_PLANET + 16} fill="none" stroke="rgba(224,178,108,0.08)" strokeWidth="0.5" />
 
           {/* Planet dots */}
           <PlanetDots
@@ -461,7 +461,7 @@ export default function NatalWheel({
           {ascendant !== null && <AscendantMarker ascPos={ascPos} />}
 
           {/* Center — subtle empty circle, no text (shown in side panel) */}
-          <circle cx={CX} cy={CY} r={R_CENTER} fill="rgba(11,11,31,0.85)" stroke="rgba(212,175,55,0.12)" strokeWidth="0.5" />
+          <circle cx={CX} cy={CY} r={R_CENTER} fill="rgba(11,10,15,0.85)" stroke="rgba(224,178,108,0.12)" strokeWidth="0.5" />
         </svg>
       </motion.div>
 
@@ -473,9 +473,9 @@ export default function NatalWheel({
             left: tooltip.x,
             top: tooltip.y - 40,
             transform: 'translateX(-50%)',
-            background: 'rgba(11,11,31,0.92)',
-            border: '1px solid rgba(212,175,55,0.35)',
-            color: 'rgba(201,194,224,0.9)',
+            background: 'rgba(11,10,15,0.92)',
+            border: '1px solid rgba(224,178,108,0.35)',
+            color: 'rgba(242,237,228,0.9)',
             whiteSpace: 'nowrap',
             backdropFilter: 'blur(8px)',
           }}
@@ -488,7 +488,7 @@ export default function NatalWheel({
       {!isPremium && (
         <div
           className="mt-3 text-center text-xs"
-          style={{ color: 'rgba(201,194,224,0.4)', letterSpacing: '0.05em' }}
+          style={{ color: 'rgba(242,237,228,0.4)', letterSpacing: '0.05em' }}
         >
           ✦ Dimmed planets visible with Premium
         </div>

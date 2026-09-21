@@ -168,23 +168,23 @@ export default function DailyCardPage() {
         <header className="text-center flex flex-col gap-2">
           <p
             className="font-sans text-xs uppercase tracking-widest"
-            style={{ color: 'rgba(212,175,55,0.55)', letterSpacing: '0.25em' }}
+            style={{ color: 'rgba(224,178,108,0.55)', letterSpacing: '0.25em' }}
           >
             {t.todayLabel} · {today}
           </p>
-          <h1 className="font-serif text-4xl" style={{ color: '#d4af37' }}>
+          <h1 className="font-serif text-4xl" style={{ color: '#E0B26C' }}>
             {t.title}
           </h1>
           <p
             className="font-sans text-sm leading-relaxed max-w-xs mx-auto"
-            style={{ color: 'rgba(201,194,224,0.7)' }}
+            style={{ color: 'rgba(242,237,228,0.7)' }}
           >
             {t.subtitle}
           </p>
         </header>
 
         {loading && (
-          <div className="text-center" style={{ color: 'rgba(201,194,224,0.5)' }}>
+          <div className="text-center" style={{ color: 'rgba(242,237,228,0.5)' }}>
             <span className="font-serif italic">{t.revealing}</span>
           </div>
         )}
@@ -212,7 +212,7 @@ export default function DailyCardPage() {
                     <CardBack />
                     <p
                       className="mt-3 text-center font-serif text-xs italic"
-                      style={{ color: 'rgba(212,175,55,0.7)' }}
+                      style={{ color: 'rgba(224,178,108,0.7)' }}
                     >
                       {t.reveal}
                     </p>
@@ -241,7 +241,7 @@ export default function DailyCardPage() {
                 {data.is_reversed && (
                   <p
                     className="text-center text-xs uppercase tracking-widest"
-                    style={{ color: 'rgba(180,140,200,0.7)', letterSpacing: '0.2em' }}
+                    style={{ color: 'rgba(182,167,240,0.7)', letterSpacing: '0.2em' }}
                   >
                     ↕ {t.reversedNote}
                   </p>
@@ -254,9 +254,9 @@ export default function DailyCardPage() {
                       key={kw}
                       className="rounded-full px-3 py-1 text-xs"
                       style={{
-                        background: 'rgba(212,175,55,0.08)',
-                        color: 'rgba(212,175,55,0.9)',
-                        border: '1px solid rgba(212,175,55,0.2)',
+                        background: 'rgba(224,178,108,0.08)',
+                        color: 'rgba(224,178,108,0.9)',
+                        border: '1px solid rgba(224,178,108,0.2)',
                       }}
                     >
                       {kw}
@@ -268,19 +268,19 @@ export default function DailyCardPage() {
                 <div
                   className="p-5 rounded-2xl"
                   style={{
-                    background: 'rgba(212,175,55,0.04)',
-                    border: '1px solid rgba(212,175,55,0.18)',
+                    background: 'rgba(224,178,108,0.04)',
+                    border: '1px solid rgba(224,178,108,0.18)',
                   }}
                 >
                   <p
                     className="font-sans text-xs uppercase tracking-widest mb-3"
-                    style={{ color: 'rgba(212,175,55,0.6)', letterSpacing: '0.2em' }}
+                    style={{ color: 'rgba(224,178,108,0.6)', letterSpacing: '0.2em' }}
                   >
                     {data.is_reversed ? t.reversed : t.upright}
                   </p>
                   <p
                     className="font-serif text-sm leading-relaxed"
-                    style={{ color: 'rgba(201,194,224,0.92)' }}
+                    style={{ color: 'rgba(242,237,228,0.92)' }}
                   >
                     {meaning}
                   </p>
@@ -290,19 +290,19 @@ export default function DailyCardPage() {
                 <div
                   className="p-5 rounded-2xl text-center"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(28,24,64,0.6), rgba(11,11,31,0.4))',
-                    border: '1px solid rgba(180,140,200,0.18)',
+                    background: 'linear-gradient(135deg, rgba(19,16,25,0.6), rgba(11,10,15,0.4))',
+                    border: '1px solid rgba(182,167,240,0.18)',
                   }}
                 >
                   <p
                     className="font-sans text-xs uppercase tracking-widest mb-3"
-                    style={{ color: 'rgba(180,140,200,0.7)', letterSpacing: '0.2em' }}
+                    style={{ color: 'rgba(182,167,240,0.7)', letterSpacing: '0.2em' }}
                   >
                     ✦ {t.reflection}
                   </p>
                   <p
                     className="font-serif italic text-sm leading-relaxed"
-                    style={{ color: 'rgba(201,194,224,0.85)' }}
+                    style={{ color: 'rgba(242,237,228,0.85)' }}
                   >
                     {reflection}
                   </p>

@@ -64,7 +64,7 @@ export default function RegisterPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-serif text-3xl text-center" style={{ color: '#d4af37' }}>
+        <h1 className="font-serif text-3xl text-center" style={{ color: '#E0B26C' }}>
           {t('register_title')}
         </h1>
 
@@ -76,9 +76,9 @@ export default function RegisterPage() {
             placeholder={t('display_name')}
             className="w-full px-4 py-3 rounded-xl font-sans text-sm outline-none"
             style={{
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: 'rgba(201,194,224,0.9)',
-              background: 'rgba(212,175,55,0.04)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: 'rgba(242,237,228,0.9)',
+              background: 'rgba(224,178,108,0.04)',
             }}
           />
           <input
@@ -89,9 +89,9 @@ export default function RegisterPage() {
             required
             className="w-full px-4 py-3 rounded-xl font-sans text-sm outline-none"
             style={{
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: 'rgba(201,194,224,0.9)',
-              background: 'rgba(212,175,55,0.04)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: 'rgba(242,237,228,0.9)',
+              background: 'rgba(224,178,108,0.04)',
             }}
           />
           <input
@@ -102,9 +102,9 @@ export default function RegisterPage() {
             required
             className="w-full px-4 py-3 rounded-xl font-sans text-sm outline-none"
             style={{
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: 'rgba(201,194,224,0.9)',
-              background: 'rgba(212,175,55,0.04)',
+              border: '1px solid rgba(224,178,108,0.3)',
+              color: 'rgba(242,237,228,0.9)',
+              background: 'rgba(224,178,108,0.04)',
             }}
           />
 
@@ -119,13 +119,13 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full py-3 rounded-full font-serif text-sm tracking-widest uppercase"
             style={{
-              background: loading ? 'rgba(212,175,55,0.05)' : 'rgba(212,175,55,0.1)',
-              border: '1px solid #d4af37',
-              color: '#d4af37',
+              background: loading ? 'rgba(224,178,108,0.05)' : 'rgba(224,178,108,0.1)',
+              border: '1px solid #E0B26C',
+              color: '#E0B26C',
               letterSpacing: '0.15em',
               opacity: loading ? 0.6 : 1,
             }}
-            whileHover={loading ? {} : { backgroundColor: 'rgba(212,175,55,0.2)' }}
+            whileHover={loading ? {} : { backgroundColor: 'rgba(224,178,108,0.2)' }}
           >
             {loading ? '...' : t('register_btn')}
           </motion.button>
@@ -133,17 +133,17 @@ export default function RegisterPage() {
 
         {/* Divider */}
         <div className="flex items-center gap-3">
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.15)' }} />
-          <span className="text-xs font-sans" style={{ color: 'rgba(201,194,224,0.3)', letterSpacing: '0.1em' }}>
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.15)' }} />
+          <span className="text-xs font-sans" style={{ color: 'rgba(242,237,228,0.3)', letterSpacing: '0.1em' }}>
             {t('or')}
           </span>
-          <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.15)' }} />
+          <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.15)' }} />
         </div>
 
         {isClient && <GoogleButton onError={setError} />}
 
-        <p className="text-xs text-center" style={{ color: 'rgba(201,194,224,0.4)' }}>
-          <Link href="/login" style={{ color: 'rgba(212,175,55,0.6)' }}>
+        <p className="text-xs text-center" style={{ color: 'rgba(242,237,228,0.4)' }}>
+          <Link href="/login" style={{ color: 'rgba(224,178,108,0.6)' }}>
             {t('login_link')}
           </Link>
         </p>

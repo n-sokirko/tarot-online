@@ -145,11 +145,11 @@ export default function RunesPage() {
         >
           <h1
             className="font-serif text-3xl md:text-4xl mb-3"
-            style={{ color: '#d4af37', letterSpacing: '0.08em' }}
+            style={{ color: '#E0B26C', letterSpacing: '0.08em' }}
           >
             ᛟ {t.title}
           </h1>
-          <p className="font-serif text-sm md:text-base max-w-xl mx-auto" style={{ color: 'rgba(201,194,224,0.7)' }}>
+          <p className="font-serif text-sm md:text-base max-w-xl mx-auto" style={{ color: 'rgba(242,237,228,0.7)' }}>
             {t.subtitle}
           </p>
         </motion.header>
@@ -161,9 +161,9 @@ export default function RunesPage() {
           className="w-full font-serif text-sm md:text-base p-4 rounded-2xl resize-none mb-8 outline-none"
           rows={3}
           style={{
-            background: 'rgba(11,11,31,0.6)',
-            border: '1px solid rgba(212,175,55,0.18)',
-            color: 'rgba(201,194,224,0.95)',
+            background: 'rgba(11,10,15,0.6)',
+            border: '1px solid rgba(224,178,108,0.18)',
+            color: 'rgba(242,237,228,0.95)',
           }}
         />
 
@@ -178,29 +178,29 @@ export default function RunesPage() {
                 className="text-left rounded-2xl p-5 transition-all"
                 style={{
                   background: isSelected
-                    ? 'linear-gradient(180deg, rgba(212,175,55,0.12), rgba(28,24,64,0.4))'
-                    : 'linear-gradient(180deg, rgba(28,24,64,0.6), rgba(11,11,31,0.6))',
-                  border: `1px solid ${isSelected ? '#d4af37' : 'rgba(212,175,55,0.18)'}`,
-                  boxShadow: isSelected ? '0 0 24px rgba(212,175,55,0.15)' : 'none',
+                    ? 'linear-gradient(180deg, rgba(224,178,108,0.12), rgba(19,16,25,0.4))'
+                    : 'linear-gradient(180deg, rgba(19,16,25,0.6), rgba(11,10,15,0.6))',
+                  border: `1px solid ${isSelected ? '#E0B26C' : 'rgba(224,178,108,0.18)'}`,
+                  boxShadow: isSelected ? '0 0 24px rgba(224,178,108,0.15)' : 'none',
                 }}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-serif text-base" style={{ color: '#d4af37' }}>
+                  <h3 className="font-serif text-base" style={{ color: '#E0B26C' }}>
                     {layoutT.title}
                   </h3>
                   <span
                     className="text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full"
                     style={{
-                      background: tier === 'premium' ? 'rgba(212,175,55,0.15)' : 'rgba(201,194,224,0.08)',
-                      color: tier === 'premium' ? '#d4af37' : 'rgba(201,194,224,0.55)',
+                      background: tier === 'premium' ? 'rgba(224,178,108,0.15)' : 'rgba(242,237,228,0.08)',
+                      color: tier === 'premium' ? '#E0B26C' : 'rgba(242,237,228,0.55)',
                       letterSpacing: '0.18em',
-                      border: tier === 'premium' ? '1px solid rgba(212,175,55,0.35)' : '1px solid transparent',
+                      border: tier === 'premium' ? '1px solid rgba(224,178,108,0.35)' : '1px solid transparent',
                     }}
                   >
                     {tier === 'premium' ? t.premium : t.free}
                   </span>
                 </div>
-                <p className="font-serif text-xs" style={{ color: 'rgba(201,194,224,0.7)' }}>
+                <p className="font-serif text-xs" style={{ color: 'rgba(242,237,228,0.7)' }}>
                   {layoutT.desc}
                 </p>
               </button>
@@ -216,11 +216,11 @@ export default function RunesPage() {
             whileTap={!casting ? { scale: 0.97 } : undefined}
             className="px-10 py-3 rounded-full text-xs tracking-widest uppercase"
             style={{
-              background: 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.05))',
-              border: '1px solid #d4af37',
-              color: '#d4af37',
+              background: 'linear-gradient(135deg, rgba(224,178,108,0.25), rgba(224,178,108,0.05))',
+              border: '1px solid #E0B26C',
+              color: '#E0B26C',
               letterSpacing: '0.22em',
-              boxShadow: '0 0 24px rgba(212,175,55,0.15)',
+              boxShadow: '0 0 24px rgba(224,178,108,0.15)',
               opacity: casting ? 0.5 : 1,
             }}
           >

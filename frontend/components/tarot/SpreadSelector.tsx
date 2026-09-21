@@ -62,7 +62,7 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
     >
       <p
         className="font-serif text-sm tracking-widest uppercase text-center"
-        style={{ color: 'rgba(212,175,55,0.7)', letterSpacing: '0.2em' }}
+        style={{ color: 'rgba(224,178,108,0.7)', letterSpacing: '0.2em' }}
       >
         {t('choose_spread')}
       </p>
@@ -83,11 +83,11 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
               className="relative flex flex-col items-center gap-4 p-6 rounded-2xl text-left transition-all"
               style={{
                 background: isLocked
-                  ? 'rgba(212,175,55,0.03)'
-                  : 'rgba(212,175,55,0.06)',
+                  ? 'rgba(224,178,108,0.03)'
+                  : 'rgba(224,178,108,0.06)',
                 border: isLocked
-                  ? '1px solid rgba(212,175,55,0.15)'
-                  : '1px solid rgba(212,175,55,0.35)',
+                  ? '1px solid rgba(224,178,108,0.15)'
+                  : '1px solid rgba(224,178,108,0.35)',
                 cursor: isLocked ? 'not-allowed' : 'pointer',
                 opacity: isLocked ? 0.6 : 1,
               }}
@@ -99,8 +99,8 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
                   ? {}
                   : {
                       scale: 1.03,
-                      borderColor: 'rgba(212,175,55,0.7)',
-                      background: 'rgba(212,175,55,0.1)',
+                      borderColor: 'rgba(224,178,108,0.7)',
+                      background: 'rgba(224,178,108,0.1)',
                     }
               }
               whileTap={isLocked || prefersReducedMotion ? {} : { scale: 0.98 }}
@@ -109,9 +109,9 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
                 <span
                   className="absolute top-3 right-3 text-xs px-2 py-0.5 rounded-full font-sans"
                   style={{
-                    background: 'rgba(212,175,55,0.15)',
-                    color: 'rgba(212,175,55,0.7)',
-                    border: '1px solid rgba(212,175,55,0.3)',
+                    background: 'rgba(224,178,108,0.15)',
+                    color: 'rgba(224,178,108,0.7)',
+                    border: '1px solid rgba(224,178,108,0.3)',
                     fontSize: '0.6rem',
                     letterSpacing: '0.1em',
                   }}
@@ -125,7 +125,7 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
                 <div
                   className="font-serif text-center leading-relaxed whitespace-pre-line"
                   style={{
-                    color: isLocked ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
+                    color: isLocked ? 'rgba(224,178,108,0.3)' : 'rgba(224,178,108,0.5)',
                     fontSize: spread.slug === 'nine-card' ? '0.6rem' : spread.slug === 'horseshoe' ? '0.7rem' : '1rem',
                     letterSpacing: '0.3em',
                     lineHeight: spread.slug === 'nine-card' ? '1.8' : spread.slug === 'horseshoe' ? '1.6' : '1',
@@ -138,20 +138,20 @@ export default function SpreadSelector({ onSelect, entitlements = [] }: SpreadSe
               <div className="flex flex-col items-center gap-1 text-center">
                 <p
                   className="font-serif text-base"
-                  style={{ color: isLocked ? 'rgba(212,175,55,0.4)' : '#d4af37' }}
+                  style={{ color: isLocked ? 'rgba(224,178,108,0.4)' : '#E0B26C' }}
                 >
                   {t(spread.nameKey)}
                 </p>
                 <p
                   className="text-xs leading-relaxed"
-                  style={{ color: 'rgba(201,194,224,0.55)' }}
+                  style={{ color: 'rgba(242,237,228,0.55)' }}
                 >
                   {t(spread.descKey)}
                 </p>
                 <p
                   className="text-xs mt-1"
                   style={{
-                    color: isLocked ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.5)',
+                    color: isLocked ? 'rgba(224,178,108,0.3)' : 'rgba(224,178,108,0.5)',
                     letterSpacing: '0.08em',
                   }}
                 >

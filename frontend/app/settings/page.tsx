@@ -16,7 +16,7 @@ const FONT_OPTIONS: { value: FontSize; label: string; desc: string }[] = [
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-sans text-xs uppercase tracking-widest" style={{ color: 'rgba(201,194,224,0.45)', letterSpacing: '0.22em' }}>
+    <h2 className="font-sans text-xs uppercase tracking-widest" style={{ color: 'rgba(242,237,228,0.45)', letterSpacing: '0.22em' }}>
       {children}
     </h2>
   );
@@ -76,17 +76,17 @@ export default function SettingsPage() {
                   onClick={() => switchLocale(loc)}
                   className="flex items-center gap-3 p-3 rounded-2xl text-left"
                   style={{
-                    background: active ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.03)',
-                    border: `1px solid ${active ? 'var(--accent)' : 'rgba(212,175,55,0.15)'}`,
+                    background: active ? 'rgba(224,178,108,0.1)' : 'rgba(224,178,108,0.03)',
+                    border: `1px solid ${active ? 'var(--accent)' : 'rgba(224,178,108,0.15)'}`,
                   }}
                   whileTap={{ scale: 0.97 }}
                 >
                   <span className="text-lg">{flag}</span>
                   <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="font-serif text-sm truncate" style={{ color: active ? 'var(--accent)' : 'rgba(201,194,224,0.85)' }}>
+                    <span className="font-serif text-sm truncate" style={{ color: active ? 'var(--accent)' : 'rgba(242,237,228,0.85)' }}>
                       {label}
                     </span>
-                    <span className="font-sans text-[10px] uppercase" style={{ color: 'rgba(201,194,224,0.35)', letterSpacing: '0.1em' }}>
+                    <span className="font-sans text-[10px] uppercase" style={{ color: 'rgba(242,237,228,0.35)', letterSpacing: '0.1em' }}>
                       {loc.toUpperCase()}
                     </span>
                   </div>
@@ -95,7 +95,7 @@ export default function SettingsPage() {
               );
             })}
           </div>
-          <p className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.3)' }}>
+          <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.3)' }}>
             Язык определяется автоматически по настройкам браузера или Telegram при первом визите.
           </p>
         </section>
@@ -112,21 +112,21 @@ export default function SettingsPage() {
                   onClick={() => setFontSize(opt.value)}
                   className="flex flex-col items-start gap-0.5 p-4 rounded-2xl text-left"
                   style={{
-                    background: active ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.03)',
-                    border: `1px solid ${active ? 'var(--accent)' : 'rgba(212,175,55,0.15)'}`,
+                    background: active ? 'rgba(224,178,108,0.1)' : 'rgba(224,178,108,0.03)',
+                    border: `1px solid ${active ? 'var(--accent)' : 'rgba(224,178,108,0.15)'}`,
                   }}
                   whileTap={{ scale: 0.97 }}
                 >
                   <span
                     className="font-serif"
-                    style={{ fontSize: `${FONT_SCALE[opt.value] * 1.25}rem`, color: active ? 'var(--accent)' : 'rgba(201,194,224,0.8)' }}
+                    style={{ fontSize: `${FONT_SCALE[opt.value] * 1.25}rem`, color: active ? 'var(--accent)' : 'rgba(242,237,228,0.8)' }}
                   >
                     Аа
                   </span>
-                  <span className="font-sans text-sm font-medium" style={{ color: active ? 'var(--accent)' : 'rgba(201,194,224,0.85)' }}>
+                  <span className="font-sans text-sm font-medium" style={{ color: active ? 'var(--accent)' : 'rgba(242,237,228,0.85)' }}>
                     {opt.label}
                   </span>
-                  <span className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.35)' }}>
+                  <span className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.35)' }}>
                     {opt.desc}
                   </span>
                   {active && <span className="ml-auto text-xs" style={{ color: 'var(--accent)' }}>✓</span>}
@@ -148,8 +148,8 @@ export default function SettingsPage() {
                   onClick={() => setAccentColor(key)}
                   className="flex items-center gap-3 p-4 rounded-2xl text-left"
                   style={{
-                    background: active ? `${pal.primary}18` : 'rgba(212,175,55,0.03)',
-                    border: `1px solid ${active ? pal.primary : 'rgba(212,175,55,0.15)'}`,
+                    background: active ? `${pal.primary}18` : 'rgba(224,178,108,0.03)',
+                    border: `1px solid ${active ? pal.primary : 'rgba(224,178,108,0.15)'}`,
                   }}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -162,10 +162,10 @@ export default function SettingsPage() {
                     }}
                   />
                   <div className="flex flex-col gap-0.5">
-                    <span className="font-serif text-sm" style={{ color: active ? pal.primary : 'rgba(201,194,224,0.85)' }}>
+                    <span className="font-serif text-sm" style={{ color: active ? pal.primary : 'rgba(242,237,228,0.85)' }}>
                       {pal.label}
                     </span>
-                    <span className="font-sans text-xs" style={{ color: 'rgba(201,194,224,0.3)', fontVariantNumeric: 'tabular-nums' }}>
+                    <span className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.3)', fontVariantNumeric: 'tabular-nums' }}>
                       {pal.primary}
                     </span>
                   </div>
@@ -181,12 +181,12 @@ export default function SettingsPage() {
           <SectionTitle>Предпросмотр · Preview</SectionTitle>
           <div
             className="p-5 rounded-2xl flex flex-col gap-2"
-            style={{ background: 'rgba(212,175,55,0.04)', border: '1px solid var(--accent-glow)' }}
+            style={{ background: 'rgba(224,178,108,0.04)', border: '1px solid var(--accent-glow)' }}
           >
             <p className="font-sans text-xs uppercase tracking-widest" style={{ color: 'var(--accent)', letterSpacing: '0.2em' }}>
               ✦ Карта дня ✦
             </p>
-            <p className="font-serif leading-relaxed" style={{ color: 'rgba(201,194,224,0.9)' }}>
+            <p className="font-serif leading-relaxed" style={{ color: 'rgba(242,237,228,0.9)' }}>
               Звёзды складываются в узор, который говорит только с тобой.
             </p>
             <p className="font-sans text-xs" style={{ color: 'var(--accent)', opacity: 0.5 }}>

@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import type { TarotCard } from '@/lib/types';
 
 const SUIT_SHIMMER: Record<string, { color: string; duration: string }> = {
-  major:     { color: 'rgba(212,175,55,0.22)',  duration: '4s' },
+  major:     { color: 'rgba(224,178,108,0.22)',  duration: '4s' },
   wands:     { color: 'rgba(255,110,40,0.22)',  duration: '3.5s' },
   cups:      { color: 'rgba(60,160,230,0.22)',  duration: '4.5s' },
   swords:    { color: 'rgba(180,210,240,0.22)', duration: '3.8s' },
@@ -94,8 +94,8 @@ export default function CardDetailModal({
           placement === 'side' ? 'max-w-3xl md:max-w-sm md:h-full' : 'max-w-3xl'
         }`}
         style={{
-          background: '#0f0c24',
-          border: '1px solid rgba(212,175,55,0.4)',
+          background: '#120F19',
+          border: '1px solid rgba(224,178,108,0.4)',
           maxHeight: '90vh',
           overflow: 'hidden',
         }}
@@ -111,9 +111,9 @@ export default function CardDetailModal({
             // Solid backing: this sits over the card art, which can be pale
             // yellow, and a translucent pill disappears against it.
             style={{
-              border: '1px solid rgba(212,175,55,0.5)',
-              color: 'rgba(212,175,55,0.95)',
-              background: 'rgba(11,11,31,0.88)',
+              border: '1px solid rgba(224,178,108,0.5)',
+              color: 'rgba(224,178,108,0.95)',
+              background: 'rgba(11,10,15,0.88)',
               backdropFilter: 'blur(2px)',
             }}
             onClick={onFlip}
@@ -142,7 +142,7 @@ export default function CardDetailModal({
               className="relative rounded-xl overflow-hidden flex-1"
               style={{
                 minHeight: '340px',
-                border: '2px solid #d4af37',
+                border: '2px solid #E0B26C',
               }}
             >
               <div
@@ -156,7 +156,7 @@ export default function CardDetailModal({
                   /* Ornamental golden placeholder */
                   <div
                     className="absolute inset-0 flex flex-col items-center justify-center gap-4"
-                    style={{ background: 'linear-gradient(135deg, #1e1245 0%, #0b0b1f 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #1e1245 0%, #0B0A0F 100%)' }}
                   >
                     <svg
                       width="96"
@@ -167,11 +167,11 @@ export default function CardDetailModal({
                       aria-hidden="true"
                     >
                       {/* Outer circle */}
-                      <circle cx="48" cy="48" r="44" stroke="rgba(212,175,55,0.35)" strokeWidth="1" />
+                      <circle cx="48" cy="48" r="44" stroke="rgba(224,178,108,0.35)" strokeWidth="1" />
                       {/* Middle circle */}
-                      <circle cx="48" cy="48" r="32" stroke="rgba(212,175,55,0.25)" strokeWidth="1" />
+                      <circle cx="48" cy="48" r="32" stroke="rgba(224,178,108,0.25)" strokeWidth="1" />
                       {/* Inner circle */}
-                      <circle cx="48" cy="48" r="18" stroke="rgba(212,175,55,0.2)" strokeWidth="1" />
+                      <circle cx="48" cy="48" r="18" stroke="rgba(224,178,108,0.2)" strokeWidth="1" />
                       {/* Eight spokes */}
                       {[0, 45, 90, 135].map((deg) => (
                         <line
@@ -180,7 +180,7 @@ export default function CardDetailModal({
                           y1="5"
                           x2="48"
                           y2="91"
-                          stroke="rgba(212,175,55,0.4)"
+                          stroke="rgba(224,178,108,0.4)"
                           strokeWidth="0.75"
                           transform={`rotate(${deg} 48 48)`}
                         />
@@ -196,7 +196,7 @@ export default function CardDetailModal({
                             cx={cx}
                             cy={cy}
                             r="2.5"
-                            fill="rgba(212,175,55,0.5)"
+                            fill="rgba(224,178,108,0.5)"
                           />
                         );
                       })}
@@ -211,16 +211,16 @@ export default function CardDetailModal({
                             cx={cx}
                             cy={cy}
                             r="1.5"
-                            fill="rgba(212,175,55,0.3)"
+                            fill="rgba(224,178,108,0.3)"
                           />
                         );
                       })}
                       {/* Central orb */}
-                      <circle cx="48" cy="48" r="5" fill="rgba(212,175,55,0.5)" />
+                      <circle cx="48" cy="48" r="5" fill="rgba(224,178,108,0.5)" />
                     </svg>
                     <span
                       className="font-serif text-center px-4 leading-snug"
-                      style={{ color: '#d4af37', fontSize: '0.85rem' }}
+                      style={{ color: '#E0B26C', fontSize: '0.85rem' }}
                     >
                       {name}
                     </span>
@@ -239,7 +239,7 @@ export default function CardDetailModal({
                     <div
                       className="card-shimmer absolute inset-0 overflow-hidden"
                       style={{
-                        ['--shimmer-color' as string]: SUIT_SHIMMER[card.suit]?.color ?? 'rgba(212,175,55,0.22)',
+                        ['--shimmer-color' as string]: SUIT_SHIMMER[card.suit]?.color ?? 'rgba(224,178,108,0.22)',
                         ['--shimmer-duration' as string]: SUIT_SHIMMER[card.suit]?.duration ?? '4s',
                         ['--shimmer-delay' as string]: '0.5s',
                       }}
@@ -256,7 +256,7 @@ export default function CardDetailModal({
             {positionLabel && (
               <p
                 className="text-xs font-sans uppercase tracking-widest"
-                style={{ color: 'rgba(212,175,55,0.65)', letterSpacing: '0.15em' }}
+                style={{ color: 'rgba(224,178,108,0.65)', letterSpacing: '0.15em' }}
               >
                 {t('position_context')}: {positionLabel}
               </p>
@@ -265,7 +265,7 @@ export default function CardDetailModal({
             {/* Card name */}
             <h2
               className="font-serif text-2xl md:text-3xl leading-tight"
-              style={{ color: '#d4af37' }}
+              style={{ color: '#E0B26C' }}
             >
               {name}
             </h2>
@@ -275,9 +275,9 @@ export default function CardDetailModal({
               <span
                 className="self-start text-xs font-sans px-3 py-1 rounded-full"
                 style={{
-                  color: '#d4af37',
-                  border: '1px solid rgba(212,175,55,0.5)',
-                  background: 'rgba(212,175,55,0.08)',
+                  color: '#E0B26C',
+                  border: '1px solid rgba(224,178,108,0.5)',
+                  background: 'rgba(224,178,108,0.08)',
                 }}
               >
                 {t('reversed')}
@@ -288,7 +288,7 @@ export default function CardDetailModal({
             {positionMeaning && (
               <p
                 className="text-sm leading-relaxed italic"
-                style={{ color: 'rgba(201,194,224,0.55)' }}
+                style={{ color: 'rgba(242,237,228,0.55)' }}
               >
                 {positionMeaning}
               </p>
@@ -297,7 +297,7 @@ export default function CardDetailModal({
             {/* Full card meaning */}
             <p
               className="text-sm md:text-base leading-relaxed"
-              style={{ color: 'rgba(201,194,224,0.9)' }}
+              style={{ color: 'rgba(242,237,228,0.9)' }}
             >
               {meaning}
             </p>
@@ -310,9 +310,9 @@ export default function CardDetailModal({
                     key={kw}
                     className="text-xs rounded-full px-3 py-1"
                     style={{
-                      color: 'rgba(212,175,55,0.6)',
-                      border: '1px solid rgba(212,175,55,0.4)',
-                      background: 'rgba(212,175,55,0.06)',
+                      color: 'rgba(224,178,108,0.6)',
+                      border: '1px solid rgba(224,178,108,0.4)',
+                      background: 'rgba(224,178,108,0.06)',
                     }}
                   >
                     {kw}
@@ -322,14 +322,14 @@ export default function CardDetailModal({
             )}
 
             {/* Premium AI interpretation placeholder */}
-            <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(212,175,55,0.15)' }}>
+            <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(224,178,108,0.15)' }}>
               <button
                 disabled
                 className="w-full py-3 px-4 rounded-xl font-serif text-sm tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
                 style={{
-                  background: 'rgba(212,175,55,0.05)',
-                  border: '1px solid rgba(212,175,55,0.2)',
-                  color: 'rgba(212,175,55,0.4)',
+                  background: 'rgba(224,178,108,0.05)',
+                  border: '1px solid rgba(224,178,108,0.2)',
+                  color: 'rgba(224,178,108,0.4)',
                 }}
               >
                 <span>✦</span>

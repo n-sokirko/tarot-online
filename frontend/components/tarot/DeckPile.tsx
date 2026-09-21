@@ -91,11 +91,11 @@ export default function DeckPile({ onShuffleComplete }: DeckPileProps) {
           className="px-8 py-3 rounded-full font-serif text-sm tracking-widest uppercase transition-all"
           style={{
             background: 'transparent',
-            border: '1px solid #d4af37',
-            color: '#d4af37',
+            border: '1px solid #E0B26C',
+            color: '#E0B26C',
             letterSpacing: '0.15em',
           }}
-          whileHover={prefersReducedMotion ? {} : { scale: 1.05, backgroundColor: 'rgba(212,175,55,0.1)' }}
+          whileHover={prefersReducedMotion ? {} : { scale: 1.05, backgroundColor: 'rgba(224,178,108,0.1)' }}
           whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
           onClick={handleShuffle}
           disabled={isShuffling}
@@ -107,7 +107,7 @@ export default function DeckPile({ onShuffleComplete }: DeckPileProps) {
       {shuffled && (
         <p
           className="text-sm font-serif tracking-wide"
-          style={{ color: 'rgba(201,194,224,0.6)' }}
+          style={{ color: 'rgba(242,237,228,0.6)' }}
         >
           ✦
         </p>
