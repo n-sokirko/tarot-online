@@ -124,6 +124,25 @@ class TestPublishEndpoint:
         assert row.tg_message_id == 4242
         assert row.fingerprint == channel.fingerprint(TOWER)
 
+    def test_publishes_with_an_image(self):
+        url = "https://upload.wikimedia.org/wikipedia/commons/a/a0/Tower.jpg"
+        with patch("apps.telegram_bot.channel.send_to_channel", return_value=7) as send:
+            resp = self._post({"topic": "Башня", "text": TOWER, "image_url": url})
+        assert resp.status_code == 201
+        send.assert_called_once_with(TOWER, image_url=url)
+
+    @pytest.mark.parametrize("bad", [
+        "http://upload.wikimedia.org/a.jpg",
+        "https://evil.example.com/a.jpg",
+        "https://upload.wikimedia.org.evil.com/a.jpg",
+    ])
+    def test_rejects_image_from_other_hosts(self, bad):
+        with patch("apps.telegram_bot.channel.send_to_channel") as send:
+            resp = self._post({"topic": "Башня", "text": TOWER, "image_url": bad})
+        assert resp.status_code == 400
+        send.assert_not_called()
+        assert ChannelPost.objects.count() == 0
+
     def test_rejects_a_reworded_repeat(self):
         ChannelPost.objects.create(kind="fact", topic="Башня", text=TOWER,
                                    fingerprint=channel.fingerprint(TOWER),
@@ -154,3 +173,29 @@ class TestPublishEndpoint:
         row = ChannelPost.objects.get()
         assert row.status == ChannelPost.STATUS_FAILED
         assert "telegram down" in row.error
+
+
+class TestSendToChannel:
+    URL = "https://upload.wikimedia.org/wikipedia/commons/a/a0/Tower.jpg"
+
+    @pytest.fixture(autouse=True)
+    def _cfg(self, settings):
+        settings.TELEGRAM_BOT_TOKEN = "t"
+        settings.TELEGRAM_CHANNEL_ID = "@chan"
+
+    def test_short_text_becomes_the_caption(self):
+        with patch("apps.telegram_bot.channel._telegram_call", return_value={"message_id": 5}) as call:
+            assert channel.send_to_channel(TOWER, image_url=self.URL) == 5
+        method, payload = call.call_args.args
+        assert method == "sendPhoto" and payload["caption"] == TOWER and payload["photo"] == self.URL
+
+    def test_long_text_goes_as_a_separate_message(self):
+        long_text = "x" * (channel.CAPTION_LIMIT + 1)
+        with patch("apps.telegram_bot.channel._telegram_call", return_value={"message_id": 9}) as call:
+            assert channel.send_to_channel(long_text, image_url=self.URL) == 9
+        assert [c.args[0] for c in call.call_args_list] == ["sendPhoto", "sendMessage"]
+
+    def test_without_image_it_is_a_plain_message(self):
+        with patch("apps.telegram_bot.channel._telegram_call", return_value={"message_id": 3}) as call:
+            channel.send_to_channel(TOWER)
+        assert call.call_args.args[0] == "sendMessage"

@@ -280,29 +280,62 @@ def generate(kind: str | None = None, *, angle: str | None = None) -> GeneratedP
     )
 
 
-def send_to_channel(text: str) -> int:
-    """Post to the channel, returning Telegram's message id."""
+# Telegram's limit for a photo caption. Longer text goes out as a separate message.
+CAPTION_LIMIT = 1024
+# Images are fetched by Telegram itself from whatever URL we hand it, so the
+# publish endpoint only accepts Wikimedia Commons — the channel's image source —
+# rather than letting a caller point Telegram at an arbitrary host.
+ALLOWED_IMAGE_HOSTS = ('upload.wikimedia.org',)
+
+
+def validate_image_url(url: str) -> str:
+    """Return the URL if it is an https Wikimedia upload link, else raise ValueError."""
+    from urllib.parse import urlparse
+
+    parsed = urlparse(url.strip())
+    if parsed.scheme != 'https' or parsed.hostname not in ALLOWED_IMAGE_HOSTS:
+        raise ValueError(f'image_url must be an https link on {", ".join(ALLOWED_IMAGE_HOSTS)}')
+    return url.strip()
+
+
+def _telegram_call(method: str, payload: dict) -> dict:
     import requests
 
     token = settings.TELEGRAM_BOT_TOKEN
     if not token:
         raise RuntimeError('TELEGRAM_BOT_TOKEN is not set')
-    chat_id = getattr(settings, 'TELEGRAM_CHANNEL_ID', '') or settings.TELEGRAM_REQUIRED_CHANNEL
-    if not chat_id:
-        raise RuntimeError('neither TELEGRAM_CHANNEL_ID nor TELEGRAM_REQUIRED_CHANNEL is set')
-
-    resp = requests.post(
-        f'https://api.telegram.org/bot{token}/sendMessage',
-        json={
-            'chat_id': chat_id,
-            'text': text,
-            'parse_mode': 'HTML',
-            'disable_web_page_preview': True,
-        },
-        timeout=20,
-    )
+    resp = requests.post(f'https://api.telegram.org/bot{token}/{method}', json=payload, timeout=30)
     resp.raise_for_status()
     data = resp.json()
     if not data.get('ok'):
         raise RuntimeError(f'Telegram rejected the post: {data}')
-    return data['result']['message_id']
+    return data['result']
+
+
+def send_to_channel(text: str, image_url: str | None = None) -> int:
+    """Post to the channel, returning Telegram's message id.
+
+    With `image_url` the text becomes the photo's caption. If it does not fit the
+    caption limit, the photo goes first and the text follows as its own message;
+    the id returned is then the text message's.
+    """
+    chat_id = getattr(settings, 'TELEGRAM_CHANNEL_ID', '') or settings.TELEGRAM_REQUIRED_CHANNEL
+    if not chat_id:
+        raise RuntimeError('neither TELEGRAM_CHANNEL_ID nor TELEGRAM_REQUIRED_CHANNEL is set')
+
+    if image_url:
+        image_url = validate_image_url(image_url)
+        plain_len = len(re.sub(r'<[^>]+>', '', text))
+        if plain_len <= CAPTION_LIMIT:
+            return _telegram_call('sendPhoto', {
+                'chat_id': chat_id, 'photo': image_url,
+                'caption': text, 'parse_mode': 'HTML',
+            })['message_id']
+        _telegram_call('sendPhoto', {'chat_id': chat_id, 'photo': image_url})
+
+    return _telegram_call('sendMessage', {
+        'chat_id': chat_id,
+        'text': text,
+        'parse_mode': 'HTML',
+        'disable_web_page_preview': True,
+    })['message_id']

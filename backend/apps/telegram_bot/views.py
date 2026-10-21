@@ -74,7 +74,10 @@ class ChannelBriefView(_ChannelTokenMixin, APIView):
 
 class ChannelPublishView(_ChannelTokenMixin, APIView):
     """
-    POST /api/v1/channel/publish/  {"topic": "...", "text": "...", "kind": "fact"}
+    POST /api/v1/channel/publish/
+        {"topic": "...", "text": "...", "kind": "fact", "image_url": "https://upload.wikimedia.org/..."}
+
+    `image_url` is optional; when present the text is posted as the photo's caption.
 
     Checks the post against recent ones and, if it is genuinely new, sends it to
     the channel and records it. A near-duplicate comes back as 409 with the topic
@@ -99,6 +102,12 @@ class ChannelPublishView(_ChannelTokenMixin, APIView):
         if kind not in dict(ChannelPost.KIND_CHOICES):
             return Response({'detail': f'unknown kind {kind!r}'},
                             status=status.HTTP_400_BAD_REQUEST)
+        image_url = (request.data.get('image_url') or '').strip() or None
+        if image_url:
+            try:
+                image_url = channel.validate_image_url(image_url)
+            except ValueError as exc:
+                return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
         worst_score, worst_topic = 0.0, ''
         for old_topic, old_text in ChannelPost.objects.order_by('-created_at').values_list(
@@ -121,7 +130,8 @@ class ChannelPublishView(_ChannelTokenMixin, APIView):
             attempts=int(request.data.get('attempts') or 1),
         )
         try:
-            message_id = channel.send_to_channel(text)
+            message_id = (channel.send_to_channel(text, image_url=image_url)
+                          if image_url else channel.send_to_channel(text))
         except Exception as exc:  # noqa: BLE001 — recorded, then reported
             row.status = ChannelPost.STATUS_FAILED
             row.error = str(exc)[:2000]
