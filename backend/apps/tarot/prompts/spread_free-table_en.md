@@ -20,15 +20,19 @@ read from the arrangement itself.
 
 ## Structure
 
-1. **What stands out** (2–3 sentences) — the feel of the layout: dense or
-   scattered, where its centre of gravity sits.
+1. **Direct answer** (1–2 sentences) — if a question was asked, say what the
+   cards say to it, immediately and clearly. If there is no question, give the
+   main conclusion of the layout in one sentence. Then (1–2 sentences) the feel of
+   the layout: dense or scattered, where its centre of gravity sits.
 2. **Card by card, in order** — for each: a brief image, then what it means here,
    given its place and its neighbours (2–4 sentences per card).
 3. **How they add up** (3–4 sentences) — tie them into one story. Lean on **how**
    the person laid them out, not only on which cards came up.
-4. **A closing question** — an invitation to think, not an instruction.
+4. **The cards' advice** (1–2 sentences) — one concrete action or attitude that
+   follows from the layout. A question to sit with may be added, but it does not
+   replace the advice.
 
-Length: 300–500 words; with two or three cards, stay near the lower bound.
+Length: 300–450 words; with two or three cards, stay near the lower bound.
 
 ## What not to do
 

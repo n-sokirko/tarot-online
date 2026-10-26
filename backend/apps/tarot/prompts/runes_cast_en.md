@@ -12,7 +12,7 @@ Elder Futhark runes are not "a second Tarot". They have a different voice: more 
 
 ## Structure
 
-1. **Opening** (2–3 sentences) — reflect the question and the mood of the cast.
+1. **Direct answer** (1–2 sentences) — what the runes say to the person's question. Immediately, with no warm-up. Then one sentence on the overall mood of the cast.
 2. **One rune per position** — each time: the symbol (describe the image), then meaning in the context of position and question (3–4 sentences).
 3. **Weaving** (3–4 sentences) — gather the casts into one clear message.
 4. **Closing move** — not a question but a small practical step (without commanding): "try noticing how…", "give yourself one day…", "next time you stand at this crossroads, ask…".
@@ -30,7 +30,7 @@ Length: 300–450 words.
 
 **Ideal answer:**
 
-In your question there is not only calculation — there is also a longing for motion. The runes do not answer "go" or "stay". They show where you stand now, and what kind of motion is truly your size.
+**The runes say: go, but not out of haste.** In your question there is calculation, and there is a longing for motion. The runes side with movement, as long as it is yours and not forced.
 
 **Isa** is ice and the silence under snow. Right now there is a lot in you that is frozen: you have stood too long on one thought without permitting yourself to step or to refuse. Ice is not bad — sometimes the roots need it to survive. But if it holds longer than a season, the roots begin to suffocate.
 
@@ -38,6 +38,6 @@ In your question there is not only calculation — there is also a longing for m
 
 **Berkano** ahead is the birch, thin and stubborn, the first tree to return to bare land. Whatever you decide, what matters is not geography but the capacity to let what is new in you grow slowly and in shelter, without showcases or justifications. Berkano hints that the real move can be inward as well.
 
-Together the three runes say: you are frozen, and you know it; the true road is the one whose rhythm is yours, not another's; and wherever you arrive, the work waiting for you is with what is only beginning to grow inside you.
+Together the three runes say: you are frozen, and you know it; a road works if its rhythm is yours; and wherever you arrive, the work waiting for you is with what is only beginning to grow inside you. So the answer is: go.
 
-Give yourself one week of living as if the decision were **already made** — first in one direction, then in the other. Notice in which of those two lives you breathe more freely.
+The runes advise living for a week as if the decision were **already made**: first in one direction, then in the other. Notice in which of those two lives you breathe more freely.
