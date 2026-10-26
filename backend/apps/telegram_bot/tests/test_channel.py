@@ -93,6 +93,7 @@ class TestBriefEndpoint:
         assert "Башня" in body["used_topics"]
         assert body["published_total"] == 1
         assert body["kind"] in ("fact", "promo")
+        assert body["image_support"] is True
 
 
 @pytest.mark.django_db

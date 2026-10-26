@@ -69,6 +69,9 @@ class ChannelBriefView(_ChannelTokenMixin, APIView):
             'published_total': ChannelPost.objects.filter(
                 status=ChannelPost.STATUS_PUBLISHED).count(),
             'similarity_limit': channel.SIMILARITY_LIMIT,
+            # Lets the caller tell a server that sends photos from an older one
+            # that would silently drop `image_url` and post the text alone.
+            'image_support': True,
         })
 
 

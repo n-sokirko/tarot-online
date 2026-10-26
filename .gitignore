@@ -81,3 +81,5 @@ coverage/
 .cypress/
 playwright-report/
 test-results/
+
+marketing/.last_channel_post
