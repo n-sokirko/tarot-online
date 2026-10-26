@@ -31,6 +31,43 @@ class TelegramUser(models.Model):
         return f'@{self.tg_username or self.tg_id} → user:{self.user_id}'
 
 
+class Referral(models.Model):
+    """"Bring a friend": one row per invited person.
+
+    Created when someone opens the bot through a referral link and was not in the
+    bot before. It stays `pending` until the friend makes their first AI
+    interpretation — only then do both sides get credits — so an empty account
+    created for the reward earns nothing.
+    """
+    STATUS_PENDING = 'pending'
+    STATUS_REWARDED = 'rewarded'
+    # Qualified, but the inviter had already earned the maximum — nobody is paid.
+    STATUS_CAPPED = 'capped'
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Ждёт первого разбора'),
+        (STATUS_REWARDED, 'Награда выдана'),
+        (STATUS_CAPPED, 'Лимит наград исчерпан'),
+    ]
+
+    referrer = models.ForeignKey(
+        TelegramUser, on_delete=models.CASCADE, related_name='referrals_made',
+    )
+    # One person can be invited once: whoever got there first keeps the credit.
+    invited = models.OneToOneField(
+        TelegramUser, on_delete=models.CASCADE, related_name='referred_by',
+    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    qualified_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [models.Index(fields=['referrer', 'status'])]
+
+    def __str__(self) -> str:
+        return f'{self.referrer_id} → {self.invited_id} ({self.status})'
+
+
 class Broadcast(models.Model):
     """A message broadcast to Telegram users, sent from the admin panel."""
     TARGET_ALL = 'all'

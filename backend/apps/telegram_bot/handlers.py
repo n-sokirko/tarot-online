@@ -229,8 +229,51 @@ async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
            else "Unsubscribed from daily cards 🌙 Come back — /subscribe")
     await update.message.reply_text(msg)
 
-@requires_channel_sub
+@sync_to_async
+def _register_referral(invited_id: int, referrer_id: int, username: str, first_name: str,
+                       locale: str) -> bool:
+    from apps.telegram_bot import referrals
+    return referrals.register(invited_id, referrer_id, username=username,
+                              first_name=first_name, locale=locale)
+
+
+@sync_to_async
+def _invite_info(tg_id: int, username: str, first_name: str, locale: str) -> dict:
+    from apps.telegram_bot import referrals
+    from apps.telegram_bot.models import TelegramUser
+
+    profile, _ = TelegramUser.objects.get_or_create(
+        tg_id=tg_id,
+        defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
+    )
+    return referrals.stats(profile)
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/start. A referral link is recorded here, BEFORE the channel gate: a friend
+    who still has to subscribe would otherwise lose the invite, because the gate
+    swallows the start argument."""
+    from apps.telegram_bot import referrals
+
+    tg = update.effective_user
+    args = context.args or []
+    if tg and args:
+        referrer_id = referrals.parse_ref(args[0])
+        if referrer_id is not None:
+            try:
+                made = await _register_referral(
+                    tg.id, referrer_id, tg.username or '', tg.first_name or '',
+                    _norm_locale(tg.language_code))
+            except Exception:  # noqa: BLE001 — a bad invite must never block /start
+                log.exception('referral register failed')
+                made = False
+            if context.user_data is not None:
+                context.user_data['referral_note'] = made
+    await _start_menu(update, context)
+
+
+@requires_channel_sub
+async def _start_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args or []
     if args and args[0].startswith('buy_'):
         await _handle_buy(update, context, args[0][4:])
@@ -279,6 +322,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "\n\n🎂 /birthday — add your birth date for a personal daily horoscope."
         )
 
+    if context.user_data is not None and context.user_data.pop('referral_note', False):
+        from apps.telegram_bot import referrals
+        text += (
+            f"\n\n🎁 Тебя пригласил друг. После первого разбора вам обоим "
+            f"начислится по {referrals.REWARD_CREDITS}."
+            if locale == 'ru' else
+            f"\n\n🎁 A friend invited you. After your first reading you both "
+            f"get +{referrals.REWARD_CREDITS}."
+        )
+
     keyboard = InlineKeyboardMarkup([[
         InlineKeyboardButton(btn, web_app=WebAppInfo(url=webapp_url)),
     ]])
@@ -297,6 +350,47 @@ def _sign_label(birth_date: datetime.date, locale: str) -> str:
     if not s:
         return ''
     return f"{s['symbol']} {s['name_ru'] if locale == 'ru' else s['name_en']}"
+
+
+@requires_channel_sub
+async def invite_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/invite — the person's referral link and how many friends it has brought."""
+    from apps.telegram_bot import referrals
+
+    tg = update.effective_user
+    locale = _norm_locale(tg.language_code)
+    ru = locale == 'ru'
+    info = await _invite_info(tg.id, tg.username or '', tg.first_name or '', locale)
+    link = referrals.link_for(tg.id)
+    reward, cap = referrals.REWARD_CREDITS, referrals.MAX_REWARDED
+
+    if ru:
+        text = (
+            f"🎁 *Пригласи друга: +{reward} разбора вам обоим*\n\n"
+            f"Отправь другу ссылку. Когда он сделает свой первый разбор, "
+            f"ты и он получите по {reward}. Награда за друзей действует до {cap}.\n\n"
+            f"`{link}`\n\n"
+            f"Приглашено: {info['rewarded']} из {cap}"
+            + (f" · ждут первого разбора: {info['pending']}" if info['pending'] else "")
+            + (f"\nПолучено: {info['credits']}" if info['credits'] else "")
+        )
+        share = "📤 Отправить другу"
+    else:
+        text = (
+            f"🎁 *Invite a friend: +{reward} readings for you both*\n\n"
+            f"Send a friend your link. Once they make their first reading, you and "
+            f"they each get {reward}. Rewards apply for up to {cap} friends.\n\n"
+            f"`{link}`\n\n"
+            f"Invited: {info['rewarded']} of {cap}"
+            + (f" · waiting for a first reading: {info['pending']}" if info['pending'] else "")
+            + (f"\nEarned: {info['credits']}" if info['credits'] else "")
+        )
+        share = "📤 Send to a friend"
+    keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(share, url=referrals.share_url(tg.id, is_ru=ru)),
+    ]])
+    await update.message.reply_text(text, parse_mode='Markdown', reply_markup=keyboard,
+                                    disable_web_page_preview=True)
 
 
 @requires_channel_sub

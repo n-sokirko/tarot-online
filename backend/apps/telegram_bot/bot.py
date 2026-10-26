@@ -38,6 +38,7 @@ async def _post_init(app: Application) -> None:
             commands=[
                 BotCommand('start', '🌙 Открыть меню'),
                 BotCommand('birthday', '🎂 Дата рождения · гороскоп'),
+                BotCommand('invite', '🎁 Пригласи друга · +3 разбора'),
                 BotCommand('contest', '🎁 Конкурс — выиграй Premium'),
                 BotCommand('status', '⭐ Моя подписка'),
             ],
@@ -78,6 +79,7 @@ def create_application() -> Application:
     from apps.telegram_bot.handlers import (
         birthday_command,
         handle_text,
+        invite_command,
         pre_checkout_query,
         ritual_checkin_callback,
         ritual_done_callback,
@@ -98,6 +100,7 @@ def create_application() -> Application:
     app.add_handler(CommandHandler('subscribe', subscribe))
     app.add_handler(CommandHandler('unsubscribe', unsubscribe))
     app.add_handler(CommandHandler('birthday', birthday_command))
+    app.add_handler(CommandHandler('invite', invite_command))
     app.add_handler(CommandHandler('contest', contest_command))
     app.add_handler(CommandHandler('contest_top', contest_top_command))
     app.add_handler(PreCheckoutQueryHandler(pre_checkout_query))

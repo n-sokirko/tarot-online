@@ -15,10 +15,10 @@ import datetime
 from zoneinfo import ZoneInfo
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import IntegrityError, transaction
 
 from apps.tarot.models import RitualDay
+from apps.telegram_bot.accounts import ensure_user
 from apps.tarot.ritual import streak_for
 
 
@@ -57,35 +57,12 @@ def current_streak(tg_profile) -> tuple[int, bool]:
     return streak_for(done, today), today in done
 
 
-def _ensure_user(tg_profile):
-    """Same convention as the Mini App sign-in, so the accounts line up when the
-    person later opens the app."""
-    if tg_profile.user_id is not None:
-        return tg_profile.user
-    User = get_user_model()
-    email = f'tg_{tg_profile.tg_id}@telegram.local'
-    user, created = User.objects.get_or_create(
-        email=email,
-        defaults={
-            'username': email,
-            'display_name': tg_profile.tg_first_name or f'tg_{tg_profile.tg_id}',
-            'is_active': True,
-        },
-    )
-    if created:
-        user.set_unusable_password()
-        user.save(update_fields=['password'])
-    tg_profile.user = user
-    tg_profile.save(update_fields=['user'])
-    return user
-
-
 def check_in(tg_profile) -> tuple[int, bool]:
     """Mark today as done. Returns (streak, newly_marked).
 
     Idempotent: a second tap on the same day changes nothing and says so.
     """
-    user = _ensure_user(tg_profile)
+    user = ensure_user(tg_profile)
     today = bot_today()
     created = False
     try:
