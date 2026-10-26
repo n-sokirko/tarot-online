@@ -32,6 +32,22 @@ CREDIT_COST = {
 }
 
 
+# Free-tier daily allowance: how many AI generations (of any kind) a signed-in
+# user without Premium gets per day before credits are needed. Anonymous web
+# visitors have their own limit in billing.rate_limit.
+FREE_DAILY_LIMIT = 3
+
+_AI_KINDS = tuple(CREDIT_COST)
+
+
+def free_generations_today(user) -> int:
+    """Free-allowance generations the user already used today (cost 0 rows)."""
+    start = timezone.localtime().replace(hour=0, minute=0, second=0, microsecond=0)
+    return UsageLedger.objects.filter(
+        user=user, kind__in=_AI_KINDS, cost_credits=0, created_at__gte=start,
+    ).count()
+
+
 @dataclass
 class TierInfo:
     tier: str  # 'free' | 'premium' | 'deep'
@@ -83,9 +99,10 @@ def charge_credits(
 ) -> tuple[bool, int]:
     """Deduct credits for an AI generation. Returns (charged, remaining_balance).
 
-    Free-tier users with no wallet and no credits get (True, 0) — the caller
-    decides whether free-tier daily limits already gate this. This function
-    only enforces the credit accounting itself.
+    Signed-in free-tier users get FREE_DAILY_LIMIT generations a day at no
+    credit cost; the allowance is spent before their credits, so purchased
+    credits are not used up on things that would have been free. After that
+    they need credits, and without them this returns (False, balance).
     """
     cost = CREDIT_COST.get(kind, 1)
     if user is None or not getattr(user, 'is_authenticated', False):
@@ -106,6 +123,15 @@ def charge_credits(
     # (subscription includes 50/mo grants; the next webhook tops up).
     # Free users without credits → block.
     info = tier_for(user)
+
+    if info.tier != 'premium' and free_generations_today(user) < FREE_DAILY_LIMIT:
+        UsageLedger.objects.create(
+            user=user, kind=kind, cost_credits=0,
+            model_used=model_used, input_tokens=input_tokens,
+            output_tokens=output_tokens, reference_id=reference_id,
+        )
+        return True, wallet.balance
+
     if wallet.balance >= cost:
         wallet.balance -= cost
         wallet.save(update_fields=['balance', 'updated_at'])

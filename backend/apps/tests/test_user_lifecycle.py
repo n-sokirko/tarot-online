@@ -253,22 +253,42 @@ class TestFullUserLifecycle:
         assert me_resp.status_code == 200
         assert me_resp.data["email"] == "bob@example.com"
 
-    def test_free_tier_reading_then_interpret_blocked_402(
-        self, api, free_user, deck_3, three_card_spread
-    ):
-        """Free user with no credits gets 402 when attempting interpret."""
+    def _free_reading(self, api, free_user):
         api.force_authenticate(user=free_user)
-
-        # Create reading
         resp = api.post(
             self.READINGS_URL,
             {"question": "What is my path?", "locale": "en", "spread_slug": "three-card"},
             format="json",
         )
         assert resp.status_code == 201
-        reading_id = resp.data["id"]
+        return resp.data["id"]
 
-        # Try interpret — free user has zero credits → 402
+    def test_free_tier_gets_a_daily_interpretation_without_credits(
+        self, api, free_user, deck_3, three_card_spread
+    ):
+        """A signed-in free user with zero credits is not walled off: the daily
+        allowance covers the first interpretations."""
+        reading_id = self._free_reading(api, free_user)
+
+        with patch(
+            "apps.readings.views.ai_client.generate_interpretation",
+            return_value=_mock_ai_result(),
+        ):
+            resp = api.post(f"/api/v1/readings/{reading_id}/interpret/")
+        assert resp.status_code == 201
+        assert "body_md" in resp.data
+
+    def test_free_tier_blocked_402_after_the_daily_allowance(
+        self, api, free_user, deck_3, three_card_spread
+    ):
+        """Once the day's allowance is spent and there are no credits → 402."""
+        from apps.billing import services as billing
+        from apps.billing.models import UsageLedger
+
+        reading_id = self._free_reading(api, free_user)
+        for _ in range(billing.FREE_DAILY_LIMIT):
+            billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
+
         resp = api.post(f"/api/v1/readings/{reading_id}/interpret/")
         assert resp.status_code == 402
         assert resp.data["detail"] == "out_of_credits"
@@ -411,7 +431,10 @@ class TestFreeTierBlocking:
     READINGS_URL = "/api/v1/readings/"
 
     def test_free_user_interpret_blocked_402(self, api, free_user, deck_3, three_card_spread):
-        """Free user (zero credits) gets 402 on interpret."""
+        """Free user (zero credits) gets 402 once the daily allowance is spent."""
+        from apps.billing import services as billing
+        from apps.billing.models import UsageLedger
+
         api.force_authenticate(user=free_user)
 
         resp = api.post(
@@ -421,6 +444,9 @@ class TestFreeTierBlocking:
         )
         assert resp.status_code == 201
         reading_id = resp.data["id"]
+
+        for _ in range(billing.FREE_DAILY_LIMIT):
+            billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
 
         resp = api.post(f"/api/v1/readings/{reading_id}/interpret/")
         assert resp.status_code == 402

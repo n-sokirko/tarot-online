@@ -49,12 +49,51 @@ class TestCharge:
         assert balance == 49
         assert UsageLedger.objects.filter(user=premium_user).count() == 1
 
-    def test_free_user_without_credits_is_blocked(self, free_user):
+    def test_free_user_gets_a_daily_allowance_without_credits(self, free_user):
+        for _ in range(billing.FREE_DAILY_LIMIT):
+            charged, balance = billing.charge_credits(
+                user=free_user, kind=UsageLedger.KIND_AI_TAROT,
+            )
+            assert charged is True
+            assert balance == 0
+        assert billing.free_generations_today(free_user) == billing.FREE_DAILY_LIMIT
+
+    def test_free_user_is_blocked_after_the_allowance(self, free_user):
+        for _ in range(billing.FREE_DAILY_LIMIT):
+            billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
         charged, balance = billing.charge_credits(
-            user=free_user, kind=UsageLedger.KIND_AI_TAROT,
+            user=free_user, kind=UsageLedger.KIND_AI_RUNES,
         )
         assert charged is False
         assert balance == 0
+
+    def test_allowance_is_shared_across_kinds(self, free_user):
+        billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
+        billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_NATAL)
+        billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_HOROSCOPE)
+        assert billing.charge_credits(
+            user=free_user, kind=UsageLedger.KIND_AI_RUNES,
+        ) == (False, 0)
+
+    def test_allowance_is_spent_before_purchased_credits(self, free_user):
+        CreditWallet.objects.create(user=free_user, balance=5)
+        for _ in range(billing.FREE_DAILY_LIMIT):
+            _, balance = billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
+            assert balance == 5
+        charged, balance = billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
+        assert (charged, balance) == (True, 4)
+
+    def test_yesterdays_usage_does_not_count(self, free_user):
+        from datetime import timedelta
+        from django.utils import timezone
+
+        for _ in range(billing.FREE_DAILY_LIMIT):
+            billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
+        UsageLedger.objects.filter(user=free_user).update(
+            created_at=timezone.now() - timedelta(days=1, hours=1),
+        )
+        charged, _ = billing.charge_credits(user=free_user, kind=UsageLedger.KIND_AI_TAROT)
+        assert charged is True
 
     def test_premium_with_zero_credits_still_allowed(self, premium_user):
         CreditWallet.objects.filter(user=premium_user).update(balance=0)
