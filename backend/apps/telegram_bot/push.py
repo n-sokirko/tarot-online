@@ -37,29 +37,111 @@ def _send(token: str, chat_id: int, text: str, reply_markup: dict) -> bool:
 
 # ── Card of the day ──────────────────────────────────────────────────────────
 
-def card_message(card, *, is_ru: bool, is_reversed: bool) -> tuple[str, str]:
-    """Return (text, button_label) for a user's card of the day."""
+CHECKIN_DATA = "ritual:checkin"
+DONE_DATA = "ritual:done"
+
+
+def _snippet(text: str, limit: int = 240) -> str:
+    """The first whole sentences of a card meaning, up to `limit` characters.
+
+    Legacy Markdown breaks the whole message on a stray `_`, `*`, `` ` `` or `[`,
+    so those are dropped rather than risking a failed send.
+    """
+    clean = " ".join((text or "").split())
+    for ch in "_*`[]":
+        clean = clean.replace(ch, "")
+    if len(clean) <= limit:
+        return clean
+    cut = clean[:limit]
+    end = max(cut.rfind(". "), cut.rfind("! "), cut.rfind("? "))
+    # Cut at a sentence end if there is one past the first few words; otherwise
+    # at a word boundary.
+    return cut[: end + 1] if end > 20 else cut.rsplit(" ", 1)[0] + "…"
+
+
+def card_for(tg_id: int, cards: list, day: datetime.date) -> tuple:
+    """The deterministic (card, is_reversed) for a person on a given day."""
+    seed = hashlib.sha256(f"{day.isoformat()}|{tg_id}".encode()).digest()
+    return cards[seed[0] % len(cards)], bool(seed[1] & 1)
+
+
+def streak_line(streak: int, done_today: bool, *, is_ru: bool) -> str:
+    from apps.telegram_bot.streak import days_ru
+
+    if is_ru:
+        if done_today:
+            return f"✅ День отмечен · 🔥 серия {days_ru(streak)}"
+        if streak:
+            return f"🔥 Серия: {days_ru(streak)}. Отметь день, чтобы не прервать"
+        return "Отметь день, чтобы начать серию 🔥"
+    if done_today:
+        return f"✅ Day marked · 🔥 streak: {streak}"
+    if streak:
+        return f"🔥 Streak: {streak} day{'s' if streak != 1 else ''}. Mark today to keep it"
+    return "Mark today to start a streak 🔥"
+
+
+def card_message(card, *, is_ru: bool, is_reversed: bool,
+                 streak: int = 0, done_today: bool = False) -> tuple[str, str, str]:
+    """Return (text, open_button_label, checkin_button_label) for the card of the day."""
+    line = streak_line(streak, done_today, is_ru=is_ru)
     if is_ru:
         kws = (card.keywords_ru or [])[:3]
         rev = " (перевёрнута)" if is_reversed else ""
+        meaning = card.reversed_meaning_ru if is_reversed else card.upright_meaning_ru
         text = (
             f"🌙 *Карта дня*\n\n"
             f"*{card.name_ru}*{rev}\n"
             f"_{' · '.join(kws)}_\n\n"
-            f"Что она значит именно для тебя сегодня?\n"
-            f"Сделай расклад 👇"
+            f"{_snippet(meaning)}\n\n"
+            f"{line}"
         )
-        return text, "🔮 Открыть расклад"
+        return text, "🔮 Разобрать подробнее", "🔥 Отметить день"
     kws = (card.keywords_en or [])[:3]
     rev = " (reversed)" if is_reversed else ""
+    meaning = card.reversed_meaning_en if is_reversed else card.upright_meaning_en
     text = (
         f"🌙 *Card of the Day*\n\n"
         f"*{card.name_en}*{rev}\n"
         f"_{' · '.join(kws)}_\n\n"
-        f"What does it mean for you today?\n"
-        f"Draw your spread 👇"
+        f"{_snippet(meaning)}\n\n"
+        f"{line}"
     )
-    return text, "🔮 Open a reading"
+    return text, "🔮 Read it in depth", "🔥 Mark the day"
+
+
+def card_markup(*, webapp: str, open_label: str, checkin_label: str,
+                done: bool = False, is_ru: bool = True) -> dict:
+    if done:
+        first = {"text": "✅ День отмечен" if is_ru else "✅ Day marked", "callback_data": DONE_DATA}
+    else:
+        first = {"text": checkin_label, "callback_data": CHECKIN_DATA}
+    return {"inline_keyboard": [
+        [first],
+        [{"text": open_label, "web_app": {"url": webapp}}],
+    ]}
+
+
+def render_card(tg_profile, cards: list, *, streak: int | None = None,
+                done_today: bool | None = None) -> tuple[str, dict]:
+    """The full card-of-the-day message and keyboard for one person, for today.
+
+    Used both by the morning push and by the check-in button, which re-renders the
+    same message with the streak updated. Pass `streak`/`done_today` to override
+    what is stored (the button already knows the fresh values).
+    """
+    from apps.telegram_bot.streak import bot_today, current_streak
+
+    card, is_reversed = card_for(tg_profile.tg_id, cards, bot_today())
+    is_ru = (getattr(tg_profile, "locale", "ru") or "ru").startswith("ru")
+    if streak is None or done_today is None:
+        streak, done_today = current_streak(tg_profile)
+    text, open_btn, checkin_btn = card_message(
+        card, is_ru=is_ru, is_reversed=is_reversed, streak=streak, done_today=done_today,
+    )
+    markup = card_markup(webapp=_webapp(), open_label=open_btn, checkin_label=checkin_btn,
+                         done=done_today, is_ru=is_ru)
+    return text, markup
 
 
 def send_card_push(users) -> dict:
@@ -73,16 +155,9 @@ def send_card_push(users) -> dict:
     if not cards:
         return {"sent": 0, "failed": 0, "error": "No cards seeded"}
 
-    webapp = _webapp()
-    today = datetime.date.today().isoformat()
     sent = failed = 0
     for u in users:
-        seed = hashlib.sha256(f"{today}|{u.tg_id}".encode()).digest()
-        card = cards[seed[0] % len(cards)]
-        is_reversed = bool(seed[1] & 1)
-        is_ru = (getattr(u, "locale", "ru") or "ru").startswith("ru")
-        text, btn = card_message(card, is_ru=is_ru, is_reversed=is_reversed)
-        markup = {"inline_keyboard": [[{"text": btn, "web_app": {"url": webapp}}]]}
+        text, markup = render_card(u, cards)
         if _send(token, u.tg_id, text, markup):
             sent += 1
         else:

@@ -79,6 +79,8 @@ def create_application() -> Application:
         birthday_command,
         handle_text,
         pre_checkout_query,
+        ritual_checkin_callback,
+        ritual_done_callback,
         start,
         status_command,
         subscribe,
@@ -103,6 +105,9 @@ def create_application() -> Application:
     # "I subscribed" recheck button on the channel-subscription gate.
     app.add_handler(CallbackQueryHandler(gate_recheck_callback, pattern=r'^gate:check$'))
     app.add_handler(CallbackQueryHandler(contest_top_callback, pattern=r'^contest:top$'))
+    # Card-of-the-day streak: "mark the day" and the already-ticked state.
+    app.add_handler(CallbackQueryHandler(ritual_checkin_callback, pattern=r'^ritual:checkin$'))
+    app.add_handler(CallbackQueryHandler(ritual_done_callback, pattern=r'^ritual:done$'))
     # Channel member updates — tally contest invites.
     app.add_handler(ChatMemberHandler(on_chat_member, ChatMemberHandler.CHAT_MEMBER))
     # Plain text — only reacts while awaiting a birth date (see handle_text).

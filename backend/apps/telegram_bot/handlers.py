@@ -135,6 +135,74 @@ def _set_daily_push(tg_id: int, on: bool, username: str = '', first_name: str = 
     obj.save(update_fields=['daily_push', 'locale'])
 
 
+@sync_to_async
+def _check_in(tg_id: int, username: str, first_name: str, locale: str) -> dict:
+    """Mark today on the person's streak and re-render their card message."""
+    from apps.tarot.models import Card
+    from apps.telegram_bot import push, streak
+    from apps.telegram_bot.models import TelegramUser
+
+    profile, _ = TelegramUser.objects.get_or_create(
+        tg_id=tg_id,
+        defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
+    )
+    count, is_new = streak.check_in(profile)
+    cards = list(Card.objects.all())
+    text = markup = None
+    if cards:
+        text, markup = push.render_card(profile, cards, streak=count, done_today=True)
+    return {'streak': count, 'new': is_new, 'text': text, 'markup': markup,
+            'is_ru': (profile.locale or 'ru').startswith('ru')}
+
+
+def _to_inline_markup(data: dict) -> InlineKeyboardMarkup:
+    """Convert the plain-dict keyboard push.py builds into a python-telegram-bot one."""
+    rows = []
+    for row in data['inline_keyboard']:
+        rows.append([
+            InlineKeyboardButton(
+                b['text'],
+                callback_data=b.get('callback_data'),
+                web_app=WebAppInfo(url=b['web_app']['url']) if 'web_app' in b else None,
+            )
+            for b in row
+        ])
+    return InlineKeyboardMarkup(rows)
+
+
+async def ritual_checkin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """The "mark the day" button under the card of the day."""
+    from apps.telegram_bot.streak import days_ru
+
+    q = update.callback_query
+    tg = q.from_user
+    res = await _check_in(tg.id, tg.username or '', tg.first_name or '', _norm_locale(tg.language_code))
+
+    if res['is_ru']:
+        toast = (f"🔥 Серия: {days_ru(res['streak'])}" if res['new']
+                 else f"Сегодня уже отмечено · 🔥 {days_ru(res['streak'])}")
+    else:
+        toast = (f"🔥 Streak: {res['streak']}" if res['new']
+                 else f"Already marked today · 🔥 {res['streak']}")
+    await q.answer(text=toast)
+
+    if res['text'] and res['markup']:
+        try:
+            await q.edit_message_text(
+                res['text'], parse_mode='Markdown',
+                reply_markup=_to_inline_markup(res['markup']),
+            )
+        except Exception:  # noqa: BLE001 — "message is not modified" etc. The toast already told them.
+            log.debug('ritual check-in: could not edit the message', exc_info=True)
+
+
+async def ritual_done_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Tapping the already-ticked button: just acknowledge it."""
+    q = update.callback_query
+    ru = _norm_locale(q.from_user.language_code) == 'ru'
+    await q.answer(text='Сегодня уже отмечено ✨' if ru else 'Already marked today ✨')
+
+
 # ── Handlers ───────────────────────────────────────────────────────────────────
 
 
