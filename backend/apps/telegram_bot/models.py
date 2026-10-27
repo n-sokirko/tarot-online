@@ -21,6 +21,10 @@ class TelegramUser(models.Model):
     # Birth date for the personal daily horoscope. Collected via /birthday or
     # auto-imported from the user's natal chart. Null until known.
     birth_date = models.DateField(null=True, blank=True)
+    # Set when Telegram refused a message to this person for good (they blocked the
+    # bot, never started it, or deleted the account). Cleared by the next success.
+    bot_blocked = models.BooleanField(default=False, db_index=True)
+    last_send_error = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -84,6 +88,8 @@ class Broadcast(models.Model):
     sent_at = models.DateTimeField(null=True, blank=True)
     sent_count = models.PositiveIntegerField(default=0)
     failed_count = models.PositiveIntegerField(default=0)
+    # One line per person who did not get it: "<tg id> @name: <why>".
+    failed_detail = models.TextField(blank=True)
 
     class Meta:
         ordering = ['-created_at']

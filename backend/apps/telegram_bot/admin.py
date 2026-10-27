@@ -28,10 +28,33 @@ class ChannelPostAdmin(admin.ModelAdmin):
 @admin.register(TelegramUser)
 class TelegramUserAdmin(admin.ModelAdmin):
     list_display = ('tg_id', 'tg_username', 'tg_first_name', 'user', 'daily_push',
-                    'birth_date', 'zodiac', 'created_at')
-    list_filter = ('daily_push', 'created_at')
+                    'bot_blocked', 'last_send_error', 'birth_date', 'zodiac', 'created_at')
+    list_filter = ('bot_blocked', 'daily_push', 'created_at')
     search_fields = ('tg_username', 'tg_first_name', 'tg_id')
-    actions = ['enable_push', 'disable_push', 'send_card_now', 'send_horoscope_now']
+    actions = ['check_reachable', 'enable_push', 'disable_push', 'send_card_now',
+               'send_horoscope_now']
+
+    @admin.action(description='📡 Проверить, доходят ли сообщения (выбранным)')
+    def check_reachable(self, request, queryset):
+        from apps.telegram_bot import delivery
+
+        token = settings.TELEGRAM_BOT_TOKEN
+        if not token:
+            self.message_user(request, 'TELEGRAM_BOT_TOKEN не настроен.', level=messages.ERROR)
+            return
+        ok_n, bad = 0, []
+        for u in queryset:
+            ok, err = delivery.probe(token, u.tg_id)
+            delivery.record(u, ok, err)
+            if ok:
+                ok_n += 1
+            else:
+                bad.append(f'{u.tg_id} @{u.tg_username or u.tg_first_name}: {delivery.explain(err)}')
+        self.message_user(
+            request,
+            f'Доходит: {ok_n}, не доходит: {len(bad)}. Подробности в колонке «Last send error».',
+            level=messages.SUCCESS if not bad else messages.WARNING,
+        )
 
     @admin.display(description='Знак')
     def zodiac(self, obj):
@@ -86,12 +109,12 @@ class BroadcastAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'target', 'sent_count', 'failed_count', 'sent_at', 'created_at')
     list_filter = ('target', 'sent_at')
     search_fields = ('title', 'message')
-    readonly_fields = ('sent_at', 'sent_count', 'failed_count', 'created_at')
+    readonly_fields = ('sent_at', 'sent_count', 'failed_count', 'failed_detail', 'created_at')
     actions = ['send_now']
 
     @admin.action(description='📤 Отправить выбранные рассылки')
     def send_now(self, request, queryset):
-        import requests
+        from apps.telegram_bot import delivery
 
         token = settings.TELEGRAM_BOT_TOKEN
         if not token:
@@ -102,26 +125,23 @@ class BroadcastAdmin(admin.ModelAdmin):
             recipients = TelegramUser.objects.all()
             if bc.target == Broadcast.TARGET_SUBSCRIBERS:
                 recipients = recipients.filter(daily_push=True)
-            sent = failed = 0
+            sent, failed_lines = 0, []
             for u in recipients:
-                try:
-                    r = requests.post(
-                        f'https://api.telegram.org/bot{token}/sendMessage',
-                        json={'chat_id': u.tg_id, 'text': bc.message, 'parse_mode': 'Markdown'},
-                        timeout=15,
-                    )
-                    if r.ok and r.json().get('ok'):
-                        sent += 1
-                    else:
-                        failed += 1
-                except Exception:  # noqa: BLE001 — best-effort; count and continue
-                    failed += 1
+                ok, err = delivery.send_text(token, u.tg_id, bc.message)
+                delivery.record(u, ok, err)
+                if ok:
+                    sent += 1
+                else:
+                    failed_lines.append(
+                        f'{u.tg_id} @{u.tg_username or u.tg_first_name}: {delivery.explain(err)}')
             bc.sent_count = sent
-            bc.failed_count = failed
+            bc.failed_count = len(failed_lines)
+            bc.failed_detail = '\n'.join(failed_lines)
             bc.sent_at = timezone.now()
-            bc.save(update_fields=['sent_count', 'failed_count', 'sent_at'])
+            bc.save(update_fields=['sent_count', 'failed_count', 'failed_detail', 'sent_at'])
             self.message_user(
                 request,
-                f'Рассылка «{bc}»: отправлено {sent}, ошибок {failed}.',
+                f'Рассылка «{bc}»: отправлено {sent}, ошибок {len(failed_lines)}. '
+                f'Кому не дошло — внутри рассылки, поле «Failed detail».',
                 level=messages.SUCCESS if sent else messages.WARNING,
             )
