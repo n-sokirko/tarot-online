@@ -110,3 +110,31 @@ def test_checklist_is_the_last_thing_the_model_reads(locale):
                  prompts.runes_cast(locale)):
         assert marker in text
         assert text.index(marker) > len(text) // 2  # near the end, after the structure and examples
+
+
+@pytest.mark.parametrize('locale', LOCALES)
+def test_sensitive_topics_get_no_verdict_and_no_advice(locale):
+    """Money, health and law: a tarot "invest / don't invest" is real harm if it is
+    wrong, and the Terms promise the service gives no such advice."""
+    base = _read('base_system', locale)
+    checklist = _read('answer_checklist', locale)
+    if locale == 'ru':
+        assert 'Чувствительные темы' in base
+        assert 'Нет вердикта' in base and 'Нет слов «карты советуют»' in base
+        assert 'Это не финансовый совет' in base
+        assert 'диагнозов' in base                     # no reading the person's state
+        assert 'НЕ применяются' in checklist
+    else:
+        assert 'Sensitive topics' in base
+        assert 'No verdict' in base and 'No "the cards advise"' in base
+        assert 'This is not financial advice' in base
+        assert 'diagnose the person' in base
+        assert 'do NOT apply' in checklist
+
+
+@pytest.mark.parametrize('locale', LOCALES)
+def test_the_checklist_exception_comes_before_the_answer_first_rules(locale):
+    """The checklist is read last, so its sensitive-topic exception (point 0) must
+    come before the rules that demand a verdict (points 1 and 4)."""
+    text = _read('answer_checklist', locale)
+    assert text.index('0.') < text.index('1.') < text.index('4.')
