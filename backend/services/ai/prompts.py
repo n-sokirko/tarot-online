@@ -15,7 +15,17 @@ from functools import lru_cache
 from pathlib import Path
 
 PROMPTS_DIR = Path(__file__).resolve().parents[2] / "apps" / "tarot" / "prompts"
-PROMPT_VERSION = "2026-05-26-v1"
+PROMPT_VERSION = "2026-10-27-v2"
+
+
+def _with_checklist(text: str, locale: str) -> str:
+    """Repeat the short answer-first checklist at the very end of the prompt.
+
+    Smaller models (Haiku) follow the rules in the long base prompt only loosely,
+    but they weigh the last lines most. Applied to the question-driven readings
+    (tarot spreads and runes), where a direct answer matters most.
+    """
+    return f"{text}\n\n{_read(f'answer_checklist_{locale}.md')}"
 
 
 @lru_cache(maxsize=16)
@@ -40,7 +50,7 @@ def tarot_spread(spread_slug: str, locale: str) -> str:
     ]
     for name in candidates:
         try:
-            return _read(name)
+            return _with_checklist(_read(name), locale)
         except FileNotFoundError:
             continue
     raise FileNotFoundError(f"No spread prompt for {spread_slug}/{locale}")
@@ -48,7 +58,7 @@ def tarot_spread(spread_slug: str, locale: str) -> str:
 
 def runes_cast(locale: str) -> str:
     locale = "ru" if locale not in ("ru", "en") else locale
-    return _read(f"runes_cast_{locale}.md")
+    return _with_checklist(_read(f"runes_cast_{locale}.md"), locale)
 
 
 def natal_chart(locale: str) -> str:

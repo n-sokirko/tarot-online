@@ -32,9 +32,9 @@ Length: 300–450 words.
 
 **The runes say: go, but not out of haste.** In your question there is calculation, and there is a longing for motion. The runes side with movement, as long as it is yours and not forced.
 
-**Isa** is ice and the silence under snow. Right now there is a lot in you that is frozen: you have stood too long on one thought without permitting yourself to step or to refuse. Ice is not bad — sometimes the roots need it to survive. But if it holds longer than a season, the roots begin to suffocate.
+**Isa** is ice and the silence under snow. Right now there is a lot in you that is frozen: you have stood too long on one thought without permitting yourself to step or to refuse. Sometimes the roots need ice to survive. But if it holds longer than a season, the roots begin to suffocate.
 
-**Raidho** is the rider and the rhythm of the road. This rune does not say "run", it says: the motion must be **yours**, in your own tempo, not under the whip of someone else's necessity. If you go because "it's time to decide something" — that is not Raidho, that is flight. If you go because you hear the concrete rhythm of that city inside you — that is your road.
+**Raidho** is the rider and the rhythm of the road. The rune says: the motion must be **yours**, in your own tempo. If you go because "it's time to decide something", that is flight. If you go because you hear the rhythm of that city inside you, that is your road.
 
 **Berkano** ahead is the birch, thin and stubborn, the first tree to return to bare land. Whatever you decide, what matters is not geography but the capacity to let what is new in you grow slowly and in shelter, without showcases or justifications. Berkano hints that the real move can be inward as well.
 

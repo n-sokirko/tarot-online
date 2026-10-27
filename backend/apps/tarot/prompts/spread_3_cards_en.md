@@ -26,7 +26,7 @@ Length: 300–450 words.
 
 The **Two of Pentacles** in the past is a juggler on the shore. When you began, you kept a lot in the air at once: interest, deadlines, other people's expectations. It worked. But anyone gets tired juggling that long without rest.
 
-The **Eight of Swords** in the present is a blindfolded woman among swords stuck in the ground. It looks like there is no way out. But the blades stand far apart, with wide gaps between them. You are stuck because you have not let yourself look at your options for a long time, not because there are none.
+The **Eight of Swords** in the present is a blindfolded woman among swords stuck in the ground. It looks like there is no way out. But the blades stand far apart, with wide gaps between them. You are stuck because you have not let yourself look at your options for a long time. The options exist.
 
 **The Star** in the future is the warmest card of the spread. A woman pours water from two jugs by a pool. It is the return of strength and clarity after a pause. The project is not lost to you, and most likely you will feel again what you started it for.
 
