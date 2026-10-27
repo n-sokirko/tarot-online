@@ -318,3 +318,36 @@ class TestCelticCrossGating:
         assert resp.status_code == 201
         assert resp.data['spread_type']['slug'] == 'celtic-cross'
         assert len(resp.data['cards']) == 10
+
+
+# A real Telegram Stars charge id is ~130 characters. The columns that store it were
+# 128 and 64 wide, so on Postgres every real payment died with "value too long" and
+# the customer paid without getting Premium. SQLite ignores varchar limits, so the
+# test database could never have caught it — these tests check the schema directly.
+REAL_STARS_CHARGE_ID = 'stx' + 'AbCdEfGh' * 16      # synthetic, 131 chars like a real one
+
+
+class TestRealStarsChargeIds:
+    def test_charge_id_columns_are_wide_enough_for_a_real_payment(self):
+        from apps.billing.models import Subscription, UsageLedger
+
+        need = len(REAL_STARS_CHARGE_ID) + len("tg:")      # ledger stores "tg:<charge id>"
+        assert Subscription._meta.get_field('tg_payment_charge_id').max_length >= need * 2
+        assert UsageLedger._meta.get_field('reference_id').max_length >= need * 2
+
+    @pytest.mark.django_db
+    def test_a_real_length_charge_id_activates_premium(self, django_user_model):
+        from apps.billing import services
+        from apps.billing.models import CreditWallet, Plan
+
+        user = django_user_model.objects.create_user(username='u', email='u@e.com', password='x')
+        plan = Plan.objects.create(
+            slug='premium-monthly', name_ru='P', name_en='P', kind=Plan.KIND_SUBSCRIPTION,
+            tg_stars_price=150, monthly_included_credits=50,
+            entitlement_keys=['sonnet_ai', 'celtic_cross'],
+        )
+        services.apply_tg_payment(user=user, plan=plan, charge_id=REAL_STARS_CHARGE_ID)
+        services.apply_tg_payment(user=user, plan=plan, charge_id=REAL_STARS_CHARGE_ID)  # replay
+
+        assert services.tier_for(user).tier == 'premium'
+        assert CreditWallet.objects.get(user=user).balance == 50     # once, not twice

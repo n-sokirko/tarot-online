@@ -89,7 +89,7 @@ class Subscription(models.Model):
 
     paddle_subscription_id = models.CharField(max_length=64, unique=True, null=True, blank=True)
     paddle_customer_id = models.CharField(max_length=64, blank=True)
-    tg_payment_charge_id = models.CharField(max_length=128, blank=True)
+    tg_payment_charge_id = models.CharField(max_length=512, blank=True)
 
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_ACTIVE)
     current_period_start = models.DateTimeField(null=True, blank=True)
@@ -180,7 +180,7 @@ class UsageLedger(models.Model):
     model_used = models.CharField(max_length=64, blank=True)
     input_tokens = models.PositiveIntegerField(default=0)
     output_tokens = models.PositiveIntegerField(default=0)
-    reference_id = models.CharField(max_length=64, blank=True)
+    reference_id = models.CharField(max_length=512, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
