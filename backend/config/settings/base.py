@@ -159,6 +159,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Telegram Bot / Stars payments
 TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', default='')
 TELEGRAM_BOT_USERNAME = config('TELEGRAM_BOT_USERNAME', default='tarott_online_bot')
+
+# The wording of the Terms of Service and Privacy Policy people accept. It must equal
+# `version` in frontend/lib/legal/config.ts (a test checks they match); bump both when
+# the documents change in a way people have to accept again.
+LEGAL_VERSION = '2026-10-28'
 TELEGRAM_PAYMENT_SECRET = config('TELEGRAM_PAYMENT_SECRET', default='change-me-in-production')
 # Channel users must be subscribed to in order to use the bot. Bot must be an
 # admin in this channel for getChatMember to work. Set to empty to disable gate.

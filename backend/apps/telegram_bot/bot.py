@@ -84,6 +84,7 @@ def create_application() -> Application:
         ritual_checkin_callback,
         ritual_done_callback,
         start,
+        terms_accept_callback,
         status_command,
         subscribe,
         successful_payment,
@@ -111,6 +112,8 @@ def create_application() -> Application:
     # Card-of-the-day streak: "mark the day" and the already-ticked state.
     app.add_handler(CallbackQueryHandler(ritual_checkin_callback, pattern=r'^ritual:checkin$'))
     app.add_handler(CallbackQueryHandler(ritual_done_callback, pattern=r'^ritual:done$'))
+    # Consent screen shown by /start until the current Terms are accepted.
+    app.add_handler(CallbackQueryHandler(terms_accept_callback, pattern=r'^terms:accept$'))
     # Channel member updates — tally contest invites.
     app.add_handler(ChatMemberHandler(on_chat_member, ChatMemberHandler.CHAT_MEMBER))
     # Plain text — only reacts while awaiting a birth date (see handle_text).

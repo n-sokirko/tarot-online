@@ -288,6 +288,17 @@ async def _start_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         return
 
     tg = update.effective_user
+    # Payment, donation and contest deep links above are never held up by this: the
+    # consent screen only stands between a plain /start and the menu.
+    if tg and not await _has_accepted_terms(tg.id):
+        await _ask_terms(update.message, _norm_locale(tg.language_code))
+        return
+    await _send_menu(update.message, tg, context)
+
+
+async def _send_menu(message, tg, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """The main menu message. `message` is whatever we reply to: the /start message,
+    or the consent screen after "Accept"."""
     locale = _norm_locale(tg.language_code if tg else None)
     has_birth = False
     if tg:
@@ -336,11 +347,92 @@ async def _start_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         InlineKeyboardButton(btn, web_app=WebAppInfo(url=webapp_url)),
     ]])
 
-    await update.message.reply_text(
+    await message.reply_text(
         text,
         parse_mode='Markdown',
         reply_markup=keyboard,
     )
+
+
+# ── Terms of Service / Privacy Policy consent ─────────────────────────────────
+
+TERMS_ACCEPT_DATA = 'terms:accept'
+
+
+@sync_to_async
+def _has_accepted_terms(tg_id: int) -> bool:
+    """True if this person accepted the CURRENT wording; a new wording asks again."""
+    from apps.telegram_bot.models import TelegramUser
+    return TelegramUser.objects.filter(
+        tg_id=tg_id, terms_accepted_at__isnull=False, terms_version=settings.LEGAL_VERSION,
+    ).exists()
+
+
+@sync_to_async
+def _record_terms_acceptance(tg_id: int, username: str, first_name: str, locale: str) -> None:
+    from django.utils import timezone
+    from apps.telegram_bot.models import TelegramUser
+
+    now = timezone.now()
+    profile, _ = TelegramUser.objects.get_or_create(
+        tg_id=tg_id,
+        defaults={'tg_username': username, 'tg_first_name': first_name, 'locale': locale},
+    )
+    profile.terms_accepted_at = now
+    profile.terms_version = settings.LEGAL_VERSION
+    profile.save(update_fields=['terms_accepted_at', 'terms_version'])
+    # The same person on the website or in the Mini App: keep one record of consent.
+    user = profile.user
+    if user is not None and user.terms_accepted_at is None:
+        user.terms_accepted_at = now
+        user.terms_version = settings.LEGAL_VERSION
+        user.save(update_fields=['terms_accepted_at', 'terms_version'])
+
+
+def _terms_text_and_keyboard(locale: str) -> tuple[str, InlineKeyboardMarkup]:
+    base = getattr(settings, 'WEBAPP_URL', 'https://sokirdon.com').rstrip('/')
+    if locale == 'ru':
+        text = (
+            "✨ *Перед началом*\n\n"
+            "Чтобы пользоваться ботом, прими Условия использования и Политику конфиденциальности.\n\n"
+            "Коротко: расклады это развлечение, а не прогноз. Для толкования мы отправляем твой "
+            "вопрос нейросети. Сервис для людей от 16 лет."
+        )
+        terms, privacy, accept = "📄 Условия", "🔒 Политика", "✅ Принимаю"
+    else:
+        text = (
+            "✨ *Before we begin*\n\n"
+            "To use the bot, please accept the Terms of Service and the Privacy Policy.\n\n"
+            "In short: readings are entertainment, not a forecast. To write an interpretation "
+            "we send your question to a neural network. The service is for people aged 16+."
+        )
+        terms, privacy, accept = "📄 Terms", "🔒 Privacy", "✅ I accept"
+    return text, InlineKeyboardMarkup([
+        [InlineKeyboardButton(terms, url=f'{base}/terms'),
+         InlineKeyboardButton(privacy, url=f'{base}/privacy')],
+        [InlineKeyboardButton(accept, callback_data=TERMS_ACCEPT_DATA)],
+    ])
+
+
+async def _ask_terms(message, locale: str) -> None:
+    text, keyboard = _terms_text_and_keyboard(locale)
+    await message.reply_text(text, parse_mode='Markdown', reply_markup=keyboard,
+                             disable_web_page_preview=True)
+
+
+async def terms_accept_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """The "Accept" button: record it, then carry on to the menu."""
+    q = update.callback_query
+    tg = q.from_user
+    locale = _norm_locale(tg.language_code)
+    await _record_terms_acceptance(tg.id, tg.username or '', tg.first_name or '', locale)
+    await q.answer('✅')
+    try:
+        await q.edit_message_text(
+            '✅ Спасибо, условия приняты.' if locale == 'ru' else '✅ Thank you, accepted.')
+    except Exception:  # noqa: BLE001 — the menu below is what matters
+        log.debug('terms accept: could not edit the consent message', exc_info=True)
+    await _send_menu(q.message, tg, context)
 
 
 def _sign_label(birth_date: datetime.date, locale: str) -> str:

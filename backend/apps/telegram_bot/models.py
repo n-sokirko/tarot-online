@@ -25,6 +25,11 @@ class TelegramUser(models.Model):
     # bot, never started it, or deleted the account). Cleared by the next success.
     bot_blocked = models.BooleanField(default=False, db_index=True)
     last_send_error = models.CharField(max_length=200, blank=True)
+    # Acceptance of the Terms and Privacy Policy given in the bot, and the wording
+    # (settings.LEGAL_VERSION) it was given to. When the wording moves on, the next
+    # /start asks again.
+    terms_accepted_at = models.DateTimeField(null=True, blank=True)
+    terms_version = models.CharField(max_length=16, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
