@@ -5,15 +5,18 @@ import { useRouter } from 'next/navigation';
 import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from '@react-oauth/google';
 import { saveTokens } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
+import { LEGAL_CONFIG } from '@/lib/legal/config';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '';
 
 interface GoogleButtonProps {
   onError?: (msg: string) => void;
+  /** The page showing this button has put the Terms and Policy in front of the person. */
+  acceptTerms?: boolean;
 }
 
-function GoogleLoginInner({ onError }: GoogleButtonProps) {
+function GoogleLoginInner({ onError, acceptTerms }: GoogleButtonProps) {
   const router = useRouter();
   const { refetch } = useAuth();
 
@@ -23,7 +26,10 @@ function GoogleLoginInner({ onError }: GoogleButtonProps) {
       const res = await fetch(`${API_BASE}/api/v1/auth/google/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: credentialResponse.credential }),
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+          ...(acceptTerms ? { accepted_terms: true, terms_version: LEGAL_CONFIG.version } : {}),
+        }),
       });
       if (!res.ok) {
         onError?.('Google sign-in failed. Please try again.');
@@ -36,7 +42,7 @@ function GoogleLoginInner({ onError }: GoogleButtonProps) {
     } catch {
       onError?.('Google sign-in failed. Please try again.');
     }
-  }, [router, onError, refetch]);
+  }, [router, onError, refetch, acceptTerms]);
 
   return (
     <div className="flex justify-center">
@@ -62,12 +68,12 @@ function GoogleLoginInner({ onError }: GoogleButtonProps) {
  *
  * If NEXT_PUBLIC_GOOGLE_CLIENT_ID is not configured, renders nothing (graceful degradation).
  */
-export default function GoogleButton({ onError }: GoogleButtonProps) {
+export default function GoogleButton({ onError, acceptTerms }: GoogleButtonProps) {
   if (!GOOGLE_CLIENT_ID) return null;
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <GoogleLoginInner onError={onError} />
+      <GoogleLoginInner onError={onError} acceptTerms={acceptTerms} />
     </GoogleOAuthProvider>
   );
 }

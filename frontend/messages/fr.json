@@ -105,5 +105,15 @@
     "error_exists": "Cet e-mail est déjà enregistré.",
     "error_generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
     "or": "ou"
+  },
+  "legal": {
+    "terms": "Conditions d'utilisation",
+    "privacy": "Politique de confidentialité",
+    "accept_prefix": "J'accepte les",
+    "accept_and": "et la",
+    "accept_required": "Pour continuer, acceptez les conditions et la politique.",
+    "continue_notice": "En continuant, vous acceptez les",
+    "translation_notice": "Ce document est disponible en russe et en anglais. La version anglaise est affichée.",
+    "footer": "Documents"
   }
 }

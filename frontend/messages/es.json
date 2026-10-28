@@ -105,5 +105,15 @@
     "error_exists": "Este correo ya está registrado.",
     "error_generic": "Algo salió mal. Por favor intenta de nuevo.",
     "or": "o"
+  },
+  "legal": {
+    "terms": "Términos de uso",
+    "privacy": "Política de privacidad",
+    "accept_prefix": "Acepto los",
+    "accept_and": "y la",
+    "accept_required": "Para continuar, acepta los términos y la política.",
+    "continue_notice": "Al continuar aceptas los",
+    "translation_notice": "Este documento está disponible en ruso e inglés. Se muestra la versión en inglés.",
+    "footer": "Documentos"
   }
 }

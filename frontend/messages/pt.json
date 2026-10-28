@@ -105,5 +105,15 @@
     "error_exists": "Este e-mail já está cadastrado.",
     "error_generic": "Algo deu errado. Por favor tente novamente.",
     "or": "ou"
+  },
+  "legal": {
+    "terms": "Termos de uso",
+    "privacy": "Política de privacidade",
+    "accept_prefix": "Aceito os",
+    "accept_and": "e a",
+    "accept_required": "Para continuar, aceite os termos e a política.",
+    "continue_notice": "Ao continuar, você aceita os",
+    "translation_notice": "Este documento está disponível em russo e inglês. A versão em inglês é exibida.",
+    "footer": "Documentos"
   }
 }

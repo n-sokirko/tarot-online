@@ -10,6 +10,7 @@ import { useAuth } from '@/lib/auth-context';
 import type { Plan, PlansResponse } from '@/lib/types';
 import DonateModal from '@/components/donate/DonateModal';
 import Starfield from '@/components/visual/Starfield';
+import { TermsNotice } from '@/components/legal/LegalLinks';
 
 type PricingCopy = {
   title: string; subtitle: string;
@@ -352,6 +353,7 @@ export default function PricingPage() {
         >
           {t.footnote}
         </p>
+        <div className="mt-3"><TermsNotice /></div>
       </div>
 
       <DonateModal

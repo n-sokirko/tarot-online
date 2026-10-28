@@ -105,5 +105,15 @@
     "error_exists": "Diese E-Mail ist bereits registriert.",
     "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
     "or": "oder"
+  },
+  "legal": {
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzerklärung",
+    "accept_prefix": "Ich akzeptiere die",
+    "accept_and": "und",
+    "accept_required": "Um fortzufahren, akzeptiere die Bedingungen und die Datenschutzerklärung.",
+    "continue_notice": "Wenn du fortfährst, akzeptierst du die",
+    "translation_notice": "Dieses Dokument gibt es auf Russisch und Englisch. Die englische Fassung wird angezeigt.",
+    "footer": "Dokumente"
   }
 }

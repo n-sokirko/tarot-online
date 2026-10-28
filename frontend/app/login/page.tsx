@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { saveTokens } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
 import GoogleButton from '@/components/auth/GoogleButton';
+import { TermsNotice } from '@/components/legal/LegalLinks';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
@@ -125,7 +126,8 @@ export default function LoginPage() {
           <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.15)' }} />
         </div>
 
-        {isClient && <GoogleButton onError={setError} />}
+        {isClient && <GoogleButton onError={setError} acceptTerms />}
+        <TermsNotice />
 
         <p className="text-xs text-center" style={{ color: 'rgba(242,237,228,0.4)' }}>
           <Link href="/register" style={{ color: 'rgba(224,178,108,0.6)' }}>

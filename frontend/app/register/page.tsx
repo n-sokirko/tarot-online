@@ -8,16 +8,20 @@ import { useTranslations } from 'next-intl';
 import { saveTokens } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
 import GoogleButton from '@/components/auth/GoogleButton';
+import { AcceptTerms } from '@/components/legal/LegalLinks';
+import { LEGAL_CONFIG } from '@/lib/legal/config';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
 export default function RegisterPage() {
   const t = useTranslations('auth');
+  const tLegal = useTranslations('legal');
   const router = useRouter();
   const { refetch } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -26,12 +30,16 @@ export default function RegisterPage() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    if (!accepted) { setError(tLegal('accept_required')); return; }
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/api/v1/auth/register/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, display_name: displayName }),
+        body: JSON.stringify({
+          email, password, display_name: displayName,
+          accepted_terms: true, terms_version: LEGAL_CONFIG.version,
+        }),
       });
       if (res.status === 400) {
         const data = await res.json() as Record<string, string[]>;
@@ -51,7 +59,7 @@ export default function RegisterPage() {
     } finally {
       setLoading(false);
     }
-  }, [email, password, displayName, router, t, refetch]);
+  }, [email, password, displayName, accepted, router, t, tLegal, refetch]);
 
   return (
     <main
@@ -108,6 +116,8 @@ export default function RegisterPage() {
             }}
           />
 
+          <AcceptTerms checked={accepted} onChange={setAccepted} />
+
           {error && (
             <p className="text-xs text-center" style={{ color: 'rgba(200,80,80,0.9)' }}>
               {error}
@@ -140,7 +150,13 @@ export default function RegisterPage() {
           <div className="flex-1 h-px" style={{ background: 'rgba(224,178,108,0.15)' }} />
         </div>
 
-        {isClient && <GoogleButton onError={setError} />}
+        {/* Google sign-in creates an account too, so it waits for the same consent. */}
+        <div
+          style={{ opacity: accepted ? 1 : 0.45, pointerEvents: accepted ? 'auto' : 'none' }}
+          aria-disabled={!accepted}
+        >
+          {isClient && <GoogleButton onError={setError} acceptTerms />}
+        </div>
 
         <p className="text-xs text-center" style={{ color: 'rgba(242,237,228,0.4)' }}>
           <Link href="/login" style={{ color: 'rgba(224,178,108,0.6)' }}>

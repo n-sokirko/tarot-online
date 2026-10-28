@@ -5,6 +5,7 @@ import time
 import urllib.parse
 
 from django.conf import settings
+from django.utils import timezone
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from rest_framework import generics, permissions, status
@@ -141,6 +142,14 @@ class GoogleAuthView(APIView):
         if created:
             user.set_unusable_password()
             user.save(update_fields=['password'])
+
+        # The page that offers Google sign-in shows the Terms and Policy; when the
+        # person goes ahead it sends `accepted_terms`. Record it once, the first
+        # time, so an older acceptance (and its wording) is not overwritten.
+        if request.data.get('accepted_terms') is True and user.terms_accepted_at is None:
+            user.terms_accepted_at = timezone.now()
+            user.terms_version = str(request.data.get('terms_version') or '')[:16]
+            user.save(update_fields=['terms_accepted_at', 'terms_version'])
 
         refresh = RefreshToken.for_user(user)
         return Response({
