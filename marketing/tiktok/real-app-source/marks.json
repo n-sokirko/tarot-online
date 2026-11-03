@@ -1,0 +1,14 @@
+{
+  "marks": {
+    "home": 2.197,
+    "shuffle": 6.948,
+    "daily": 9.63,
+    "pick": 13.306,
+    "reading": 14.203,
+    "detail": 20.095,
+    "detailReady": 22.933,
+    "end": 25.936
+  },
+  "errors": [],
+  "readingURL": "http://127.0.0.1:3000/reading/2"
+}
