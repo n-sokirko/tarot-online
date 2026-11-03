@@ -1,0 +1,3 @@
+# Isolated video tooling; not part of backend/requirements.txt.
+piper-tts==1.3.0
+runwayml==5.24.0

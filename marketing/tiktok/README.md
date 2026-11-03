@@ -1,5 +1,12 @@
 # Tarot Online — материалы для TikTok
 
+**Варианты с русской озвучкой:**
+
+- [POV «Три двери» — AI-ключевой кадр с анимацией + настоящее приложение](survival/tarot-survival-voice.mp4).
+- [Реальные экраны приложения с голосом](tarot-bot-real-app-voice.mp4).
+- [Модули генерации, сценарий и ограничения](survival/README.md).
+- [Источники и гипотезы форматов](survival/trend-research.md).
+
 **Новый основной ролик — из реальных экранов приложения, с переходом в @tarott_online_bot:**
 
 - [Скачать MP4](tarot-bot-real-app.mp4).
