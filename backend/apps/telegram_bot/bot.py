@@ -81,6 +81,7 @@ def create_application() -> Application:
         handle_text,
         invite_command,
         pre_checkout_query,
+        promo_video,
         ritual_checkin_callback,
         ritual_done_callback,
         start,
@@ -116,6 +117,8 @@ def create_application() -> Application:
     app.add_handler(CallbackQueryHandler(terms_accept_callback, pattern=r'^terms:accept$'))
     # Channel member updates — tally contest invites.
     app.add_handler(ChatMemberHandler(on_chat_member, ChatMemberHandler.CHAT_MEMBER))
+    # Warm-up campaign: a video (sent as video or as an mp4 file) → free readings once.
+    app.add_handler(MessageHandler(filters.VIDEO | filters.Document.VIDEO, promo_video))
     # Plain text — only reacts while awaiting a birth date (see handle_text).
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 

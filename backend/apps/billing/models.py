@@ -159,6 +159,7 @@ class UsageLedger(models.Model):
     KIND_GRANT_SUB = 'grant_subscription'
     KIND_GRANT_PACK = 'grant_pack'
     KIND_GRANT_REFERRAL = 'grant_referral'
+    KIND_GRANT_PROMO = 'grant_promo'
     KIND_CHOICES = [
         (KIND_AI_TAROT, 'AI tarot reading'),
         (KIND_AI_RUNES, 'AI rune cast'),
@@ -168,6 +169,7 @@ class UsageLedger(models.Model):
         (KIND_GRANT_SUB, 'Subscription monthly grant'),
         (KIND_GRANT_PACK, 'Credit pack purchase'),
         (KIND_GRANT_REFERRAL, 'Referral reward'),
+        (KIND_GRANT_PROMO, 'Promo bonus (video campaign)'),
     ]
 
     user = models.ForeignKey(

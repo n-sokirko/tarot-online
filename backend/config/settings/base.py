@@ -193,6 +193,11 @@ TELEGRAM_WEBHOOK_SECRET = config('TELEGRAM_WEBHOOK_SECRET', default='')
 # Telegram Mini App (Web App)
 WEBAPP_URL = config('WEBAPP_URL', default='https://sokirdon.com')
 
+# Warm-up video campaign: sending the bot a video grants free readings once per
+# account (apps/telegram_bot/promo.py). Turn off with PROMO_VIDEO_ENABLED=0.
+PROMO_VIDEO_ENABLED = config('PROMO_VIDEO_ENABLED', default=True, cast=bool)
+PROMO_VIDEO_CREDITS = config('PROMO_VIDEO_CREDITS', default=3, cast=int)
+
 # Celery
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL

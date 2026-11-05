@@ -445,6 +445,37 @@ def _sign_label(birth_date: datetime.date, locale: str) -> str:
 
 
 @requires_channel_sub
+async def promo_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """A video sent to the bot — the warm-up campaign bonus (see promo.py)."""
+    from apps.telegram_bot import promo
+
+    if not promo.enabled():
+        return
+    tg = update.effective_user
+    locale = _norm_locale(tg.language_code)
+    ru = locale == 'ru'
+    granted = await sync_to_async(promo.claim_video_bonus)(
+        tg.id, username=tg.username or '', first_name=tg.first_name or '', locale=locale,
+    )
+    n = promo.credits()
+    if granted:
+        text = (f"🎁 Видео получено! Тебе начислено {n} бесплатных расклада.\n\n"
+                f"Открой расклады, задай свой вопрос — и карты ответят."
+                if ru else
+                f"🎁 Video received! You've got {n} free readings.\n\n"
+                f"Open the readings, ask your question — and let the cards answer.")
+    else:
+        text = ("Этот подарок ты уже получал(а) — он даётся один раз 🌙\n\n"
+                "Хочешь ещё разборы? Пригласи друга через /invite — вам обоим начислится бонус."
+                if ru else
+                "You've already received this gift — it's one per person 🌙\n\n"
+                "Want more readings? Invite a friend with /invite — you both get a bonus.")
+    btn = '🔮 Открыть расклады' if ru else '🔮 Open readings'
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(btn, web_app=WebAppInfo(url=settings.WEBAPP_URL))]])
+    await update.message.reply_text(text, reply_markup=keyboard)
+
+
+@requires_channel_sub
 async def invite_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """/invite — the person's referral link and how many friends it has brought."""
     from apps.telegram_bot import referrals
