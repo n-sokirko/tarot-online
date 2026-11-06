@@ -340,3 +340,47 @@ export async function startTelegramDonation(stars: number): Promise<TelegramDona
     body: JSON.stringify({ stars }),
   });
 }
+
+// ---- Personal tarologist (persona, style mirroring, memory, dossier) ----
+
+export type PersonaKey = 'classic' | 'mira' | 'val' | 'val18' | 'agata';
+
+export interface PersonaMeta {
+  key: PersonaKey;
+  premium: boolean;
+  adult: boolean;
+  name_ru: string;
+  tagline_ru: string;
+  name_en: string;
+  tagline_en: string;
+}
+
+export interface TarologistSettings {
+  persona: PersonaKey;
+  effective_persona: PersonaKey;
+  mirror_style: boolean;
+  remember: boolean;
+  adult_confirmed: boolean;
+  dossier: string[];
+  premium: boolean;
+  personas: PersonaMeta[];
+}
+
+export async function getTarologist(): Promise<TarologistSettings> {
+  return request<TarologistSettings>('/api/v1/tarologist/');
+}
+
+export async function updateTarologist(
+  patch: Partial<Pick<TarologistSettings, 'persona' | 'mirror_style' | 'remember' | 'dossier'>> & {
+    adult_confirm?: boolean;
+  },
+): Promise<TarologistSettings> {
+  return request<TarologistSettings>('/api/v1/tarologist/', {
+    method: 'PATCH',
+    body: JSON.stringify(patch),
+  });
+}
+
+export async function forgetTarologist(): Promise<TarologistSettings> {
+  return request<TarologistSettings>('/api/v1/tarologist/forget/', { method: 'POST' });
+}

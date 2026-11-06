@@ -138,6 +138,9 @@ ANTHROPIC_GATEWAY_AUTH = config('ANTHROPIC_GATEWAY_AUTH', default='')
 ANTHROPIC_MODEL_FREE = config('ANTHROPIC_MODEL_FREE', default='claude-haiku-4-5-20251001')
 ANTHROPIC_MODEL_PREMIUM = config('ANTHROPIC_MODEL_PREMIUM', default='claude-sonnet-4-6')
 ANTHROPIC_MODEL_DEEP = config('ANTHROPIC_MODEL_DEEP', default='claude-opus-4-7')
+# Premium readings with a persona or style mirroring: Haiku drops the voice too
+# often, so these go to a stronger model (see services/ai/personas.py).
+ANTHROPIC_MODEL_PERSONA = config('ANTHROPIC_MODEL_PERSONA', default='claude-sonnet-4-6')
 
 # Paddle (kept for legacy/international users)
 PADDLE_ENV = config('PADDLE_ENV', default='sandbox')

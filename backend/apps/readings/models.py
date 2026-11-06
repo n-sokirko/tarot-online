@@ -47,3 +47,42 @@ class Interpretation(models.Model):
     prompt_version = models.CharField(max_length=32)
     generated_at = models.DateTimeField(auto_now_add=True)
     token_count = models.PositiveIntegerField(default=0)
+    # One-line gist the model writes in a hidden tail (<memo>…</memo>): question,
+    # cards, the takeaway. Fed back into later readings as the person's history.
+    memo = models.CharField(max_length=300, blank=True)
+
+
+class TarotProfile(models.Model):
+    """How the tarologist talks to this person and what it remembers about them.
+
+    Personas, style mirroring and the dossier are Premium; the reading memory
+    (memos of past readings) works for every signed-in user who keeps it on.
+    """
+    PERSONA_CLASSIC = 'classic'
+    PERSONA_MIRA = 'mira'
+    PERSONA_VAL = 'val'
+    PERSONA_VAL18 = 'val18'
+    PERSONA_AGATA = 'agata'
+    PERSONA_CHOICES = [
+        (PERSONA_CLASSIC, 'Classic'),
+        (PERSONA_MIRA, 'Mira — warm'),
+        (PERSONA_VAL, 'Val — bold'),
+        (PERSONA_VAL18, 'Val 18+ — uncensored'),
+        (PERSONA_AGATA, 'Agata — mystic'),
+    ]
+    DOSSIER_MAX_ITEMS = 12
+    DOSSIER_MAX_LEN = 200
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                related_name='tarot_profile')
+    persona = models.CharField(max_length=16, choices=PERSONA_CHOICES, default=PERSONA_CLASSIC)
+    mirror_style = models.BooleanField(default=False)
+    remember = models.BooleanField(default=True)
+    adult_confirmed_at = models.DateTimeField(null=True, blank=True)
+    # Short facts the tarologist keeps about the person: names, ongoing stories,
+    # how they like to be spoken to, running jokes. A list of strings.
+    dossier = models.JSONField(default=list, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f'TarotProfile({self.user_id}, {self.persona})'

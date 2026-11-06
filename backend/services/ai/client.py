@@ -159,6 +159,7 @@ def generate_interpretation(
     model: Optional[str] = None,
     max_tokens: int = 1500,
     temperature: float = 0.85,
+    extra_system_prompt: str = '',
 ) -> GenerationResult:
     """One-shot synchronous generation with prompt caching on the base prompt.
 
@@ -187,6 +188,9 @@ def generate_interpretation(
             'text': spread_system_prompt,
         },
     ]
+    if extra_system_prompt:
+        # Per-person block (persona, memory, dossier): after the cached prefix.
+        system.append({'type': 'text', 'text': extra_system_prompt})
     with client.messages.stream(
         model=chosen_model,
         max_tokens=max_tokens,
@@ -216,6 +220,7 @@ def stream_interpretation(
     model: Optional[str] = None,
     max_tokens: int = 1500,
     temperature: float = 0.85,
+    extra_system_prompt: str = '',
 ) -> Iterator[Tuple[str, object]]:
     """Generator for live (SSE) generation.
 
@@ -233,6 +238,8 @@ def stream_interpretation(
         {'type': 'text', 'text': base_system_prompt, 'cache_control': {'type': 'ephemeral'}},
         {'type': 'text', 'text': spread_system_prompt},
     ]
+    if extra_system_prompt:
+        system.append({'type': 'text', 'text': extra_system_prompt})
     parts: list[str] = []
     with client.messages.stream(
         model=chosen_model,

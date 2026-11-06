@@ -7,6 +7,7 @@ import { useSettings, ACCENT_PALETTES, FONT_SCALE } from '@/lib/settings-context
 import { locales, LOCALE_LABELS, LOCALE_FLAGS } from '@/lib/i18n-config';
 import type { FontSize, AccentColor } from '@/lib/settings-context';
 import { LegalFooterLinks } from '@/components/legal/LegalLinks';
+import TarologistSettings from '@/components/tarologist/TarologistSettings';
 
 const FONT_OPTIONS: { value: FontSize; label: string; desc: string }[] = [
   { value: 'sm', label: 'Маленький',      desc: 'Compact' },
@@ -62,6 +63,8 @@ export default function SettingsPage() {
             Персонализация
           </h1>
         </header>
+
+        <TarologistSettings locale={currentLocale === 'ru' ? 'ru' : 'en'} />
 
         {/* Language */}
         <section className="flex flex-col gap-3">

@@ -15,7 +15,7 @@ from functools import lru_cache
 from pathlib import Path
 
 PROMPTS_DIR = Path(__file__).resolve().parents[2] / "apps" / "tarot" / "prompts"
-PROMPT_VERSION = "2026-10-27-v2"
+PROMPT_VERSION = "2026-11-06-v3"
 
 
 def _with_checklist(text: str, locale: str) -> str:

@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from apps.billing import services as billing
 from apps.billing.models import UsageLedger
 from apps.billing.rate_limit import ANON_DAILY_LIMIT, check_anon_daily_limit
+from apps.readings import personalization
 from apps.readings.models import Interpretation, Reading, ReadingCard
 from apps.readings.serializers import (
     CreateReadingSerializer,
@@ -374,6 +375,9 @@ class ReadingViewSet(
         info = billing.tier_for(user)
         tier = info.tier
         model = ai_client.model_for_tier(tier)
+        perso = personalization.build(user, reading, tier)
+        if perso.model:
+            model = perso.model
 
         # Charge credits before generating, so over-quota free users get a clean 402.
         # The local model costs us no API tokens — it's free, so no credit charge.
@@ -406,17 +410,20 @@ class ReadingViewSet(
                 model=model,
                 max_tokens=1800,
                 temperature=0.85,
+                extra_system_prompt=perso.system,
             )
         except RuntimeError as exc:
             return Response({'detail': str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
+        body, memo, dossier = personalization.parse_tail(result.body)
         interpretation = Interpretation.objects.create(
             reading=reading,
-            body_md=result.body,
+            body_md=body,
             model_used=result.model,
             prompt_version=ai_prompts.PROMPT_VERSION,
             token_count=result.input_tokens + result.output_tokens,
         )
+        personalization.save_tail(user, interpretation, memo, dossier, perso)
 
         return Response(
             InterpretationSerializer(interpretation).data,
@@ -465,6 +472,9 @@ class ReadingViewSet(
 
         tier = billing.tier_for(user).tier
         model = ai_client.model_for_tier(tier)
+        perso = personalization.build(user, reading, tier)
+        if perso.model:
+            model = perso.model
         # The local model costs us no API tokens — it's free, no credit charge.
         if not model.startswith('local:'):
             charged, balance = billing.charge_credits(
@@ -485,6 +495,7 @@ class ReadingViewSet(
         user_msg = _format_user_message(reading)
 
         def event_stream():
+            tail = personalization.TailFilter()
             try:
                 final = None
                 for kind, payload in ai_client.stream_interpretation(
@@ -494,18 +505,26 @@ class ReadingViewSet(
                     model=model,
                     max_tokens=1800,
                     temperature=0.85,
+                    extra_system_prompt=perso.system,
                 ):
                     if kind == 'delta':
-                        yield _sse({'type': 'delta', 'text': payload})
+                        visible = tail.feed(payload)
+                        if visible:
+                            yield _sse({'type': 'delta', 'text': visible})
                     else:
                         final = payload
+                rest = tail.flush()
+                if rest:
+                    yield _sse({'type': 'delta', 'text': rest})
+                body, memo, dossier = personalization.parse_tail(final.body)
                 interpretation = Interpretation.objects.create(
                     reading=reading,
-                    body_md=final.body,
+                    body_md=body,
                     model_used=final.model,
                     prompt_version=ai_prompts.PROMPT_VERSION,
                     token_count=final.input_tokens + final.output_tokens,
                 )
+                personalization.save_tail(user, interpretation, memo, dossier, perso)
                 yield _sse({'type': 'done',
                             'interpretation': InterpretationSerializer(interpretation).data})
             except Exception as exc:  # noqa: BLE001 — surface as SSE error
