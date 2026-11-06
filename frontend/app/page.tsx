@@ -38,7 +38,7 @@ export default function HomePage() {
   const [flipped, setFlipped] = useState(false);
   const [opened, setOpened] = useState(false);
   const [busy, setBusy] = useState<RailSpread | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ text: string; at: 'top' | 'rail' } | null>(null);
   const [premium, setPremium] = useState(false);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function HomePage() {
     if (!ritual.done_today) void checkIn();
   }, [ritual.done_today, checkIn]);
 
-  const pick = useCallback(async (slug: RailSpread) => {
+  const pick = useCallback(async (slug: RailSpread, at: 'top' | 'rail' = 'rail') => {
     if (slug === 'free') {
       router.push('/table');
       return;
@@ -66,9 +66,12 @@ export default function HomePage() {
       const reading = await createReading(rawLocale, slug, question.trim());
       router.push(`/reading/${reading.id}`);
     } catch (e) {
-      setError(e instanceof ApiError && (e.status === 402 || e.status === 429)
-        ? ERRORS[locale].limit
-        : ERRORS[locale].generic);
+      setError({
+        text: e instanceof ApiError && (e.status === 402 || e.status === 429)
+          ? ERRORS[locale].limit
+          : ERRORS[locale].generic,
+        at,
+      });
       setBusy(null);
     }
   }, [router, rawLocale, question, locale]);
@@ -100,8 +103,18 @@ export default function HomePage() {
         locale={locale}
         question={question}
         onQuestion={setQuestion}
-        onShuffle={() => setShuffleSignal((n) => n + 1)}
+        busy={busy === 'three-card'}
+        onShuffle={() => {
+          // "Перетасовать" opens the standard three-card reading right away.
+          setShuffleSignal((n) => n + 1);
+          void pick('three-card', 'top');
+        }}
       />
+      {error?.at === 'top' && (
+        <p role="alert" style={{ margin: '12px 18px 0', fontSize: 13.5, lineHeight: 1.5, color: '#E7A48B' }}>
+          {error.text}
+        </p>
+      )}
       <DailyFan
         locale={locale}
         daily={daily}
@@ -111,10 +124,10 @@ export default function HomePage() {
         onOpened={onOpened}
       />
       <WeekRitual locale={locale} ritual={ritual} />
-      <SpreadRail locale={locale} busy={busy} onPick={pick} />
-      {error && (
+      <SpreadRail locale={locale} busy={busy} onPick={(slug) => void pick(slug)} />
+      {error?.at === 'rail' && (
         <p role="alert" style={{ margin: '14px 18px 0', fontSize: 13.5, lineHeight: 1.5, color: '#E7A48B' }}>
-          {error}
+          {error.text}
         </p>
       )}
       <YesterdayCard locale={locale} />

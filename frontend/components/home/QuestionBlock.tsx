@@ -7,6 +7,8 @@ interface QuestionBlockProps {
   question: string;
   onQuestion: (q: string) => void;
   onShuffle: () => void;
+  /** True while the three-card reading is being created. */
+  busy?: boolean;
 }
 
 export const QUESTION_LIMIT = 180;
@@ -17,17 +19,19 @@ const L = {
     lead: 'Опиши ситуацию своими словами — разбор будет про тебя, а не про абстрактные значения карт.',
     placeholder: 'например: почему я тяну с решением о работе',
     shuffle: 'Перетасовать',
+    busy: 'Тасую…',
   },
   en: {
     title: 'What needs your attention right now?',
     lead: 'Describe it in your own words — the reading will be about you, not about abstract card meanings.',
     placeholder: "e.g. why I keep putting off the decision about work",
     shuffle: 'Shuffle',
+    busy: 'Shuffling…',
   },
 } as const;
 
 /** The question comes first: the reading is about the person's situation. */
-export default function QuestionBlock({ locale, question, onQuestion, onShuffle }: QuestionBlockProps) {
+export default function QuestionBlock({ locale, question, onQuestion, onShuffle, busy = false }: QuestionBlockProps) {
   const t = L[locale];
   return (
     <section style={{ padding: '22px 18px 0' }}>
@@ -76,6 +80,8 @@ export default function QuestionBlock({ locale, question, onQuestion, onShuffle 
           <button
             type="button"
             onClick={onShuffle}
+            disabled={busy}
+            aria-busy={busy}
             className="transition-transform hover:-translate-y-0.5 hover:scale-[1.02]"
             style={{
               background: 'var(--accent)',
@@ -88,9 +94,10 @@ export default function QuestionBlock({ locale, question, onQuestion, onShuffle 
               transitionDuration: '300ms',
               transitionTimingFunction: 'cubic-bezier(.2,.8,.2,1)',
               minHeight: 44,
+              opacity: busy ? .7 : 1,
             }}
           >
-            {t.shuffle}
+            {busy ? t.busy : t.shuffle}
           </button>
         </div>
       </div>
