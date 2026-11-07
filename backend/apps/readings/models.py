@@ -55,8 +55,8 @@ class Interpretation(models.Model):
 class TarotProfile(models.Model):
     """How the tarologist talks to this person and what it remembers about them.
 
-    Personas, style mirroring and the dossier are Premium; the reading memory
-    (memos of past readings) works for every signed-in user who keeps it on.
+    Personas and style mirroring are Premium; the reading memory (memos of past
+    readings) and the dossier work for every signed-in user who keeps memory on.
     """
     PERSONA_CLASSIC = 'classic'
     PERSONA_MIRA = 'mira'

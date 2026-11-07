@@ -67,7 +67,7 @@ class TestTail:
 
 @pytest.mark.django_db
 class TestInterpretWithPersonalization:
-    def test_free_user_gets_memo_but_no_dossier_or_persona(self, api_client, user, deck, three_card_spread):
+    def test_free_user_gets_memo_and_dossier_but_no_persona(self, api_client, user, deck, three_card_spread):
         CreditWallet.objects.create(user=user, balance=5)
         api_client.force_authenticate(user=user)
         rid = _reading(api_client)
@@ -75,11 +75,12 @@ class TestInterpretWithPersonalization:
             res = api_client.post(f'/api/v1/readings/{rid}/interpret/')
         assert res.status_code == 201, res.content
         kw = gen.call_args.kwargs
-        assert '<memo>' in kw['extra_system_prompt'] and '<dossier>' not in kw['extra_system_prompt']
+        assert '<memo>' in kw['extra_system_prompt'] and '<dossier>' in kw['extra_system_prompt']
+        assert 'ОТМЕНЯЕТ' not in kw['extra_system_prompt']
         assert 'haiku' in kw['model']
         assert res.data['body_md'] == 'Скорее нет: Луна держит туман.'
         assert Interpretation.objects.get(reading_id=rid).memo.startswith('Дима')
-        assert TarotProfile.objects.get(user=user).dossier == []
+        assert TarotProfile.objects.get(user=user).dossier == ['Аня, Рыбы', 'Дима — бывший']
 
     def test_premium_persona_uses_persona_model_and_saves_dossier(self, api_client, premium, deck,
                                                                   three_card_spread, settings):

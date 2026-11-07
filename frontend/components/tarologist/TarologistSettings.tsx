@@ -53,7 +53,6 @@ const L = {
     rememberHint: 'Таролог вспомнит прошлые расклады, если они связаны с вопросом.',
     dossier: 'Что таролог знает обо мне',
     dossierEmpty: 'Пока пусто. Таролог дополнит досье сам после следующих раскладов.',
-    dossierPremium: 'Досье ведётся в Premium.',
     forget: 'Стереть всё',
     forgetConfirm: 'Стереть досье и память о прошлых раскладах? Сами расклады останутся.',
     error: 'Не получилось сохранить. Попробуй ещё раз.',
@@ -74,7 +73,6 @@ const L = {
     rememberHint: 'Your reader recalls past readings when they relate to the question.',
     dossier: 'What my reader knows about me',
     dossierEmpty: 'Empty for now. Your reader fills it in after your next readings.',
-    dossierPremium: 'The dossier is kept with Premium.',
     forget: 'Erase everything',
     forgetConfirm: 'Erase the dossier and the memory of past readings? The readings themselves stay.',
     error: "Couldn't save. Try again.",
@@ -252,8 +250,7 @@ export default function TarologistSettings({ locale }: { locale: 'ru' | 'en' }) 
 
           <div className="p-4 rounded-2xl flex flex-col gap-1" style={card(false)}>
             <p className="font-serif text-base" style={{ color: 'rgba(242,237,228,0.9)' }}>{t.dossier}</p>
-            {!data.premium && <p className="font-sans text-xs" style={{ color: 'var(--accent)' }}>{t.dossierPremium}</p>}
-            {data.premium && data.dossier.length === 0 && (
+            {data.dossier.length === 0 && (
               <p className="font-sans text-xs" style={{ color: 'rgba(242,237,228,0.4)' }}>{t.dossierEmpty}</p>
             )}
             {data.dossier.map((fact, i) => (

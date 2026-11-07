@@ -5,8 +5,8 @@ stronger model); ``parse_tail()`` strips the hidden <memo>/<dossier> tail the
 model writes; ``TailFilter`` keeps that tail out of a live SSE stream.
 
 Who gets what:
-- signed-in, memory on → memos of recent readings (cheap, all tiers);
-- Premium → also the dossier, a persona and style mirroring, on the persona model;
+- signed-in, memory on → memos of recent readings and the dossier (all tiers);
+- Premium → also a persona and style mirroring, on the persona model;
 - Val 18+ → Premium plus a confirmed age, otherwise it quietly falls back to Val.
 """
 from __future__ import annotations
@@ -89,7 +89,7 @@ def build(user, reading: Reading, tier: str) -> Personalization:
             blocks.append(personas.mirror_prompt(reading.locale, allow_swearing=adult))
 
     wants_memo = profile.remember and reading.user_id is not None
-    wants_dossier = wants_memo and premium
+    wants_dossier = wants_memo
     if wants_memo:
         lines = _memory_lines(reading)
         if lines:
