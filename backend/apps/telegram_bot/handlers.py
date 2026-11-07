@@ -343,9 +343,13 @@ async def _send_menu(message, tg, context: ContextTypes.DEFAULT_TYPE) -> None:
             f"get +{referrals.REWARD_CREDITS}."
         )
 
-    keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton(btn, web_app=WebAppInfo(url=webapp_url)),
-    ]])
+    # Second button opens the Mini App straight on the relationship questions
+    # (the home page reads ?topic= and pre-selects the spread).
+    love_btn = "💔 Что он обо мне думает" if locale == 'ru' else "💔 What do they think of me"
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(btn, web_app=WebAppInfo(url=webapp_url))],
+        [InlineKeyboardButton(love_btn, web_app=WebAppInfo(url=f"{webapp_url.rstrip('/')}/?topic=thinks"))],
+    ])
 
     await message.reply_text(
         text,

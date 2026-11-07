@@ -138,3 +138,24 @@ def test_the_checklist_exception_comes_before_the_answer_first_rules(locale):
     come before the rules that demand a verdict (points 1 and 4)."""
     text = _read('answer_checklist', locale)
     assert text.index('0.') < text.index('1.') < text.index('4.')
+
+
+RELATIONSHIP_SPREADS = ('feelings', 'comeback', 'rival', 'together', 'new-love')
+
+
+@pytest.mark.parametrize('slug', RELATIONSHIP_SPREADS)
+@pytest.mark.parametrize('locale', ('ru', 'en'))
+def test_relationship_spreads_have_their_own_prompt(slug, locale):
+    """The relationship spreads must not fall back to the past/present/future prompt."""
+    import json
+
+    from services.ai import prompts
+
+    data = json.loads((Path(__file__).resolve().parents[4] / 'data' / 'deck' / 'spread-positions.json')
+                      .read_text(encoding='utf-8'))
+    spread = next(s for s in data['spreads'] if s['slug'] == slug)
+    text = prompts.tarot_spread(slug, locale)
+    assert 'Прошлое / Настоящее / Будущее' not in text
+    assert spread['positions_count'] == len(spread['positions'])
+    for pos in spread['positions']:
+        assert pos[f'label_{locale}'] in text

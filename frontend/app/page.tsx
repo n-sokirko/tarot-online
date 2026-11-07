@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl';
 import { ApiError, createReading, getBillingMe, getDailyCard, type DailyCardResponse } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 import { useRitualContext } from '@/lib/ritual-context';
-import QuestionBlock from '@/components/home/QuestionBlock';
+import QuestionBlock, { TOPICS, type TopicKey } from '@/components/home/QuestionBlock';
 import DailyFan from '@/components/home/DailyFan';
 import WeekRitual from '@/components/home/WeekRitual';
 import SpreadRail, { type RailSpread } from '@/components/home/SpreadRail';
@@ -25,7 +25,7 @@ const ERRORS = {
   },
 } as const;
 
-/** Home, design "1a Обсидиан": question → card of the day → ritual → spreads. */
+/** Home, design "1a Обсидиан": question + topics → card of the day → love spreads → ritual → spreads. */
 export default function HomePage() {
   const rawLocale = useLocale();
   const locale: 'ru' | 'en' = rawLocale === 'ru' ? 'ru' : 'en';
@@ -33,6 +33,7 @@ export default function HomePage() {
   const { ritual, checkIn } = useRitualContext();
 
   const [question, setQuestion] = useState('');
+  const [topic, setTopic] = useState<TopicKey | null>(null);
   const [shuffleSignal, setShuffleSignal] = useState(0);
   const [daily, setDaily] = useState<DailyCardResponse | null>(null);
   const [flipped, setFlipped] = useState(false);
@@ -40,6 +41,17 @@ export default function HomePage() {
   const [busy, setBusy] = useState<RailSpread | null>(null);
   const [error, setError] = useState<{ text: string; at: 'top' | 'rail' } | null>(null);
   const [premium, setPremium] = useState(false);
+
+  // Deep link from the bot menu: /?topic=thinks opens with that question ready.
+  useEffect(() => {
+    const key = new URLSearchParams(window.location.search).get('topic');
+    const tp = TOPICS.find((x) => x.key === key);
+    if (tp) {
+      setTopic(tp.key);
+      setQuestion(tp[locale].q);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     getDailyCard().then(setDaily).catch(() => {/* the fan still shows card backs */});
@@ -103,11 +115,14 @@ export default function HomePage() {
         locale={locale}
         question={question}
         onQuestion={setQuestion}
-        busy={busy === 'three-card'}
+        busy={busy !== null && busy === (TOPICS.find((x) => x.key === topic)?.spread ?? 'three-card')}
+        topic={topic}
+        onTopic={setTopic}
         onShuffle={() => {
-          // "Перетасовать" opens the standard three-card reading right away.
+          // "Перетасовать" opens the reading right away: the topic's spread,
+          // or the standard three cards.
           setShuffleSignal((n) => n + 1);
-          void pick('three-card', 'top');
+          void pick(TOPICS.find((x) => x.key === topic)?.spread ?? 'three-card', 'top');
         }}
       />
       {error?.at === 'top' && (
@@ -123,6 +138,7 @@ export default function HomePage() {
         shuffleSignal={shuffleSignal}
         onOpened={onOpened}
       />
+      <SpreadRail locale={locale} group="love" busy={busy} onPick={(slug) => void pick(slug)} />
       <WeekRitual locale={locale} ritual={ritual} />
       <SpreadRail locale={locale} busy={busy} onPick={(slug) => void pick(slug)} />
       {error?.at === 'rail' && (

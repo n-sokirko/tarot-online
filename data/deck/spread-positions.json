@@ -236,6 +236,217 @@
       "description_en": "No fixed positions: cards are pulled from the deck and laid out however the person likes.",
       "positions_count": 0,
       "positions": []
+    },
+    {
+      "slug": "feelings",
+      "name_ru": "Как он ко мне относится",
+      "name_en": "How they feel about me",
+      "description_ru": "Его мысли, чувства и то, что он пока не говорит",
+      "description_en": "Their thoughts, feelings and what they are not saying yet",
+      "positions": [
+        {
+          "index": 0,
+          "label_ru": "Мысли обо мне",
+          "label_en": "Thoughts about me",
+          "meaning_ru": "Что он думает о тебе, когда вспоминает",
+          "meaning_en": "What they think of you when you come to mind"
+        },
+        {
+          "index": 1,
+          "label_ru": "Чувства",
+          "label_en": "Feelings",
+          "meaning_ru": "Что он на самом деле чувствует",
+          "meaning_en": "What they really feel"
+        },
+        {
+          "index": 2,
+          "label_ru": "Что скрывает",
+          "label_en": "What is hidden",
+          "meaning_ru": "То, что он не показывает и не говорит",
+          "meaning_en": "What they keep hidden or unsaid"
+        },
+        {
+          "index": 3,
+          "label_ru": "Чего хочет",
+          "label_en": "What they want",
+          "meaning_ru": "Чего он хочет от вас двоих",
+          "meaning_en": "What they want between you"
+        },
+        {
+          "index": 4,
+          "label_ru": "Что дальше",
+          "label_en": "What comes next",
+          "meaning_ru": "Куда это движется в ближайшее время",
+          "meaning_en": "Where this is heading soon"
+        }
+      ],
+      "positions_count": 5
+    },
+    {
+      "slug": "comeback",
+      "name_ru": "Вернётся ли он",
+      "name_en": "Will they come back",
+      "description_ru": "Почему всё остановилось и есть ли путь назад",
+      "description_en": "Why it stopped and whether there is a way back",
+      "positions": [
+        {
+          "index": 0,
+          "label_ru": "Почему ушёл",
+          "label_en": "Why they left",
+          "meaning_ru": "Настоящая причина разрыва или паузы",
+          "meaning_en": "The real reason for the break or pause"
+        },
+        {
+          "index": 1,
+          "label_ru": "Что чувствует сейчас",
+          "label_en": "What they feel now",
+          "meaning_ru": "Его чувства к тебе сегодня",
+          "meaning_en": "Their feelings for you today"
+        },
+        {
+          "index": 2,
+          "label_ru": "Что мешает",
+          "label_en": "What stands in the way",
+          "meaning_ru": "Что не даёт вернуться",
+          "meaning_en": "What keeps them from coming back"
+        },
+        {
+          "index": 3,
+          "label_ru": "Что тянет назад",
+          "label_en": "What pulls them back",
+          "meaning_ru": "Что связывает его с тобой до сих пор",
+          "meaning_en": "What still ties them to you"
+        },
+        {
+          "index": 4,
+          "label_ru": "Итог",
+          "label_en": "Outcome",
+          "meaning_ru": "Вероятное развитие и ответ на вопрос",
+          "meaning_en": "The likely outcome and the answer"
+        }
+      ],
+      "positions_count": 5
+    },
+    {
+      "slug": "rival",
+      "name_ru": "Есть ли у него другая",
+      "name_en": "Is there someone else",
+      "description_ru": "Где его внимание и что на самом деле происходит",
+      "description_en": "Where their attention is and what is really going on",
+      "positions": [
+        {
+          "index": 0,
+          "label_ru": "Его внимание",
+          "label_en": "Their attention",
+          "meaning_ru": "Чем и кем он занят сейчас",
+          "meaning_en": "What and who occupies them now"
+        },
+        {
+          "index": 1,
+          "label_ru": "Скрытое",
+          "label_en": "The hidden",
+          "meaning_ru": "Что происходит вне твоего поля зрения",
+          "meaning_en": "What happens out of your sight"
+        },
+        {
+          "index": 2,
+          "label_ru": "Ты в его жизни",
+          "label_en": "You in their life",
+          "meaning_ru": "Какое место ты занимаешь для него",
+          "meaning_en": "Your place in their life"
+        },
+        {
+          "index": 3,
+          "label_ru": "Что делать",
+          "label_en": "What to do",
+          "meaning_ru": "Как тебе лучше поступить",
+          "meaning_en": "How you had best act"
+        }
+      ],
+      "positions_count": 4
+    },
+    {
+      "slug": "together",
+      "name_ru": "Будем ли мы вместе",
+      "name_en": "Will we be together",
+      "description_ru": "Ты, он и то, что между вами",
+      "description_en": "You, them and what lies between you",
+      "positions": [
+        {
+          "index": 0,
+          "label_ru": "Ты",
+          "label_en": "You",
+          "meaning_ru": "Что ты приносишь в эти отношения",
+          "meaning_en": "What you bring into this"
+        },
+        {
+          "index": 1,
+          "label_ru": "Он",
+          "label_en": "Them",
+          "meaning_ru": "Что приносит он",
+          "meaning_en": "What they bring"
+        },
+        {
+          "index": 2,
+          "label_ru": "Что связывает",
+          "label_en": "What connects you",
+          "meaning_ru": "Сила, которая тянет вас друг к другу",
+          "meaning_en": "The force pulling you together"
+        },
+        {
+          "index": 3,
+          "label_ru": "Что мешает",
+          "label_en": "What gets in the way",
+          "meaning_ru": "Главное препятствие",
+          "meaning_en": "The main obstacle"
+        },
+        {
+          "index": 4,
+          "label_ru": "Итог",
+          "label_en": "Outcome",
+          "meaning_ru": "Вероятное будущее пары",
+          "meaning_en": "The likely future of the couple"
+        }
+      ],
+      "positions_count": 5
+    },
+    {
+      "slug": "new-love",
+      "name_ru": "Новое знакомство",
+      "name_en": "A new connection",
+      "description_ru": "Кто он, чего хочет и стоит ли продолжать",
+      "description_en": "Who they are, what they want and whether to continue",
+      "positions": [
+        {
+          "index": 0,
+          "label_ru": "Кто он",
+          "label_en": "Who they are",
+          "meaning_ru": "Какой он человек на самом деле",
+          "meaning_en": "What kind of person they really are"
+        },
+        {
+          "index": 1,
+          "label_ru": "Его намерения",
+          "label_en": "Their intentions",
+          "meaning_ru": "Чего он хочет от знакомства",
+          "meaning_en": "What they want from this"
+        },
+        {
+          "index": 2,
+          "label_ru": "Ваш потенциал",
+          "label_en": "Your potential",
+          "meaning_ru": "Во что это может вырасти",
+          "meaning_en": "What this could grow into"
+        },
+        {
+          "index": 3,
+          "label_ru": "Совет",
+          "label_en": "Advice",
+          "meaning_ru": "Как тебе действовать дальше",
+          "meaning_en": "How to move forward"
+        }
+      ],
+      "positions_count": 4
     }
   ]
 }
